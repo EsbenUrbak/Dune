@@ -24,8 +24,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Soldier Paul;
 	//Creating a the surface object of the planet
 	private static Surface planetSurface;
-	//Creating tile
-
 	
 	enum GameState {
 		Running, Dead

@@ -1,0 +1,15 @@
+import java.awt.Image;
+import java.awt.Rectangle;
+
+
+public class Tile {
+	//Greating variables: 
+	// TileX  = position  ; TileY = Y position ; speedY = speed in x direction; speedY speed in y direction
+	//Type = Type of landscape; SizeX = size of tile; sizeY = size of tile
+	private int tileX, tileY, speedX, speedY, type, sizex, SizeX;
+	public Image tileImage;
+	private Rectangle r;
+	
+	
+	
+}

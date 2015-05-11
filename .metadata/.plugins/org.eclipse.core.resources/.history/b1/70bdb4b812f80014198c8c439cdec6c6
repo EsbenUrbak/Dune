@@ -1,0 +1,33 @@
+import java.awt.Image;
+import java.awt.Rectangle;
+
+
+public class Tile {
+	//Creating variables: 
+	// TileX  = X pixel position  ; TileY = Y pixel position ; speedY = speed in x direction; speedY speed in y direction
+	//Type = Type of landscape; SizeX = size of tile; sizeY = size of tile
+	private int tileX, tileY, speedX, speedY, type, sizeX=40, sizeY=40;
+	public Image tileImage;
+	private Rectangle r;
+	
+	
+	//Loading the tile imagine from data base of landscapes
+	public Tile(int x, int y, int typeInt) {
+		tileX = x * sizeX;
+		tileY = y * sizeY;
+
+		type = typeInt;
+
+		r = new Rectangle();
+
+		if (type == 5) {
+			tileImage = StartingClass.tiledirt;
+		} else if (type == 8) {
+			tileImage = StartingClass.tileocean;
+		} else {
+			type = 0;
+		}
+
+	}
+	
+}

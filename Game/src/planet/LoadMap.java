@@ -12,7 +12,7 @@ public class LoadMap {
 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	
-	private void loadMap(String filename) throws IOException {
+	public void loadMap(String filename) throws IOException {
 		ArrayList lines = new ArrayList();
 		int width = 0;
 		int height = 0;

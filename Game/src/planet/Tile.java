@@ -1,22 +1,38 @@
 package planet;
 import gameEngine.StartingClass;
 
+import java.applet.Applet;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.net.URL;
 
 
-public class Tile {
+public class Tile extends Applet {
 	//Creating variables: 
 	// TileX  = X pixel position  ; TileY = Y pixel position ; speedY = speed in x direction; speedY speed in y direction
 	//Type = Type of landscape; SizeX = size of tile; sizeY = size of tile
 	private int tileX, tileY, speedX, speedY, type, sizeX=40, sizeY=40;
 	public Image tileImage;
 	private Rectangle r;
+	private URL base;
 	
-	private Background bg = StartingClass.getBg1();
+	public static Image tileocean, tiledirt;
+	
+	private Surface surface = StartingClass.getsurface();
+	
 	
 	//Loading the tile imagine from data base of landscapes
 	public Tile(int x, int y, int typeInt) {
+		
+		try {
+			base = getDocumentBase();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		tiledirt = getImage(base, "data/tiledirt.png");
+		tileocean = getImage(base, "data/tileocean.png");
+		
 		tileX = x * sizeX;
 		tileY = y * sizeY;
 
@@ -25,9 +41,9 @@ public class Tile {
 		r = new Rectangle();
 
 		if (type == 5) {
-			tileImage = StartingClass.tiledirt;
+			tileImage = tiledirt;
 		} else if (type == 8) {
-			tileImage = StartingClass.tileocean;
+			tileImage = tileocean;
 		} else {
 			type = 0;
 		}
@@ -36,9 +52,14 @@ public class Tile {
 	
 	
 	public void update() {
-		speedX = bg.getSpeedX() * 5;
+		
+		///updating the X and Y position of the tile
+		speedX = surface.getSpeedX() * 5;
 		tileX += speedX;
 
+		speedY = surface.getSpeedY() * 5;
+		tileY += speedY;
+		
 		r.setBounds(tileX, tileY, 40, 40);
 		
 	}

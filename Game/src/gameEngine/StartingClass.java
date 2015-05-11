@@ -1,42 +1,35 @@
 package gameEngine;
+
 import java.applet.Applet;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 
+import planet.LoadMap;
 import planet.Surface;
 import Units.Soldier;
 
-
-
 public class StartingClass extends Applet implements Runnable, KeyListener {
-	//Creating variables and objects
+	// Creating variables and objects
 	// Creating a unit to move around on the planet
 	private static Soldier Paul;
-	//Creating a the surface object of the planet
+	// Creating a the surface object of the planet
 	private static Surface planetSurface;
-	//Creating tile
 
-	
+	// Creating tile
+
 	enum GameState {
 		Running, Dead
 	}
 
 	GameState state = GameState.Running;
-	
-	
-	
+
 	private URL base;
-	
+
 	public void init() {
 		setSize(800, 480);
 		setBackground(Color.BLACK);
@@ -50,36 +43,54 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			// TODO: handle exception
 		}
 
-		// Image Setups
-
-		tiledirt = getImage(base, "data/tiledirt.png");
-		tilegrassTop = getImage(base, "data/tilegrasstop.png");
-		background = getImage(base, "data/background.png");
 	}
 
 	public void start() {
 		planetSurface = new Surface(0, 0);
 
-
-		// Initialize Tiles
+		// Creating the planet surface [I have moved the map loader out of the
+		// starting class to limit the size]
 		try {
-			loadMap("data/map1.txt");
+			LoadMap Maploader = new LoadMap();
+			Maploader.loadMap("data/map1.txt");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		Thread thread = new Thread(this);
 		thread.start();
 	}
-	
-	
+
 	@Override
 	public void run() {
-		
+
+	}
+
+	public void stop() {
+
 	}
 	
-	
+	public void update(Graphics g) {
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

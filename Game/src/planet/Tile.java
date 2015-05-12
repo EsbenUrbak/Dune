@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import java.net.URL;
 
 
-public class Tile extends Applet {
+public class Tile {
 	//Creating variables: 
 	// TileX  = X pixel position  ; TileY = Y pixel position ; speedY = speed in x direction; speedY speed in y direction
 	//Type = Type of landscape; SizeX = size of tile; sizeY = size of tile
@@ -18,20 +18,12 @@ public class Tile extends Applet {
 	
 	public static Image tileocean, tiledirt;
 	
-	private Surface surface = StartingClass.getsurface();
+	private Surface surface = StartingClass.getPlanetSurface();
 	
 	
 	//Loading the tile imagine from data base of landscapes
 	public Tile(int x, int y, int typeInt) {
 		
-		try {
-			base = getDocumentBase();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		tiledirt = getImage(base, "data/tiledirt.png");
-		tileocean = getImage(base, "data/tileocean.png");
 		
 		tileX = x * sizeX;
 		tileY = y * sizeY;
@@ -41,9 +33,9 @@ public class Tile extends Applet {
 		r = new Rectangle();
 
 		if (type == 5) {
-			tileImage = tiledirt;
+			tileImage = StartingClass.tiledirt;
 		} else if (type == 8) {
-			tileImage = tileocean;
+			tileImage = StartingClass.tileocean;
 		} else {
 			type = 0;
 		}

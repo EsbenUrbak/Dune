@@ -32,9 +32,9 @@ public class Tile {
 
 		r = new Rectangle();
 
-		if (type == 5) {
+		if (type == 1) {
 			tileImage = StartingClass.tiledirt;
-		} else if (type == 8) {
+		} else if (type == 2) {
 			tileImage = StartingClass.tileocean;
 		} else {
 			type = 0;

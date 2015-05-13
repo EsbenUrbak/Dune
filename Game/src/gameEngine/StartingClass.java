@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import planet.LoadMap;
 import planet.Surface;
 import planet.Tile;
-import Units.Soldier;
+
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
 	// Creating variables and objects
 	// Creating a unit to move around on the planet
-	private static Soldier paul;
+
 	// Creating a the surface object of the planet
 	private static Surface planetSurface;
 	// Creating tile
@@ -161,23 +161,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			paul.moveDown();
-			paul.setMovingLeft(true)
+			planetSurface.setSpeedY(6);
 			break;
 
 		case KeyEvent.VK_DOWN:
-			paul.moveDown();
-			paul.setMovingLeft(true)
+			planetSurface.setSpeedY(-6);
 			break;
 
 		case KeyEvent.VK_LEFT:
-			paul.moveLeft();
-			paul.setMovingLeft(true);
+			planetSurface.setSpeedX(-6);
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			paul.moveRight();
-			paul.setMovingRight(true);
+			planetSurface.setSpeedX(6);
 			break;
 
 
@@ -188,9 +184,24 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyReleased(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_UP:
+			planetSurface.setSpeedY(0);
+			break;
 
+		case KeyEvent.VK_DOWN:
+			planetSurface.setSpeedY(0);
+			break;
+
+		case KeyEvent.VK_LEFT:
+			planetSurface.setSpeedX(0);
+			break;
+
+		case KeyEvent.VK_RIGHT:
+			planetSurface.setSpeedX(0);
+			break;
+		}
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class LoadMap {
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		while (true) {
 			String line = reader.readLine();
-			// no more lines to read
+			height ++;
 			if (line == null) {
 				reader.close();
 				break;
@@ -29,12 +29,12 @@ public class LoadMap {
 			if (!line.startsWith("!")) {
 				lines.add(line);
 				width = Math.max(width, line.length());
-
+				
 			}
 		}
 		height = lines.size();
 
-		for (int j = 0; j < 12; j++) {
+		for (int j = 0; j < height; j++) {
 			String line = (String) lines.get(j);
 			for (int i = 0; i < width; i++) {
 				System.out.println(i + "is i ");

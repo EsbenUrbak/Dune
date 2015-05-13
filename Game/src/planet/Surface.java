@@ -12,8 +12,21 @@ public class Surface {
 	}
 
 	public void update() {
-		surfaceX += speedX;
+		//bounding the map 
+		if (surfaceX == 0 && speedX < 0) {
+			surfaceX = 0;
+		} else {
+			surfaceX += speedX;
+		}
+		
+		if (surfaceY == 0 && speedY > 0) {
+			surfaceY = 0;
+		} else {
+			surfaceY += speedY;
+		}
+
 		surfaceY += speedY;
+		
 		if (surfaceX <= -2160) {
 			surfaceX += 4320;
 		}
@@ -54,6 +67,4 @@ public class Surface {
 		this.speedY = speedY;
 	}
 
-	
 }
-

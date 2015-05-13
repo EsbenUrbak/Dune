@@ -46,10 +46,17 @@ public class Tile {
 	public void update() {
 		
 		///updating the X and Y position of the tile
-		speedX = surface.getSpeedX() * 5;
+		speedX = surface.getSpeedX();
+	//	if(tileX==0&&speedX<0){
+	//		speedX=0;
+	//	}
 		tileX += speedX;
+		
+		speedY = surface.getSpeedY();
+	//	if(tileY==0&&speedY<0){
+	//		speedX=0;
+	//	}
 
-		speedY = surface.getSpeedY() * 5;
 		tileY += speedY;
 		
 		r.setBounds(tileX, tileY, 40, 40);

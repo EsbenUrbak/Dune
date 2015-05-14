@@ -2,7 +2,6 @@ package gameEngine;
 
 import java.applet.Applet;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -12,22 +11,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import planet.LoadMap;
-import planet.Surface;
-import planet.Tile;
+import planet.*;
+
 
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
 	// Creating variables and objects
 	// Creating a unit to move around on the planet
-
+	public Squad squad;
 	// Creating a the surface object of the planet
-	private static Surface planetSurface;
+	public static Surface planetSurface;
 	// Creating tile
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	//
 	public static Image tiledirt, tileocean,background;
-	private Image image;
+	private Image image,squadimagine;
 	Graphics second;
 
 
@@ -53,18 +51,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			// TODO: handle exception
 		}
 
-		// Image Setups -> would like to move this out of the starting class but
-		// couldnt get it to work...
+		// Image Setups 
 		tileocean = getImage(base, "data/tiledirt.png");
 		tiledirt = getImage(base, "data/tileocean.png");
-		
 		background = getImage(base, "data/background.png");
-
+		squadimagine = getImage(base, "data/squad.png");
+		
 	}
 
 	public void start() {
 		planetSurface = new Surface(0, 0);
-
+		squad = new Squad();
 		// Creating the planet surface [I have moved the map loader out of the
 		// starting class to limit the size]
 		LoadMap Maploader = new LoadMap();
@@ -84,11 +81,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void run() {
 		if (state == GameState.Running) {
 			while (true) {
-				// soldier.update();
+				
 
 				// Updating tiles and surface
 				planetSurface.update();
 				updateTiles();
+				
+				//update squad properties
+				squad.update();
 				
 				// Repainting the screen
 				repaint();
@@ -122,8 +122,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		if (state == GameState.Running) {
 			g.drawImage(background, planetSurface.getSurfaceX(), planetSurface.getSurfaceY(), this);
-
 			paintTiles(g);
+			
+			g.drawImage(squadimagine, squad.getCenterX(), squad.getCenterY(), this);
+			//squad.getCenterX(), squad.getCenterY(), this);
+			
 			//Happens if the character dies
 		} else if (state == GameState.Dead) {
 			g.setColor(Color.BLACK);
@@ -169,13 +172,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			break;
 
 		case KeyEvent.VK_LEFT:
-			planetSurface.setSpeedX(-6);
-			break;
-
-		case KeyEvent.VK_RIGHT:
 			planetSurface.setSpeedX(6);
 			break;
 
+		case KeyEvent.VK_RIGHT:
+			planetSurface.setSpeedX(-6);
+			break;
+			
+		case KeyEvent.VK_Z:
+			//ZOOMin
+			break;
+
+		case KeyEvent.VK_X:
+			//ZOOMout
+			break;
 
 
 

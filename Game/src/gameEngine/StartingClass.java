@@ -87,9 +87,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				// soldier.update();
 
 				// Updating tiles and surface
-				updateTiles();
 				planetSurface.update();
-
+				updateTiles();
+				
 				// Repainting the screen
 				repaint();
 

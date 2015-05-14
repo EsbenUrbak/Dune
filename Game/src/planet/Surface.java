@@ -13,19 +13,18 @@ public class Surface {
 
 	public void update() {
 		//bounding the map 
-		if (surfaceX == 0 && speedX < 0) {
-			surfaceX = 0;
+		if (surfaceX == 0 && speedX > 0) {
+			speedX = 0;
 		} else {
 			surfaceX += speedX;
 		}
 		
 		if (surfaceY == 0 && speedY > 0) {
-			surfaceY = 0;
+			speedY = 0;
 		} else {
 			surfaceY += speedY;
 		}
 
-		surfaceY += speedY;
 		
 		if (surfaceX <= -2160) {
 			surfaceX += 4320;

@@ -11,11 +11,13 @@ import java.util.ArrayList;
 public class LoadMap {
 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
+	private int width, height;
+	private final int DEFAULTPIXELSIZE = 40;
 	
 	public void loadMap(String filename) throws IOException {
 		ArrayList lines = new ArrayList();
-		int width = 0;
-		int height = 0;
+		width = 0;
+		height = 0;
 
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		while (true) {
@@ -58,6 +60,30 @@ public class LoadMap {
 		this.tilearray = tilearray;
 	}
 
-	
+	public int getWidth(boolean inPixel) {
+		if (inPixel){
+			if(tilearray.isEmpty()) {
+				return DEFAULTPIXELSIZE * width;
+			} else {
+				return tilearray.get(0).getSizeX() * width;
+			}
+			
+		} else {
+			return width;
+		}
+	}
+
+	public int getHeight(boolean inPixel) {
+		if (inPixel){
+			if(tilearray.isEmpty()) {
+				return DEFAULTPIXELSIZE * height;
+			} else {
+				return tilearray.get(0).getSizeY() * height;
+			}
+			
+		} else {
+			return height;
+		}
+	}	
 	
 }

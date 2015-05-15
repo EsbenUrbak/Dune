@@ -28,7 +28,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Image image,squadimagine;
 	Graphics second;
 
-
+	private static final int SCROLLSPEED = 20; 	// use a divisor of 40 or the screen will shift a little too far
+												//there must be a way to fix this, will think about it
+	private static final int SCREENSIZEX = 800;
+	private static final int SCREENSIZEY = 480;
+	
 	enum GameState {
 		Running, Dead
 	}
@@ -64,15 +68,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		squad = new Squad();
 		// Creating the planet surface [I have moved the map loader out of the
 		// starting class to limit the size]
-		LoadMap Maploader = new LoadMap();
+		LoadMap maploader = new LoadMap();
 		try {
-			Maploader.loadMap("data/map1.txt");
+			maploader.loadMap("data/map1.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		tilearray = Maploader.getTilearray();
+		tilearray = maploader.getTilearray();
+		
+		planetSurface.setBoundX(-maploader.getWidth(true)+SCREENSIZEX);
+		planetSurface.setBoundY(-maploader.getHeight(true)+SCREENSIZEY);
+		
 		Thread thread = new Thread(this);
 		thread.start();
 	}
@@ -85,7 +93,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 				// Updating tiles and surface
 				planetSurface.update();
-				updateTiles();
+				updateTiles();	// there is an issue with tile update, if you move around too much, they get shifted around
+								// maybe they get updated by another thread?
 				
 				//update squad properties
 				squad.update();
@@ -164,19 +173,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			planetSurface.setSpeedY(6);
+			planetSurface.setSpeedY(SCROLLSPEED);
 			break;
 
 		case KeyEvent.VK_DOWN:
-			planetSurface.setSpeedY(-6);
+			planetSurface.setSpeedY(-SCROLLSPEED);
 			break;
 
 		case KeyEvent.VK_LEFT:
-			planetSurface.setSpeedX(6);
+			planetSurface.setSpeedX(SCROLLSPEED);
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			planetSurface.setSpeedX(-6);
+			planetSurface.setSpeedX(-SCROLLSPEED);
 			break;
 			
 		case KeyEvent.VK_Z:

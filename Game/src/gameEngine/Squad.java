@@ -1,8 +1,8 @@
 package gameEngine;
 
-import java.awt.Graphics;
+import java.awt.Rectangle;
 
-import planet.Surface;
+import planet.ViewFrame;
 
 public class Squad {
 
@@ -13,14 +13,20 @@ public class Squad {
 	private int speedX = 0;
 	private int speedY = 0;
 	
-	private Surface surface = StartingClass.getPlanetSurface();
+	public static Rectangle rect = new Rectangle(0, 0, 0, 0);
+	//squad imagine size
+	public int xImagine =77;
+	public int yImagine =79;
+	
+	//private ViewFrame surface = StartingClass.getViewFrame();
 
 	public void update() {
 
-		speedX=surface.getSpeedX();
-		speedY=surface.getSpeedY();
 		centerX+=speedX;
 		centerY+=speedY;
+		
+		rect.setRect(centerX, centerY,xImagine, yImagine);
+		
 	}
 
 	public void moveRight() {
@@ -73,5 +79,23 @@ public class Squad {
 		this.speedY = speedY;
 	}
 
+	public int getxImagine() {
+		return xImagine;
+	}
+
+	public void setxImagine(int xImagine) {
+		this.xImagine = xImagine;
+	}
+
+	public int getyImagine() {
+		return yImagine;
+	}
+
+	public void setyImagine(int yImagine) {
+		this.yImagine = yImagine;
+	}
+
+	
+	
 
 }

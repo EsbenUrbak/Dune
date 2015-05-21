@@ -11,14 +11,15 @@ public class Tile {
 	//Creating variables: 
 	// TileX  = X pixel position  ; TileY = Y pixel position ; speedY = speed in x direction; speedY speed in y direction
 	//Type = Type of landscape; SizeX = size of tile; sizeY = size of tile
-	private int tileX, tileY, speedX, speedY, type, sizeX=40, sizeY=40;
+	private int tileX, tileY, speedX, speedY, type;
+	private static int sizeX=40, sizeY=40;
 	public Image tileImage;
 	private Rectangle r;
 	private URL base;
 	
 	public static Image tileocean, tiledirt;
 	
-	private Surface surface = StartingClass.getPlanetSurface();
+	//private ViewFrame viewframe = StartingClass.getViewFrame();
 	
 	
 	//Loading the tile imagine from data base of landscapes
@@ -31,6 +32,7 @@ public class Tile {
 		type = typeInt;
 
 		r = new Rectangle();
+		r.setBounds(tileX, tileY, sizeX, sizeY);
 
 		if (type == 1) {
 			tileImage = StartingClass.tiledirt;
@@ -44,22 +46,7 @@ public class Tile {
 	
 	
 	public void update() {
-		
-		///updating the X and Y position of the tile
-		speedX = surface.getSpeedX();
-	//	if(tileX==0&&speedX<0){
-	//		speedX=0;
-	//	}
-		tileX += speedX;
-		
-		speedY = surface.getSpeedY();
-	//	if(tileY==0&&speedY<0){
-	//		speedX=0;
-	//	}
-
-		tileY += speedY;
-		
-		r.setBounds(tileX, tileY, 40, 40);
+		// absolute coordinates - no need to update the tile movement anymore
 		
 	}
 	
@@ -104,20 +91,12 @@ public class Tile {
 		this.type = type;
 	}
 
-	public int getSizeX() {
+	public static int getSizeX() {
 		return sizeX;
 	}
 
-	public void setSizeX(int sizeX) {
-		this.sizeX = sizeX;
-	}
-
-	public int getSizeY() {
+	public static int getSizeY() {
 		return sizeY;
-	}
-
-	public void setSizeY(int sizeY) {
-		this.sizeY = sizeY;
 	}
 
 	public Image getTileImage() {

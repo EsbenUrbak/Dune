@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,23 +17,32 @@ import planet.*;
 
 
 
-public class StartingClass extends Applet implements Runnable, KeyListener {
+public class StartingClass extends Applet implements Runnable, KeyListener, MouseListener {
 	// Creating variables and objects
 	// Creating a unit to move around on the planet
 	public Squad squad;
 	// Creating a the surface object of the planet
-	public static Surface planetSurface;
+	public static ViewFrame viewframe;
+	public static Map map;
 	// Creating tile
-	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
+	private ArrayList<Tile> scopetilearray = new ArrayList<Tile>();
 	//
 	public static Image tiledirt, tileocean,background;
-	private Image image,squadimagine;
+	private Image image, squadCurrent, squadimagine, squadClickedImagine;
 	Graphics second;
 
-	private static final int SCROLLSPEED = 20; 	// use a divisor of 40 or the screen will shift a little too far
+	public static final int SCROLLSPEED = 20; 	// use a divisor of 40 or the screen will shift a little too far
 												//there must be a way to fix this, will think about it
-	private static final int SCREENSIZEX = 800;
-	private static final int SCREENSIZEY = 480;
+	public static int screenSizeX = 800;
+	public static int screenSizeY = 480;
+	public static final int INITIALSCREENX = 0;
+	public static final int INITIALSCREENY = 0;
+	
+	//Mouse elements
+	boolean mouseEntered;
+	boolean MouseClicked;
+	int xPos; 
+	int yPos; 
 	
 	enum GameState {
 		Running, Dead
@@ -47,6 +58,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
+		//adding mouselistener
+		addMouseListener(this);
 		Frame frame = (Frame) this.getParent().getParent();
 		frame.setTitle("Dune");
 		try {
@@ -60,26 +73,23 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tiledirt = getImage(base, "data/tileocean.png");
 		background = getImage(base, "data/background.png");
 		squadimagine = getImage(base, "data/squad.png");
-		
+		squadClickedImagine= getImage(base, "data/squadClicked.png");
+		squadCurrent=squadimagine;
 	}
 
 	public void start() {
-		planetSurface = new Surface(0, 0);
+		viewframe = new ViewFrame(INITIALSCREENX, INITIALSCREENY, screenSizeX, screenSizeY);
 		squad = new Squad();
-		// Creating the planet surface [I have moved the map loader out of the
-		// starting class to limit the size]
-		LoadMap maploader = new LoadMap();
+
 		try {
-			maploader.loadMap("data/map1.txt");
+			map = new Map("data/map1.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		tilearray = maploader.getTilearray();
 		
-		planetSurface.setBoundX(-maploader.getWidth(true)+SCREENSIZEX);
-		planetSurface.setBoundY(-maploader.getHeight(true)+SCREENSIZEY);
+		viewframe.setBoundX(map.getWidth(true));
+		viewframe.setBoundY(map.getHeight(true));
 		
 		Thread thread = new Thread(this);
 		thread.start();
@@ -91,14 +101,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			while (true) {
 				
 
-				// Updating tiles and surface
-				planetSurface.update();
-				updateTiles();	// there is an issue with tile update, if you move around too much, they get shifted around
-								// maybe they get updated by another thread?
+				// Updating the screen, squad, and zone of the map to be displayed
+				viewframe.update();
+				squad.update();			
+				map.update(viewframe.getFrameX(), viewframe.getFrameY());
+				scopetilearray = map.getScopeTileArray();
+				//updateTiles();
 				
 				//update squad properties
-				squad.update();
-				
+				if(MouseClicked){
+					squadCurrent=squadClickedImagine;
+				}else{
+					squadCurrent=squadimagine;
+				}
+
 				// Repainting the screen
 				repaint();
 
@@ -130,11 +146,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void paint(Graphics g) {
 
 		if (state == GameState.Running) {
-			g.drawImage(background, planetSurface.getSurfaceX(), planetSurface.getSurfaceY(), this);
+			//g.drawImage(background, viewframe.getFrameX(), viewframe.getFrameY(), this);
 			paintTiles(g);
 			
-			g.drawImage(squadimagine, squad.getCenterX(), squad.getCenterY(), this);
-			//squad.getCenterX(), squad.getCenterY(), this);
+			g.drawRect((int)squad.rect.getX() - viewframe.getFrameX(), (int)squad.rect.getY() - viewframe.getFrameY(), 
+							(int)squad.rect.getWidth(), (int)squad.rect.getHeight());
+			g.drawImage(squadCurrent, squad.getCenterX() - viewframe.getFrameX(), squad.getCenterY()-viewframe.getFrameY(), this);
+			
 			
 			//Happens if the character dies
 		} else if (state == GameState.Dead) {
@@ -148,18 +166,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	}
 
 	private void updateTiles() {
-
-		for (int i = 0; i < tilearray.size(); i++) {
-			Tile t = (Tile) tilearray.get(i);
+	/* 	for (int i = 0; i < scopetilearray.size(); i++) {
+			Tile t = (Tile) scopetilearray.get(i);
 			t.update();
 		}
-
+	*/
 	}
 
 	private void paintTiles(Graphics g) {
-		for (int i = 0; i < tilearray.size(); i++) {
-			Tile t = (Tile) tilearray.get(i);
-			g.drawImage(t.getTileImage(), t.getTileX(), t.getTileY(), this);
+		
+		// paint ONLY the tiles in the catch zone, and adjusts for relative coordinates
+		for (int i = 0; i < scopetilearray.size(); i++) {
+			Tile t = (Tile) scopetilearray.get(i);
+			g.drawImage(t.getTileImage(), t.getTileX() - viewframe.getFrameX(), t.getTileY() - viewframe.getFrameY(), this);
 		}
 	}
 	
@@ -173,19 +192,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			planetSurface.setSpeedY(SCROLLSPEED);
+			viewframe.setSpeedY(-SCROLLSPEED);
 			break;
 
 		case KeyEvent.VK_DOWN:
-			planetSurface.setSpeedY(-SCROLLSPEED);
+			viewframe.setSpeedY(SCROLLSPEED);
 			break;
 
 		case KeyEvent.VK_LEFT:
-			planetSurface.setSpeedX(SCROLLSPEED);
+			viewframe.setSpeedX(-SCROLLSPEED);
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			planetSurface.setSpeedX(-SCROLLSPEED);
+			viewframe.setSpeedX(SCROLLSPEED);
 			break;
 			
 		case KeyEvent.VK_Z:
@@ -195,9 +214,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		case KeyEvent.VK_X:
 			//ZOOMout
 			break;
-
-
-
 		}
 
 	}
@@ -206,19 +222,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			planetSurface.setSpeedY(0);
+			viewframe.setSpeedY(0);
 			break;
 
 		case KeyEvent.VK_DOWN:
-			planetSurface.setSpeedY(0);
+			viewframe.setSpeedY(0);
 			break;
 
 		case KeyEvent.VK_LEFT:
-			planetSurface.setSpeedX(0);
+			viewframe.setSpeedX(0);
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			planetSurface.setSpeedX(0);
+			viewframe.setSpeedX(0);
 			break;
 		}
 	}
@@ -229,12 +245,52 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	}
 
-	public static void setPlanetSurface(Surface planetSurface) {
-		StartingClass.planetSurface = planetSurface;
+	public static void setViewFrame(ViewFrame viewFrame) {
+		StartingClass.viewframe = viewFrame;
 	}
 
-	public static Surface getPlanetSurface() {
-		return planetSurface;
+	public static ViewFrame getViewFrame() {
+		return viewframe;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent me) {
+	//Getting coordinations of the click
+	xPos =me.getX();	
+	yPos =me.getY();	
+	
+	//Logic to check whether it was within the rectangle (in relative coordinate)
+	if(xPos > squad.getCenterX() - viewframe.getFrameX() && xPos < squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine()  && 
+				yPos >squad.getCenterY() - viewframe.getFrameY() && yPos < squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()){
+		MouseClicked=true;
+	}else{
+		MouseClicked=false;
+	}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

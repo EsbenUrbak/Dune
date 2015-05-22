@@ -158,7 +158,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, screenSizeX, screenSizeY);
 			g.setColor(Color.WHITE);
-			g.drawString("Dead", Math.round((float)(screenSizeY)/2) - Tile.getSizeX(), Math.round((float)(screenSizeY)/2));
+			g.drawString("Dead", Math.round((float)(screenSizeX)/2) - Tile.getSizeX(), Math.round((float)(screenSizeY)/2));
 		}
 
 	}

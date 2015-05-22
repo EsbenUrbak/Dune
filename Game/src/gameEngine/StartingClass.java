@@ -26,9 +26,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 	// Creating a the surface object of the planet
 	public static ViewFrame viewframe;
 	public static Map map;
-	// Creating tile
-	private ArrayList<Tile> scopetilearray = new ArrayList<Tile>();
-	//
 	public static Image tiledirt, tileocean,background;
 	private Image image, squadCurrent, squadimagine, squadClickedImagine;
 	Graphics second;
@@ -310,12 +307,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 
 	@Override
 	public void componentResized(ComponentEvent e) {
+		// when applet get resized, update size parameters
 		screenSizeX = this.getWidth();
 		screenSizeY = this.getHeight();
 		viewframe.setSizeX(screenSizeX);
 		viewframe.setSizeY(screenSizeY);
-		setSize(screenSizeX, screenSizeY);
-		map.reInit(viewframe.getFrameX(), viewframe.getFrameY(), this.getWidth(), this.getHeight());		
+		
+		// then identify the new frames to be displayed
+		map.reInit(viewframe.getFrameX(), viewframe.getFrameY(), this.getWidth(), this.getHeight());
+		
+		// finally reset the image object that will get resized in update() method
+		image = null;
 	}
 
 	@Override

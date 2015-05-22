@@ -156,10 +156,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 			//Happens if the character dies
 		} else if (state == GameState.Dead) {
 			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 800, 480);
+			g.fillRect(0, 0, screenSizeX, screenSizeY);
 			g.setColor(Color.WHITE);
-			g.drawString("Dead", 360, 240);
-
+			g.drawString("Dead", Math.round((float)(screenSizeY)/2) - Tile.getSizeX(), Math.round((float)(screenSizeY)/2));
 		}
 
 	}

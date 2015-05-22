@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -17,7 +19,7 @@ import planet.*;
 
 
 
-public class StartingClass extends Applet implements Runnable, KeyListener, MouseListener {
+public class StartingClass extends Applet implements Runnable, KeyListener, MouseListener, ComponentListener{
 	// Creating variables and objects
 	// Creating a unit to move around on the planet
 	public Squad squad;
@@ -54,12 +56,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 
 	// Initialisation of game
 	public void init() {
-		setSize(800, 480);
+		setSize(screenSizeX, screenSizeY);
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
 		//adding mouselistener
 		addMouseListener(this);
+		addComponentListener(this);
 		Frame frame = (Frame) this.getParent().getParent();
 		frame.setTitle("Dune");
 		try {
@@ -99,13 +102,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 	public void run() {
 		if (state == GameState.Running) {
 			while (true) {
-				
 
 				// Updating the screen, squad, and zone of the map to be displayed
 				viewframe.update();
-				squad.update();			
+				squad.update();	
+
 				map.update(viewframe.getFrameX(), viewframe.getFrameY());
-				scopetilearray = map.getScopeTileArray();
 				//updateTiles();
 				
 				//update squad properties
@@ -176,10 +178,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 	private void paintTiles(Graphics g) {
 		
 		// paint ONLY the tiles in the catch zone, and adjusts for relative coordinates
-		for (int i = 0; i < scopetilearray.size(); i++) {
-			Tile t = (Tile) scopetilearray.get(i);
+		for (int i = 0; i < map.getScopeTileArray().size(); i++) {
+			Tile t = (Tile) map.getScopeTileArray().get(i);
 			g.drawImage(t.getTileImage(), t.getTileX() - viewframe.getFrameX(), t.getTileY() - viewframe.getFrameY(), this);
 		}
+		
 	}
 	
 	
@@ -289,6 +292,34 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		screenSizeX = this.getWidth();
+		screenSizeY = this.getHeight();
+		viewframe.setSizeX(screenSizeX);
+		viewframe.setSizeY(screenSizeY);
+		setSize(screenSizeX, screenSizeY);
+		map.reInit(viewframe.getFrameX(), viewframe.getFrameY(), this.getWidth(), this.getHeight());		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}

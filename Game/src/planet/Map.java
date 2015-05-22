@@ -2,6 +2,7 @@ package planet;
 
 import gameEngine.StartingClass;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,27 +13,17 @@ public class Map {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
-	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0, viewX, viewY;
+	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
 	private Rectangle rCatch; 
 	private final int DEFAULTPIXELSIZE = 40;
 
 	public Map(String filename) throws IOException {
+		
 		// master array that contains ALL the tiles in the map
 		ArrayList lines = new ArrayList();
 		
-		// initializes with the original position of the screen
-		viewX = StartingClass.INITIALSCREENX;
-		viewY = StartingClass.INITIALSCREENY;
-		
 		// defines the catch area of the map in which tiles may have to be displayed
 		rCatch = new Rectangle();		
-		
-		// sets it to the coordinate of the view frame, plus the screen height and width, 
-		// extends it in both directions by the screen scrolling speed to ensure tiles
-		// affected in the next screen movement will be displayed
-		rCatch.setBounds(viewX - StartingClass.SCROLLSPEED - 1, viewY - StartingClass.SCROLLSPEED -1, 
-							StartingClass.screenSizeX + StartingClass.SCROLLSPEED * 2 + 2, 
-							StartingClass.screenSizeY + StartingClass.SCROLLSPEED * 2 + 2);
 		
 		// loads the tiles from the txt file
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -64,16 +55,29 @@ public class Map {
 				}
 
 			}
-		}
+		}	
+		init(StartingClass.INITIALSCREENX, StartingClass.INITIALSCREENY, StartingClass.screenSizeX, StartingClass.screenSizeY, false);
+	}
+	
+	private void init(int viewX, int viewY, int screenSizeX, int screenSizeY, boolean reSized){
 
+		// sets it to the coordinate of the view frame, plus the screen height and width, 
+		// extends it in both directions by the screen scrolling speed to ensure tiles
+		// affected in the next screen movement will be displayed
+		rCatch.setBounds(viewX - StartingClass.SCROLLSPEED - 1, viewY - StartingClass.SCROLLSPEED -1, 
+							screenSizeX + StartingClass.SCROLLSPEED * 2 + 2, 
+							screenSizeY + StartingClass.SCROLLSPEED * 2 + 2);
+
+		
 		// initializes the list that contains only the tiles in the catch zone
 		
-		// find the first tile to be included in the catch zone (going row by row) 
-		while(!tilearray.get(firstIndex).getR().intersects(rCatch)){
-				firstIndex++;
-				if (firstIndex > width * height) break;
-			}
-		
+		// find the first tile to be included in the catch zone (going row by row)
+		if (!reSized){
+			while(!tilearray.get(firstIndex).getR().intersects(rCatch)){
+					firstIndex++;
+					if (firstIndex > width * height) break;
+				}
+		}
 		
 		for (int l = 0; l < height - firstIndex / width; l++){
 			lastIndex = firstIndex + l*width;
@@ -98,7 +102,15 @@ public class Map {
 				scopeHeight++;
 						
 		}
-					
+				
+	}
+	
+	public void reInit(int viewX, int viewY, int screenSizeX, int screenSizeY){
+		scopeWidth = 0;
+		scopeHeight = 0;
+		lastIndex = firstIndex;
+		scopeTileArray.clear();
+		init(viewX, viewY, screenSizeX, screenSizeY, true);
 	}
 	
 
@@ -200,6 +212,7 @@ public class Map {
 		scopeTileArray.trimToSize();
 		
 	}
+	
 
 	public ArrayList<Tile> getTilearray() {
 		return tilearray;

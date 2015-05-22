@@ -88,4 +88,22 @@ public class ViewFrame {
 		this.speedY = speedY;
 	}
 
+	public int getSizeX() {
+		return sizeX;
+	}
+
+	public int getSizeY() {
+		return sizeY;
+	}
+
+	public void setSizeX(int sizeX) {
+		this.boundX += this.sizeX - sizeX;
+		this.sizeX = sizeX;
+	}
+
+	public void setSizeY(int sizeY) {
+		this.boundY += this.sizeY - sizeY;
+		this.sizeY = sizeY;
+	}
+
 }

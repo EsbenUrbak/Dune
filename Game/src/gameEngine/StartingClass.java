@@ -1,9 +1,11 @@
 package gameEngine;
 
 import java.applet.Applet;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -38,10 +40,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 	public static final int INITIALSCREENY = 0;
 	
 	//Mouse elements
-	boolean mouseEntered;
-	boolean MouseClicked;
+	public static ArrayList<Integer> pathXPoints = new ArrayList<Integer>();
+	public static ArrayList<Integer> pathYPoints = new ArrayList<Integer>();
+	public static ArrayList<Integer> activeList = new ArrayList<Integer>();
+	boolean squadSelected;
+	boolean outsideX;
+	boolean outsideY;
+	int active = 1;
 	int xPos; 
-	int yPos; 
+	int yPos;
+	Path pathPoint;
 	
 	enum GameState {
 		Running, Dead
@@ -107,11 +115,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 				map.update(viewframe.getFrameX(), viewframe.getFrameY());
 				//updateTiles();
 				
-				//update squad properties
-				if(MouseClicked){
-					squadCurrent=squadClickedImagine;
-				}else{
-					squadCurrent=squadimagine;
+				// update squad properties
+				if (squadSelected) {
+					squadCurrent = squadClickedImagine;
+				} else {
+					squadCurrent = squadimagine;
 				}
 
 				// Repainting the screen
@@ -147,13 +155,32 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 		if (state == GameState.Running) {
 			//g.drawImage(background, viewframe.getFrameX(), viewframe.getFrameY(), this);
 			paintTiles(g);
-			
+	
 			g.drawRect((int)squad.rect.getX() - viewframe.getFrameX(), (int)squad.rect.getY() - viewframe.getFrameY(), 
-							(int)squad.rect.getWidth(), (int)squad.rect.getHeight());
+					(int)squad.rect.getWidth(), (int)squad.rect.getHeight());
+			
+			//adding 2D graphics such that the line can be thicker (otherwise we can hardly see it)
+		    Graphics2D g2 = (Graphics2D) g;
+		    g2.setStroke(new BasicStroke(3));
+			
+			if(pathXPoints.size()>0){
+				for ( int i = 0; i < pathXPoints.size(); ++i ) {
+					if(i==0){
+						g2.drawLine( squad.getCenterX()+squad.getxImagine()/2 - viewframe.getFrameX(), squad.getCenterY()+ squad.getyImagine()/2- viewframe.getFrameY(), pathXPoints.get(0)- viewframe.getFrameX(), pathYPoints.get(0)- viewframe.getFrameY());	
+						g.drawOval(pathXPoints.get(0)-5/2- viewframe.getFrameX(),pathYPoints.get(0)-5/2- viewframe.getFrameY(),5,5);
+						g.drawOval(pathXPoints.get(0)-15/2- viewframe.getFrameX(),pathYPoints.get(0)-15/2- viewframe.getFrameY(),15,15);
+					}else{
+						g2.drawLine(pathXPoints.get(i-1)- viewframe.getFrameX(), pathYPoints.get(i-1)- viewframe.getFrameY(),pathXPoints.get(i)- viewframe.getFrameX(), pathYPoints.get(i)- viewframe.getFrameY());	
+						g.drawOval(pathXPoints.get(i)-5/2- viewframe.getFrameX(),pathYPoints.get(i)-5/2- viewframe.getFrameY(),5,5);
+						g.drawOval(pathXPoints.get(i)-15/2- viewframe.getFrameX(),pathYPoints.get(i)-15/2- viewframe.getFrameY(),15,15);
+				
+					}	
+				}
+			}	
+			
 			g.drawImage(squadCurrent, squad.getCenterX() - viewframe.getFrameX(), squad.getCenterY()-viewframe.getFrameY(), this);
 			
-			
-			//Happens if the character dies
+		//Happens if the character dies
 		} else if (state == GameState.Dead) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, screenSizeX, screenSizeY);
@@ -254,18 +281,49 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-	//Getting coordinations of the click
-	xPos =me.getX();	
-	yPos =me.getY();	
-	
-	//Logic to check whether it was within the rectangle (in relative coordinate)
-	if(xPos > squad.getCenterX() - viewframe.getFrameX() && xPos < squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine()  && 
-				yPos >squad.getCenterY() - viewframe.getFrameY() && yPos < squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()){
-		MouseClicked=true;
-	}else{
-		MouseClicked=false;
-	}
+		// Getting coordinations of the click
+		xPos = me.getX();
+		yPos = me.getY();
+
+
+		// adding path to the list but only if outside of squad and if the squad
+		// is selected
 		
+		if(squadSelected == true){
+		if ( 	   xPos < (squad.getCenterX() - viewframe.getFrameX())
+				|| xPos > (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())){
+			
+			pathXPoints.add(xPos+viewframe.getFrameX());
+			pathYPoints.add(yPos+viewframe.getFrameY());
+			activeList.add(active);
+			System.out.println("X not within squad");
+			
+		}else if((yPos < (squad.getCenterY() - viewframe.getFrameY())
+				|| yPos > (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()))){
+			pathXPoints.add(xPos+viewframe.getFrameX());
+			pathYPoints.add(yPos+viewframe.getFrameY());
+			activeList.add(active);
+			System.out.println("Y not within squad");
+			
+			}	
+		}
+	
+
+		// Logic to check whether it was within the rectangle (in relative
+		// coordinate)
+		if (       xPos > (squad.getCenterX() - viewframe.getFrameX())
+				&& xPos < (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())
+				&& yPos > (squad.getCenterY() - viewframe.getFrameY())
+				&& yPos < (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()) 
+				&& squadSelected == false) {
+			squadSelected = true;
+		} else if (xPos > (squad.getCenterX() - viewframe.getFrameX())
+				&& xPos < (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())
+				&& yPos > (squad.getCenterY() - viewframe.getFrameY())
+				&& yPos < (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()) && squadSelected == true) {
+			squadSelected = false;
+		}
+
 	}
 
 	@Override
@@ -323,6 +381,31 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Mous
 	public void componentShown(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	public static ArrayList<Integer> getPathXPoints() {
+		return pathXPoints;
+	}
+
+	public void setPathXPoints(ArrayList<Integer> pathXPoints) {
+		this.pathXPoints = pathXPoints;
+	}
+
+	public static ArrayList<Integer> getPathYPoints() {
+		return pathYPoints;
+	}
+
+	public void setPathYPoints(ArrayList<Integer> pathYPoints) {
+		this.pathYPoints = pathYPoints;
+	}
+
+	public static ArrayList<Integer> getActiveList() {
+		return activeList;
+	}
+
+	public void setActiveList(ArrayList<Integer> activeList) {
+		this.activeList = activeList;
 	}
 
 }

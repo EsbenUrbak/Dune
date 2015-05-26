@@ -1,4 +1,4 @@
-package planet;
+package com.dune.planet;
 
 public class ViewFrame {
 

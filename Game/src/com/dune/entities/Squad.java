@@ -1,10 +1,10 @@
-package gameEngine;
+package com.dune.entities;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import planet.ViewFrame;
+import com.baseframework.screen.PlayScreen;
 
 public class Squad {
 
@@ -35,9 +35,9 @@ public class Squad {
 
 	public void update() {
 		
-		pathXPoints=StartingClass.getPathXPoints();
-		pathYPoints=StartingClass.getPathYPoints();
-		activeList=StartingClass.getActiveList();
+		pathXPoints=PlayScreen.getPathXPoints();
+		pathYPoints=PlayScreen.getPathYPoints();
+		activeList=PlayScreen.getActiveList();
 		
 		System.out.println(pathXPoints.size());
 		if(pathXPoints.size()>0){
@@ -87,21 +87,9 @@ public class Squad {
 		
 	}
 
-	public void moveRight() {
-		speedX = 6;
-	}
-
-	public void moveLeft() {
-		speedX = -6;
-	}
-
 	public void stop() {
 		speedX = 0;
 	}
-
-
-
-
 
 	public int getCenterX() {
 		return centerX;

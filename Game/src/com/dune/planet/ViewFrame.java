@@ -2,64 +2,65 @@ package com.dune.planet;
 
 public class ViewFrame {
 
-	private int frameX, frameY, speedX, speedY, sizeX, sizeY, boundX, boundY;
+	private float frameX, frameY, speedX, speedY;
+	private int sizeX, sizeY, boundX, boundY;
 
-	public ViewFrame(int x, int y, int sx, int sy) {
+	public ViewFrame(float x, float y, int sx, int sy) {
 		frameX = x;
 		frameY = y;
 		sizeX = sx;
 		sizeY = sy;
-		speedX = 0;
-		speedY = 0;
+		speedX = 0f;
+		speedY = 0f;
 		boundX = 100;
 		boundY = 100;
 	}
 
-	public void update() {
+	public void update(float delta) {
 		//makes sure the view frame does not get out of the map 
-		if (frameX + speedX <= 0 && speedX < 0) {
-			frameX = 0;
-			speedX = 0;
-		} else if (frameX + speedX >= boundX && speedX > 0){
-			speedX = 0;
-			frameX = boundX;
+		if ((frameX + speedX) * delta <= 0f && speedX < 0f) {
+			frameX = 0f;
+			speedX = 0f;
+		} else if ((frameX + speedX)*delta >= (float) boundX && speedX > 0f){
+			speedX = 0f;
+			frameX = (float) boundX;
 		}  else {
-			frameX += speedX;
+			frameX += speedX * delta;
 		}
 		
-		if (frameY + speedY <= 0 && speedY < 0) {
-			speedY = 0;
-			frameY = 0;
-		} else if (frameY + speedY >= boundY && speedY > 0) {
-			speedY = 0;
-			frameY = boundY;
+		if ((frameY + speedY)*delta <= 0f && speedY < 0f) {
+			speedY = 0f;
+			frameY = 0f;
+		} else if ((frameY + speedY)*delta >= (float) boundY && speedY > 0f) {
+			speedY = 0f;
+			frameY = (float) boundY;
 		} else {
-			frameY += speedY;
+			frameY += speedY * delta;
 		}
 
 	}
 
-	public int getFrameX() {
+	public float getFrameX() {
 		return frameX;
 	}
 
-	public void setFrameX(int frameX) {
+	public void setFrameX(float frameX) {
 		this.frameX = frameX;
 	}
 
-	public int getFrameY() {
+	public float getFrameY() {
 		return frameY;
 	}
 
-	public void setFrameY(int frameY) {
+	public void setFrameY(float frameY) {
 		this.frameY = frameY;
 	}
 
-	public int getSpeedX() {
+	public float getSpeedX() {
 		return speedX;
 	}
 
-	public void setSpeedX(int speedX) {
+	public void setSpeedX(float speedX) {
 		this.speedX = speedX;
 	}
 	
@@ -80,11 +81,11 @@ public class ViewFrame {
 		return boundY;
 	}
 
-	public int getSpeedY() {
+	public float getSpeedY() {
 		return speedY;
 	}
 
-	public void setSpeedY(int speedY) {
+	public void setSpeedY(float speedY) {
 		this.speedY = speedY;
 	}
 

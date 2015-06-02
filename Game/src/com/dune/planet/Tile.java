@@ -2,18 +2,16 @@ package com.dune.planet;
 
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.net.URL;
 
 import com.baseframework.game.main.Resources;
 
 
 public class Tile {
 
-	private int tileX, tileY, speedX, speedY, type;
+	private int tileX, tileY, type;
 	private static int sizeX=40, sizeY=40;
 	public Image tileImage;
 	private Rectangle r;
-	private URL base;
 	
 	public static Image tileocean, tiledirt;
 		
@@ -40,7 +38,7 @@ public class Tile {
 	}
 	
 	
-	public void update() {
+	public void update(float delta) {
 		// absolute coordinates - no need to update the tile movement anymore
 		
 	}
@@ -62,21 +60,6 @@ public class Tile {
 		this.tileY = tileY;
 	}
 
-	public int getSpeedX() {
-		return speedX;
-	}
-
-	public void setSpeedX(int speedX) {
-		this.speedX = speedX;
-	}
-
-	public int getSpeedY() {
-		return speedY;
-	}
-
-	public void setSpeedY(int speedY) {
-		this.speedY = speedY;
-	}
 
 	public int getType() {
 		return type;

@@ -8,19 +8,16 @@ import com.baseframework.screen.PlayScreen;
 
 public class Squad {
 
-	private int centerX = 300;
-	private int centerY = 200;
-	private int pointX = 0;
-	private int pointY = 0;
-	private double distX = 0;
-	private double distY = 0;
-	private double diagonalDist=0;
-	private double diagonalDistLast=0;
+	private float centerX = 300f;
+	private float centerY = 200f;
+	private float distX = 0f;
+	private float distY = 0f;
+	private float diagonalDist=0f;
 	boolean lastStep;
 
-	private double speedX = 0;
-	private double speedY = 0;
-	private int speedTile = 4;
+	private float speedX = 0f;
+	private float speedY = 0f;
+	private int speedTile = 200;
 	
 	public static Rectangle rect = new Rectangle(0, 0, 0, 0);
 	//squad imagine size
@@ -33,57 +30,52 @@ public class Squad {
 	
 	//private ViewFrame surface = StartingClass.getViewFrame();
 
-	public void update() {
+	public void update(float delta) {
 		
 		pathXPoints=PlayScreen.getPathXPoints();
 		pathYPoints=PlayScreen.getPathYPoints();
 		activeList=PlayScreen.getActiveList();
 		
-		System.out.println(pathXPoints.size());
 		if(pathXPoints.size()>0){
 			//finding the absolute distance between the new point and the center of squad
-			distX = pathXPoints.get(0)-(centerX+xImagine/2);
-			distY = pathYPoints.get(0)-(centerY+yImagine/2);
+			distX = (float) pathXPoints.get(0)-(centerX+ (float) xImagine/2);
+			distY = (float) pathYPoints.get(0)-(centerY+ (float)yImagine/2);
 			//finding the diagonal distance between the two points
-			diagonalDist=Math.sqrt(Math.pow(distX,2)+Math.pow(distY,2));
+			diagonalDist=(float) Math.sqrt(Math.pow(distX,2)+Math.pow(distY,2));
 			
 
 						//Now find the speed in each direction -> Notice i have added a speedtile which can represent the max speed on a specific tile
-						speedX=(distX*speedTile/diagonalDist);
-						speedY=(distY*speedTile/diagonalDist);
+						speedX=(distX * (float) speedTile/diagonalDist);
+						speedY=(distY * (float) speedTile/diagonalDist);
 						//Have to use a rounding function as otherwise when the squad gets very close to the point the speed blows up to infinite.
-						speedX=Math.round(speedX);
-						speedY=Math.round(speedY);
-						
-						//Check whether last step if then change speed to make the squad move to that precise point
-						if(Math.abs(pathXPoints.get(0)-(centerX+xImagine/2))<Math.abs(speedX)||Math.abs(pathYPoints.get(0)-(centerY+yImagine/2))<Math.abs(speedY)){
-							speedX=pathXPoints.get(0)-(centerX+xImagine/2);
-							speedY=pathYPoints.get(0)-(centerY+yImagine/2);
-							speedX=Math.round(speedX);
-							speedY=Math.round(speedY);
-						}
 
 						
+						//Check whether it is the last step, if so sets the squad to that precise point and sets the speeds to 0
+						if(Math.abs(pathXPoints.get(0)-(centerX+xImagine/2))<Math.abs(speedX) * delta||Math.abs(pathYPoints.get(0)-(centerY+yImagine/2))<Math.abs(speedY)*delta){
+							centerX= (float) pathXPoints.get(0) - (float)xImagine/2f;
+							centerY= (float) pathYPoints.get(0) - (float)yImagine/2f;
+							speedX=0f;
+							speedY=0f;
+						// otherwise updates the squad position using the speeds and safeguards against infinite values using round)	
+						} else {
+							speedX=(float) Math.round(speedX);
+							speedY=(float) Math.round(speedY);
+							centerX += speedX * delta;
+							centerY += speedY * delta;
+						}
+						
 						//if last step on the path we can remove that point in the list.
-						if(diagonalDistLast==diagonalDist){
+						if(centerX == (float) pathXPoints.get(0) - (float)xImagine/2f && centerY == (float) pathYPoints.get(0) - (float)yImagine/2f){
 							pathXPoints.remove(0);
 							pathYPoints.remove(0);
 						}
-						
-						diagonalDistLast=diagonalDist;
-
 												
 		}else{
-			speedX=0;	
-			speedY=0;
+			speedX=0f;	
+			speedY=0f;
 		}
 
-		
-		centerX+=speedX;
-		centerY+=speedY;
-	
-		
-		rect.setRect(centerX, centerY,xImagine, yImagine);
+		rect.setRect((int)centerX, (int)centerY,xImagine, yImagine);
 		
 	}
 
@@ -91,37 +83,37 @@ public class Squad {
 		speedX = 0;
 	}
 
-	public int getCenterX() {
+	public float getCenterX() {
 		return centerX;
 	}
 
-	public int getCenterY() {
+	public float getCenterY() {
 		return centerY;
 	}
 
 
-	public double getSpeedX() {
+	public float getSpeedX() {
 		return speedX;
 	}
 
-	public double getSpeedY() {
+	public float getSpeedY() {
 		return speedY;
 	}
 
-	public void setCenterX(int centerX) {
+	public void setCenterX(float centerX) {
 		this.centerX = centerX;
 	}
 
-	public void setCenterY(int centerY) {
+	public void setCenterY(float centerY) {
 		this.centerY = centerY;
 	}
 
 
-	public void setSpeedX(int speedX) {
+	public void setSpeedX(float speedX) {
 		this.speedX = speedX;
 	}
 
-	public void setSpeedY(int speedY) {
+	public void setSpeedY(float speedY) {
 		this.speedY = speedY;
 	}
 

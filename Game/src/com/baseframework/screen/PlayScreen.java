@@ -26,7 +26,7 @@ public class PlayScreen extends GameScreen{
 	public static Map map;
 	private Image squadCurrent;
 
-	public static final int SCROLLSPEED = 20; 	
+	public static final int SCROLLSPEED = 400; 	
 
 	public static int screenSizeX = 800;
 	public static int screenSizeY = 480;
@@ -52,7 +52,7 @@ public class PlayScreen extends GameScreen{
 		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
 		squadCurrent = Resources.squadImagine;
 		
-		viewframe = new ViewFrame(INITIALSCREENX, INITIALSCREENY, screenSizeX, screenSizeY);
+		viewframe = new ViewFrame((float) INITIALSCREENX, (float) INITIALSCREENY, screenSizeX, screenSizeY);
 		squad = new Squad();
 		
 		try {
@@ -67,12 +67,12 @@ public class PlayScreen extends GameScreen{
 	}
 
 	@Override
-	public void update() {
+	public void update(float delta) {
 		// Updating the screen, squad, and zone of the map to be displayed
-		viewframe.update();
-		squad.update();	
+		viewframe.update(delta);
+		squad.update(delta);	
 		
-		map.update(viewframe.getFrameX(), viewframe.getFrameY());
+		map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
 		
 		//updateTiles();
 		
@@ -95,7 +95,7 @@ public class PlayScreen extends GameScreen{
 		// paint ONLY the tiles in the catch zone, and adjusts for relative coordinates
 		for (int i = 0; i < map.getScopeTileArray().size(); i++) {
 			Tile t = (Tile) map.getScopeTileArray().get(i);
-			g.drawImage(t.getTileImage(), t.getTileX() - viewframe.getFrameX(), t.getTileY() - viewframe.getFrameY(), null);
+			g.drawImage(t.getTileImage(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), null);
 		}	
 	}
 
@@ -106,13 +106,18 @@ public class PlayScreen extends GameScreen{
 		if(pathXPoints.size()>0){
 			for ( int i = 0; i < pathXPoints.size(); ++i ) {
 				if(i==0){
-					g2.drawLine( squad.getCenterX()+squad.getxImagine()/2 - viewframe.getFrameX(), squad.getCenterY()+ squad.getyImagine()/2- viewframe.getFrameY(), pathXPoints.get(0)- viewframe.getFrameX(), pathYPoints.get(0)- viewframe.getFrameY());	
-					g.drawOval(pathXPoints.get(0)-5/2- viewframe.getFrameX(),pathYPoints.get(0)-5/2- viewframe.getFrameY(),5,5);
-					g.drawOval(pathXPoints.get(0)-15/2- viewframe.getFrameX(),pathYPoints.get(0)-15/2- viewframe.getFrameY(),15,15);
+					g2.drawLine((int) squad.getCenterX()+ squad.getxImagine()/2 - (int) viewframe.getFrameX(), 
+								(int) squad.getCenterY()+ squad.getyImagine()/2- (int) viewframe.getFrameY(), 
+								pathXPoints.get(0)- (int) viewframe.getFrameX(), 
+								pathYPoints.get(0)- (int) viewframe.getFrameY());
+					
+					g.drawOval(pathXPoints.get(0)-2/5 - (int) viewframe.getFrameX(),pathYPoints.get(0)-2/5- (int) viewframe.getFrameY(),5,5);
+					g.drawOval(pathXPoints.get(0)-15/2- (int) viewframe.getFrameX(),pathYPoints.get(0)-15/2- (int) viewframe.getFrameY(),15,15);
 				}else{
-					g2.drawLine(pathXPoints.get(i-1)- viewframe.getFrameX(), pathYPoints.get(i-1)- viewframe.getFrameY(),pathXPoints.get(i)- viewframe.getFrameX(), pathYPoints.get(i)- viewframe.getFrameY());	
-					g.drawOval(pathXPoints.get(i)-5/2- viewframe.getFrameX(),pathYPoints.get(i)-5/2- viewframe.getFrameY(),5,5);
-					g.drawOval(pathXPoints.get(i)-15/2- viewframe.getFrameX(),pathYPoints.get(i)-15/2- viewframe.getFrameY(),15,15);
+					g2.drawLine(pathXPoints.get(i-1)- (int) viewframe.getFrameX(), pathYPoints.get(i-1)- (int) viewframe.getFrameY(),
+								pathXPoints.get(i)- (int) viewframe.getFrameX(), pathYPoints.get(i)- (int) viewframe.getFrameY());	
+					g.drawOval(pathXPoints.get(i)-2/5- (int) viewframe.getFrameX(),pathYPoints.get(i)-2/5- (int) viewframe.getFrameY(),5,5);
+					g.drawOval(pathXPoints.get(i)-15/2- (int) viewframe.getFrameX(),pathYPoints.get(i)-15/2- (int) viewframe.getFrameY(),15,15);
 			
 				}	
 			}
@@ -120,9 +125,9 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderSquad(Graphics g) {
-		g.drawRect((int)squad.rect.getX() - viewframe.getFrameX(), (int)squad.rect.getY() - viewframe.getFrameY(), 
+		g.drawRect((int)squad.rect.getX() - (int) viewframe.getFrameX(), (int)squad.rect.getY() - (int) viewframe.getFrameY(), 
 				(int)squad.rect.getWidth(), (int)squad.rect.getHeight());
-		g.drawImage(squadCurrent, squad.getCenterX() - viewframe.getFrameX(), squad.getCenterY()-viewframe.getFrameY(), null);
+		g.drawImage(squadCurrent, (int) squad.getCenterX() - (int) viewframe.getFrameX(), (int) squad.getCenterY()-(int) viewframe.getFrameY(), null);
 	}
 	
 	
@@ -135,18 +140,18 @@ public class PlayScreen extends GameScreen{
 		// adding path to the list but only if outside of squad and if the squad
 		// is selected
 		
-		if(squadSelected == true){
-		if ( 	   xPos < (squad.getCenterX() - viewframe.getFrameX())
-				|| xPos > (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())){
+		if(squadSelected){
+		if ( 	   xPos < (int) (squad.getCenterX() - viewframe.getFrameX())
+				|| xPos > (int) (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())){
 			
-			pathXPoints.add(xPos+viewframe.getFrameX());
-			pathYPoints.add(yPos+viewframe.getFrameY());
+			pathXPoints.add(xPos+(int) viewframe.getFrameX());
+			pathYPoints.add(yPos+(int) viewframe.getFrameY());
 			activeList.add(active);
 			
-		}else if((yPos < (squad.getCenterY() - viewframe.getFrameY())
-				|| yPos > (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()))){
-			pathXPoints.add(xPos+viewframe.getFrameX());
-			pathYPoints.add(yPos+viewframe.getFrameY());
+		}else if((yPos < (int) (squad.getCenterY() - viewframe.getFrameY())
+				|| yPos > (int) (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()))){
+			pathXPoints.add(xPos+(int) viewframe.getFrameX());
+			pathYPoints.add(yPos+(int) viewframe.getFrameY());
 			activeList.add(active);
 			}	
 		}
@@ -233,7 +238,7 @@ public class PlayScreen extends GameScreen{
 		viewframe.setSizeY(screenSizeY);
 		
 		// then identifies the new frames to be displayed
-		map.reInit(viewframe.getFrameX(), viewframe.getFrameY(), screenSizeX, screenSizeY);
+		map.reInit((int) viewframe.getFrameX(), (int) viewframe.getFrameY(), screenSizeX, screenSizeY);
 		
 		// finally resets the image object that will get resized in update() method
 		MainHolder.thegame.resetGameImage();
@@ -252,24 +257,24 @@ public class PlayScreen extends GameScreen{
 		return pathXPoints;
 	}
 
-	public void setPathXPoints(ArrayList<Integer> pathXPoints) {
-		this.pathXPoints = pathXPoints;
+	public static void setPathXPoints(ArrayList<Integer> newPathXPoints) {
+		pathXPoints = newPathXPoints;
 	}
 
 	public static ArrayList<Integer> getPathYPoints() {
 		return pathYPoints;
 	}
 
-	public void setPathYPoints(ArrayList<Integer> pathYPoints) {
-		this.pathYPoints = pathYPoints;
+	public static void setPathYPoints(ArrayList<Integer> newPathYPoints) {
+		pathYPoints = newPathYPoints;
 	}
 
 	public static ArrayList<Integer> getActiveList() {
 		return activeList;
 	}
 
-	public void setActiveList(ArrayList<Integer> activeList) {
-		this.activeList = activeList;
+	public static void setActiveList(ArrayList<Integer> newActiveList) {
+		activeList = newActiveList;
 	}
 
 

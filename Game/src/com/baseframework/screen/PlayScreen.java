@@ -31,7 +31,7 @@ public class PlayScreen extends GameScreen{
 	public static int screenSizeX = 800;
 	public static int screenSizeY = 480;
 	public static final int INITIALSCREENX = 0;
-	public static final int INITIALSCREENY = 0;
+	public static final int INITIALSCREENY = 2600;
 	
 	//Mouse elements
 	public static ArrayList<Integer> pathXPoints = new ArrayList<Integer>();
@@ -63,7 +63,8 @@ public class PlayScreen extends GameScreen{
 		}
 		
 		viewframe.setBoundX(map.getWidth(true));
-		viewframe.setBoundY(map.getHeight(true));		
+		viewframe.setBoundY(map.getHeight(true));
+		squad.setBounds(map.getWidth(false), map.getHeight(false));
 	}
 
 	@Override
@@ -106,8 +107,8 @@ public class PlayScreen extends GameScreen{
 		if(pathXPoints.size()>0){
 			for ( int i = 0; i < pathXPoints.size(); ++i ) {
 				if(i==0){
-					g2.drawLine((int) squad.getCenterX()+ squad.getxImagine()/2 - (int) viewframe.getFrameX(), 
-								(int) squad.getCenterY()+ squad.getyImagine()/2- (int) viewframe.getFrameY(), 
+					g2.drawLine((int) squad.getTopX()+ squad.getxImagine()/2 - (int) viewframe.getFrameX(), 
+								(int) squad.getTopY()+ squad.getyImagine()/2- (int) viewframe.getFrameY(), 
 								pathXPoints.get(0)- (int) viewframe.getFrameX(), 
 								pathYPoints.get(0)- (int) viewframe.getFrameY());
 					
@@ -117,7 +118,7 @@ public class PlayScreen extends GameScreen{
 					g2.drawLine(pathXPoints.get(i-1)- (int) viewframe.getFrameX(), pathYPoints.get(i-1)- (int) viewframe.getFrameY(),
 								pathXPoints.get(i)- (int) viewframe.getFrameX(), pathYPoints.get(i)- (int) viewframe.getFrameY());	
 					g.drawOval(pathXPoints.get(i)-2/5- (int) viewframe.getFrameX(),pathYPoints.get(i)-2/5- (int) viewframe.getFrameY(),5,5);
-					g.drawOval(pathXPoints.get(i)-15/2- (int) viewframe.getFrameX(),pathYPoints.get(i)-15/2- (int) viewframe.getFrameY(),15,15);
+					g.drawOval(pathXPoints.get(i)-9/2- (int) viewframe.getFrameX(),pathYPoints.get(i)-9/2- (int) viewframe.getFrameY(),9,9);
 			
 				}	
 			}
@@ -127,7 +128,7 @@ public class PlayScreen extends GameScreen{
 	private void renderSquad(Graphics g) {
 		g.drawRect((int)squad.rect.getX() - (int) viewframe.getFrameX(), (int)squad.rect.getY() - (int) viewframe.getFrameY(), 
 				(int)squad.rect.getWidth(), (int)squad.rect.getHeight());
-		g.drawImage(squadCurrent, (int) squad.getCenterX() - (int) viewframe.getFrameX(), (int) squad.getCenterY()-(int) viewframe.getFrameY(), null);
+		g.drawImage(squadCurrent, (int) squad.getTopX() - (int) viewframe.getFrameX(), (int) squad.getTopY()-(int) viewframe.getFrameY(), null);
 	}
 	
 	
@@ -141,15 +142,15 @@ public class PlayScreen extends GameScreen{
 		// is selected
 		
 		if(squadSelected){
-		if ( 	   xPos < (int) (squad.getCenterX() - viewframe.getFrameX())
-				|| xPos > (int) (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())){
+		if ( 	   xPos < (int) (squad.getTopX() - viewframe.getFrameX())
+				|| xPos > (int) (squad.getTopX() - viewframe.getFrameX() + squad.getxImagine())){
 			
 			pathXPoints.add(xPos+(int) viewframe.getFrameX());
 			pathYPoints.add(yPos+(int) viewframe.getFrameY());
 			activeList.add(active);
 			
-		}else if((yPos < (int) (squad.getCenterY() - viewframe.getFrameY())
-				|| yPos > (int) (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()))){
+		}else if((yPos < (int) (squad.getTopY() - viewframe.getFrameY())
+				|| yPos > (int) (squad.getTopY() - viewframe.getFrameY() + squad.getyImagine()))){
 			pathXPoints.add(xPos+(int) viewframe.getFrameX());
 			pathYPoints.add(yPos+(int) viewframe.getFrameY());
 			activeList.add(active);
@@ -158,16 +159,16 @@ public class PlayScreen extends GameScreen{
 	
 
 		// Logic to check whether it was within the rectangle (in relative coordinate)
-		if (       xPos > (squad.getCenterX() - viewframe.getFrameX())
-				&& xPos < (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())
-				&& yPos > (squad.getCenterY() - viewframe.getFrameY())
-				&& yPos < (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()) 
+		if (       xPos > (squad.getTopX() - viewframe.getFrameX())
+				&& xPos < (squad.getTopX() - viewframe.getFrameX() + squad.getxImagine())
+				&& yPos > (squad.getTopY() - viewframe.getFrameY())
+				&& yPos < (squad.getTopY() - viewframe.getFrameY() + squad.getyImagine()) 
 				&& squadSelected == false) {
 			squadSelected = true;
-		} else if (xPos > (squad.getCenterX() - viewframe.getFrameX())
-				&& xPos < (squad.getCenterX() - viewframe.getFrameX() + squad.getxImagine())
-				&& yPos > (squad.getCenterY() - viewframe.getFrameY())
-				&& yPos < (squad.getCenterY() - viewframe.getFrameY() + squad.getyImagine()) && squadSelected == true) {
+		} else if (xPos > (squad.getTopX() - viewframe.getFrameX())
+				&& xPos < (squad.getTopX() - viewframe.getFrameX() + squad.getxImagine())
+				&& yPos > (squad.getTopY() - viewframe.getFrameY())
+				&& yPos < (squad.getTopY() - viewframe.getFrameY() + squad.getyImagine()) && squadSelected == true) {
 			squadSelected = false;
 		}
 		

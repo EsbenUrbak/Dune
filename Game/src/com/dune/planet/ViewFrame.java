@@ -18,20 +18,20 @@ public class ViewFrame {
 
 	public void update(float delta) {
 		//makes sure the view frame does not get out of the map 
-		if ((frameX + speedX) * delta <= 0f && speedX < 0f) {
+		if (frameX + speedX * delta <= 0f && speedX < 0f) {
 			frameX = 0f;
 			speedX = 0f;
-		} else if ((frameX + speedX)*delta >= (float) boundX && speedX > 0f){
+		} else if (frameX + speedX * delta >= (float) boundX && speedX > 0f){
 			speedX = 0f;
 			frameX = (float) boundX;
 		}  else {
 			frameX += speedX * delta;
 		}
 		
-		if ((frameY + speedY)*delta <= 0f && speedY < 0f) {
+		if (frameY + speedY*delta <= 0f && speedY < 0f) {
 			speedY = 0f;
 			frameY = 0f;
-		} else if ((frameY + speedY)*delta >= (float) boundY && speedY > 0f) {
+		} else if (frameY + speedY*delta >= (float) boundY && speedY > 0f) {
 			speedY = 0f;
 			frameY = (float) boundY;
 		} else {

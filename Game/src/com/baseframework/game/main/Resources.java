@@ -19,12 +19,13 @@ public class Resources {
 	public static BufferedImage background, tileOcean, tileDirt, squadRight, squadLeft, squadSelect;
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
+	private static BufferedImage squadBlink;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
 	public static URL URLmap1;
 	public static BasicStroke strokeSize;
 	
-	public static Animation squadMoveRightAnim, squadMoveLeftAnim, selectAnim;
+	public static Animation squadMoveRightAnim, squadMoveLeftAnim, squadStandRightAnim, squadStandLeftAnim, selectAnim;
 	
 	public static void load(){
 		URLmap1 = Resources.class.getResource("/resources/map1.txt");
@@ -55,7 +56,7 @@ public class Resources {
 		Frame f0_4 = new Frame(squadSelect4, .1f);
 		selectAnim = new Animation(f0_0, f0_1, f0_2, f0_1, f0_0, f0_3, f0_4, f0_3);
 		
-		// animate the squad
+		// animate the squad movement
 		squadMoveRg1 = loadImage("squad_move1.png");
 		squadMoveRg2 = loadImage("squad_move2.png");
 		squadMoveRg3 = loadImage("squad_move3.png");
@@ -76,8 +77,18 @@ public class Resources {
 		Frame f2_3 = new Frame(horizontalflip(squadMoveRg3), .1f);
 		Frame f2_4 = new Frame(horizontalflip(squadMoveRg4), .1f);
 		Frame f2_5 = new Frame(horizontalflip(squadMoveRg5), .1f);
-		squadMoveLeftAnim = new Animation(f2_1, f2_2, f2_3, f2_4, f2_5);		
+		squadMoveLeftAnim = new Animation(f2_1, f2_2, f2_3, f2_4, f2_5);
+		
+		// animate the squad standing position
+		squadBlink = loadImage("squad_blink.png");
+		Frame f10_0 = new Frame(squadRight, 1f);
+		Frame f10_1 = new Frame(squadBlink, .1f);
+		squadStandRightAnim = new Animation(f10_0, f10_1, f10_0);
 
+		Frame f11_0 = new Frame(squadLeft, 1f);
+		Frame f11_1 = new Frame(horizontalflip(squadBlink), .1f);
+		squadStandLeftAnim = new Animation(f11_0, f11_1, f11_0);		
+		
 	}
 	
 	private static AudioClip loadSound(String filename){
@@ -111,7 +122,7 @@ public class Resources {
     private static BufferedImage verticalflip(BufferedImage img) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
-        BufferedImage dimg = dimg = new BufferedImage(w, h, img.getColorModel().getTransparency());  
+        BufferedImage dimg = new BufferedImage(w, h, img.getColorModel().getTransparency());  
         Graphics2D g = dimg.createGraphics();  
         g.drawImage(img, 0, 0, w, h, 0, h, w, 0, null);  
         g.dispose();  
@@ -121,7 +132,7 @@ public class Resources {
     private static BufferedImage resize(BufferedImage img, int newW, int newH) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
-        BufferedImage dimg = dimg = new BufferedImage(newW, newH, img.getType());  
+        BufferedImage dimg = new BufferedImage(newW, newH, img.getType());  
         Graphics2D g = dimg.createGraphics();  
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
         g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);  
@@ -132,7 +143,7 @@ public class Resources {
     public static BufferedImage rotate(BufferedImage img, int angle) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
-        BufferedImage dimg = dimg = new BufferedImage(w, h, img.getType());  
+        BufferedImage dimg = new BufferedImage(w, h, img.getType());  
         Graphics2D g = dimg.createGraphics();  
         g.rotate(Math.toRadians(angle), w/2, h/2);  
         g.drawImage(img, null, 0, 0);  

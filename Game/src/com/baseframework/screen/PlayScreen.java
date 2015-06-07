@@ -139,11 +139,11 @@ public class PlayScreen extends GameScreen{
 			//		(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.squadSelect.getTileHeight()/2 - 5, null);			
 		}
 		
-		if(pathXPoints.isEmpty()){
-			g.drawImage(squad.getCurrentImage(), (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()), null);
-		} else {
+		//if(pathXPoints.isEmpty()){
+			//g.drawImage(squad.getCurrentImage(), (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()), null);
+		//} else {
 			squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
-		}
+		//}
 		
 	}
 	

@@ -30,8 +30,7 @@ public class Squad {
 	
 	public Rectangle rect = new Rectangle(0, 0, 0, 0);
 	
-	private Image currentImage = Resources.squadRight;
-	private Animation currentAnim = Resources.squadMoveRightAnim;
+	private Animation currentAnim = Resources.squadStandRightAnim;
 	
 	//squad imagine size
 	public int xImagine =Resources.squadRight.getTileWidth(); //66  //77
@@ -73,10 +72,8 @@ public class Squad {
 						speedY=(distY * (float) speedTile/diagonalDist);
 						
 						if(speedX > 0){
-							currentImage = Resources.squadRight;
 							currentAnim = Resources.squadMoveRightAnim;
 						} else if (speedX < 0) {
-							currentImage = Resources.squadLeft;
 							currentAnim = Resources.squadMoveLeftAnim;							
 						}
 							
@@ -87,11 +84,21 @@ public class Squad {
 						//Check whether it is the last step, if so sets the squad to that precise point and sets the speeds to 0
 						if(Math.abs(pathX-(topX+(float)xImagine/2f))<Math.abs(speedX) * delta || Math.abs(pathY-(topY+(float) yImagine/2f))<Math.abs(speedY)*delta){
 							topX= pathX - (float)xImagine/2f;
-							topY= pathY - (float)yImagine/2f;
-							speedX=0f;
-							speedY=0f;
+							topY= pathY - (float)yImagine/2f;	
+
 							pathXPoints.remove(0);
 							pathYPoints.remove(0);
+							
+							if(pathXPoints.isEmpty()){
+								if(speedX >= 0){
+									currentAnim = Resources.squadStandRightAnim;
+								} else {
+									currentAnim = Resources.squadStandLeftAnim;									
+								}
+							}
+							
+							speedX=0f;
+							speedY=0f;
 							
 						// otherwise updates the squad position using the speeds and safeguards against infinite values using round)	
 						} else {
@@ -162,10 +169,6 @@ public class Squad {
 
 	public void setyImagine(int yImagine) {
 		this.yImagine = yImagine;
-	}
-
-	public Image getCurrentImage() {
-		return currentImage;
 	}
 
 	public Animation getCurrentAnim() {

@@ -54,8 +54,8 @@ public class Squad {
 			pathY = (float) Math.min(Math.max(pathYPoints.get(0),minY + yImagine/2),maxY + yImagine/2);
 			
 			//finding the absolute distance between the new point and the center of squad
-			distX = pathX -(topX+ (float) xImagine/2);
-			distY = pathY -(topY+ (float) yImagine/2);
+			distX = pathX -(topX+ (float) xImagine/2f);
+			distY = pathY -(topY+ (float) yImagine/2f);
 			
 			//finding the diagonal distance between the two points
 			diagonalDist=(float) Math.sqrt(Math.pow(distX,2)+Math.pow(distY,2));

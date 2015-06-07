@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import com.baseframework.game.main.Resources;
 
 
+
 public class Tile {
 
 	private int tileX, tileY, type;

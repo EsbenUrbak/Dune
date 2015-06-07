@@ -25,7 +25,6 @@ public class PlayScreen extends GameScreen{
 	// Creating a the surface object of the planet
 	public static ViewFrame viewframe;
 	public static Map map;
-	private Image squadCurrent;
 
 	// Graphics objects
 	Graphics2D g2;
@@ -50,7 +49,6 @@ public class PlayScreen extends GameScreen{
 		MainHolder.setResizeable(false);
 		
 		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
-		squadCurrent = Resources.squadImagine;
 		
 		viewframe = new ViewFrame((float) INITIALSCREENX, (float) INITIALSCREENY, screenSizeX, screenSizeY);
 		squad = new Squad();
@@ -75,14 +73,17 @@ public class PlayScreen extends GameScreen{
 		
 		map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
 		
+		Resources.selectAnim.update(delta);
+		squad.getCurrentAnim().update(delta);
+		
 		//updateTiles();
 		
-		// update squad properties
+		/* update squad properties
 		if (squadSelected) {
 			squadCurrent = Resources.squadClickedImagine;
 		} else {
 			squadCurrent = Resources.squadImagine;
-		}
+		}*/
 	}
 
 	@Override
@@ -125,9 +126,25 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderSquad(Graphics g) {
-		g.drawRect((int)(squad.getTopX() - viewframe.getFrameX()), (int)(squad.getTopY() - viewframe.getFrameY()), 
-				squad.getxImagine(), squad.getyImagine());
-		g.drawImage(squadCurrent, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()), null);
+		//g.drawRect((int)(squad.getTopX() - viewframe.getFrameX()), (int)(squad.getTopY() - viewframe.getFrameY()), 
+		//		squad.getxImagine(), squad.getyImagine());
+
+		if(squadSelected){
+			Resources.selectAnim.render(g, 
+					(int) (squad.getTopX() - viewframe.getFrameX() + (squad.xImagine - Resources.selectAnim.getCurrentWidth())/2), 
+					(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.selectAnim.getCurrentHeight()/2 - 5);
+			
+			//g.drawImage(Resources.squadSelect, 
+			//		(int) (squad.getTopX() - viewframe.getFrameX() + (squad.xImagine - Resources.squadSelect.getTileWidth())/2), 
+			//		(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.squadSelect.getTileHeight()/2 - 5, null);			
+		}
+		
+		if(pathXPoints.isEmpty()){
+			g.drawImage(squad.getCurrentImage(), (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()), null);
+		} else {
+			squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
+		}
+		
 	}
 	
 	
@@ -142,6 +159,11 @@ public class PlayScreen extends GameScreen{
 
 		// adding path to the list but only if outside of squad and if the squad
 		// is selected
+
+		// Logic to check whether it was within the rectangle (in relative coordinate)
+		if (squad.rect.contains(xPos, yPos)) {
+			squadSelected = !squadSelected;
+		}
 		
 		if(squadSelected){
 			if (!squad.rect.contains(xPos, yPos)){
@@ -161,10 +183,7 @@ public class PlayScreen extends GameScreen{
 			}	
 		}
 
-		// Logic to check whether it was within the rectangle (in relative coordinate)
-		if (squad.rect.contains(xPos, yPos)) {
-			squadSelected = !squadSelected;
-		}
+
 		
 	}
 

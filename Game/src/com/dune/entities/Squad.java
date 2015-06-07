@@ -1,9 +1,11 @@
 package com.dune.entities;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baseframework.animation.Animation;
 import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
 import com.dune.planet.Tile;
@@ -28,9 +30,12 @@ public class Squad {
 	
 	public Rectangle rect = new Rectangle(0, 0, 0, 0);
 	
+	private Image currentImage = Resources.squadRight;
+	private Animation currentAnim = Resources.squadMoveRightAnim;
+	
 	//squad imagine size
-	public int xImagine =Resources.squadImagine.getTileWidth(); //66  //77
-	public int yImagine =Resources.squadImagine.getTileHeight(); //92  //79
+	public int xImagine =Resources.squadRight.getTileWidth(); //66  //77
+	public int yImagine =Resources.squadRight.getTileHeight(); //92  //79
 	
 	public List<Integer> pathXPoints = new ArrayList<Integer>();
 	public List<Integer> pathYPoints = new ArrayList<Integer>();
@@ -66,6 +71,16 @@ public class Squad {
 						//Now find the speed in each direction -> Notice i have added a speedtile which can represent the max speed on a specific tile
 						speedX=(distX * (float) speedTile/diagonalDist);
 						speedY=(distY * (float) speedTile/diagonalDist);
+						
+						if(speedX > 0){
+							currentImage = Resources.squadRight;
+							currentAnim = Resources.squadMoveRightAnim;
+						} else if (speedX < 0) {
+							currentImage = Resources.squadLeft;
+							currentAnim = Resources.squadMoveLeftAnim;							
+						}
+							
+							
 						//Have to use a rounding function as otherwise when the squad gets very close to the point the speed blows up to infinite.
 
 						
@@ -147,6 +162,14 @@ public class Squad {
 
 	public void setyImagine(int yImagine) {
 		this.yImagine = yImagine;
+	}
+
+	public Image getCurrentImage() {
+		return currentImage;
+	}
+
+	public Animation getCurrentAnim() {
+		return currentAnim;
 	}
 
 

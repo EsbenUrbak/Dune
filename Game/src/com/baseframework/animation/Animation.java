@@ -1,6 +1,7 @@
 package com.baseframework.animation;
 
 import java.awt.Graphics;
+import java.awt.Image;
 
 public class Animation {
 	private Frame[] frames;
@@ -38,11 +39,19 @@ public class Animation {
 		currentTime %= totalDuration;
 	}
 	
-	private synchronized void render(Graphics g, int x, int y){
+	public synchronized void render(Graphics g, int x, int y){
 		g.drawImage(frames[currentFrameIndex].getImage(), x, y, null);
 	}
 	
-	private synchronized void render(Graphics g, int x, int y, int width, int height){
+	public synchronized void render(Graphics g, int x, int y, int width, int height){
 		g.drawImage(frames[currentFrameIndex].getImage(), x, y, width, height, null);
 	}
+	
+	public int getCurrentWidth(){
+		return frames[currentFrameIndex].getImage().getWidth(null);
+	}
+	
+	public int getCurrentHeight(){
+		return frames[currentFrameIndex].getImage().getHeight(null);
+	}	
 }

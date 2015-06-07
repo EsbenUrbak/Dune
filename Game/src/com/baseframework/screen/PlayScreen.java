@@ -1,6 +1,5 @@
 package com.baseframework.screen;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -19,30 +18,31 @@ import com.dune.planet.*;
 
 public class PlayScreen extends GameScreen{
 	// Creating variables and objects
+	
 	// Creating a unit to move around on the planet
 	public Squad squad;
+	
 	// Creating a the surface object of the planet
 	public static ViewFrame viewframe;
 	public static Map map;
 	private Image squadCurrent;
 
-	public static final int SCROLLSPEED = 400; 	
-
+	// Graphics objects
+	Graphics2D g2;
+	
+	// numerical variables
+	public static final int SCROLLSPEED = 400;
 	public static int screenSizeX = 800;
 	public static int screenSizeY = 480;
 	public static final int INITIALSCREENX = 0;
-	public static final int INITIALSCREENY = 2600;
+	public static final int INITIALSCREENY = 0;
 	
 	//Mouse elements
 	public static ArrayList<Integer> pathXPoints = new ArrayList<Integer>();
 	public static ArrayList<Integer> pathYPoints = new ArrayList<Integer>();
 	public static ArrayList<Integer> activeList = new ArrayList<Integer>();
 	boolean squadSelected;
-	boolean outsideX;
-	boolean outsideY;
 	int active = 1;
-	int xPos; 
-	int yPos;
 	Path pathPoint;
 
 	@Override
@@ -88,7 +88,7 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void render(Graphics g) {
 		renderTiles(g);
-	    renderPaths(g);	
+		renderPaths(g);	
 		renderSquad(g);
 	}
 	
@@ -101,39 +101,41 @@ public class PlayScreen extends GameScreen{
 	}
 
 	private void renderPaths(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-	    g2.setStroke(new BasicStroke(3));	
+		g2 = (Graphics2D) g;
+	    g2.setStroke(Resources.strokeSize);	
 
 		if(pathXPoints.size()>0){
 			for ( int i = 0; i < pathXPoints.size(); ++i ) {
 				if(i==0){
-					g2.drawLine((int) squad.getTopX()+ squad.getxImagine()/2 - (int) viewframe.getFrameX(), 
-								(int) squad.getTopY()+ squad.getyImagine()/2- (int) viewframe.getFrameY(), 
+					g2.drawLine((int) (squad.getTopX()+ (float)squad.getxImagine()/2f - viewframe.getFrameX()), 
+								(int) (squad.getTopY()+ (float)squad.getyImagine()/2f - viewframe.getFrameY()), 
 								pathXPoints.get(0)- (int) viewframe.getFrameX(), 
 								pathYPoints.get(0)- (int) viewframe.getFrameY());
-					
-					g.drawOval(pathXPoints.get(0)-2/5 - (int) viewframe.getFrameX(),pathYPoints.get(0)-2/5- (int) viewframe.getFrameY(),5,5);
-					g.drawOval(pathXPoints.get(0)-15/2- (int) viewframe.getFrameX(),pathYPoints.get(0)-15/2- (int) viewframe.getFrameY(),15,15);
+				
+					g.drawOval(pathXPoints.get(0)-1 - (int) viewframe.getFrameX(),pathYPoints.get(0)-1- (int) viewframe.getFrameY(),3,3);
+					g.drawOval(pathXPoints.get(0)-7- (int) viewframe.getFrameX(),pathYPoints.get(0)-7- (int) viewframe.getFrameY(),15,15);
 				}else{
 					g2.drawLine(pathXPoints.get(i-1)- (int) viewframe.getFrameX(), pathYPoints.get(i-1)- (int) viewframe.getFrameY(),
 								pathXPoints.get(i)- (int) viewframe.getFrameX(), pathYPoints.get(i)- (int) viewframe.getFrameY());	
-					g.drawOval(pathXPoints.get(i)-2/5- (int) viewframe.getFrameX(),pathYPoints.get(i)-2/5- (int) viewframe.getFrameY(),5,5);
-					g.drawOval(pathXPoints.get(i)-9/2- (int) viewframe.getFrameX(),pathYPoints.get(i)-9/2- (int) viewframe.getFrameY(),9,9);
-			
+					g.drawOval(pathXPoints.get(i)-1- (int) viewframe.getFrameX(),pathYPoints.get(i)-1- (int) viewframe.getFrameY(),3,3);
+					g.drawOval(pathXPoints.get(i)-5- (int) viewframe.getFrameX(),pathYPoints.get(i)-5- (int) viewframe.getFrameY(),11,11);
 				}	
 			}
 		}
 	}
 	
 	private void renderSquad(Graphics g) {
-		g.drawRect((int)squad.rect.getX() - (int) viewframe.getFrameX(), (int)squad.rect.getY() - (int) viewframe.getFrameY(), 
-				(int)squad.rect.getWidth(), (int)squad.rect.getHeight());
-		g.drawImage(squadCurrent, (int) squad.getTopX() - (int) viewframe.getFrameX(), (int) squad.getTopY()-(int) viewframe.getFrameY(), null);
+		g.drawRect((int)(squad.getTopX() - viewframe.getFrameX()), (int)(squad.getTopY() - viewframe.getFrameY()), 
+				squad.getxImagine(), squad.getyImagine());
+		g.drawImage(squadCurrent, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()), null);
 	}
 	
 	
 	@Override
 	public void onClick(MouseEvent e) {
+		int xPos, yPos;
+		boolean addNewPath = false;
+		
 		// Getting click coordinates
 		xPos = e.getX();
 		yPos = e.getY();
@@ -142,34 +144,26 @@ public class PlayScreen extends GameScreen{
 		// is selected
 		
 		if(squadSelected){
-		if ( 	   xPos < (int) (squad.getTopX() - viewframe.getFrameX())
-				|| xPos > (int) (squad.getTopX() - viewframe.getFrameX() + squad.getxImagine())){
-			
-			pathXPoints.add(xPos+(int) viewframe.getFrameX());
-			pathYPoints.add(yPos+(int) viewframe.getFrameY());
-			activeList.add(active);
-			
-		}else if((yPos < (int) (squad.getTopY() - viewframe.getFrameY())
-				|| yPos > (int) (squad.getTopY() - viewframe.getFrameY() + squad.getyImagine()))){
-			pathXPoints.add(xPos+(int) viewframe.getFrameX());
-			pathYPoints.add(yPos+(int) viewframe.getFrameY());
-			activeList.add(active);
+			if (!squad.rect.contains(xPos, yPos)){
+				
+				if(pathXPoints.size() ==0){
+					addNewPath = true;
+				} else if (pathXPoints.get(pathXPoints.size()-1) != xPos+ (int) viewframe.getFrameX() || 
+						pathYPoints.get(pathYPoints.size()-1) != yPos + (int) viewframe.getFrameY()) {
+					addNewPath = true;
+				}
+				
+				if(addNewPath){
+					pathXPoints.add(xPos+(int) viewframe.getFrameX());
+					pathYPoints.add(yPos+(int) viewframe.getFrameY());
+					activeList.add(active);
+				}
 			}	
 		}
-	
 
 		// Logic to check whether it was within the rectangle (in relative coordinate)
-		if (       xPos > (squad.getTopX() - viewframe.getFrameX())
-				&& xPos < (squad.getTopX() - viewframe.getFrameX() + squad.getxImagine())
-				&& yPos > (squad.getTopY() - viewframe.getFrameY())
-				&& yPos < (squad.getTopY() - viewframe.getFrameY() + squad.getyImagine()) 
-				&& squadSelected == false) {
-			squadSelected = true;
-		} else if (xPos > (squad.getTopX() - viewframe.getFrameX())
-				&& xPos < (squad.getTopX() - viewframe.getFrameX() + squad.getxImagine())
-				&& yPos > (squad.getTopY() - viewframe.getFrameY())
-				&& yPos < (squad.getTopY() - viewframe.getFrameY() + squad.getyImagine()) && squadSelected == true) {
-			squadSelected = false;
+		if (squad.rect.contains(xPos, yPos)) {
+			squadSelected = !squadSelected;
 		}
 		
 	}
@@ -207,19 +201,19 @@ public class PlayScreen extends GameScreen{
 	public void onKeyRelease(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			viewframe.setSpeedY(0);
+			if(viewframe.getSpeedY() < 0) viewframe.setSpeedY(0);
 			break;
 
 		case KeyEvent.VK_DOWN:
-			viewframe.setSpeedY(0);
+			if(viewframe.getSpeedY() >0) viewframe.setSpeedY(0);
 			break;
 
 		case KeyEvent.VK_LEFT:
-			viewframe.setSpeedX(0);
+			if(viewframe.getSpeedX() <0) viewframe.setSpeedX(0);
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			viewframe.setSpeedX(0);
+			if(viewframe.getSpeedX() > 0) viewframe.setSpeedX(0);
 			break;
 		}
 	}

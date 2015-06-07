@@ -4,13 +4,14 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
 import com.dune.planet.Tile;
 
 public class Squad {
 
 	private float topX = 300f;
-	private float topY = 2800f;
+	private float topY = 200f;
 	private float distX = 0f;
 	private float distY = 0f;
 	private float diagonalDist=0f;
@@ -25,10 +26,11 @@ public class Squad {
 	private float speedY = 0f;
 	private int speedTile = 200;
 	
-	public static Rectangle rect = new Rectangle(0, 0, 0, 0);
+	public Rectangle rect = new Rectangle(0, 0, 0, 0);
+	
 	//squad imagine size
-	public int xImagine =78;
-	public int yImagine =80;
+	public int xImagine =Resources.squadImagine.getTileWidth(); //66  //77
+	public int yImagine =Resources.squadImagine.getTileHeight(); //92  //79
 	
 	public List<Integer> pathXPoints = new ArrayList<Integer>();
 	public List<Integer> pathYPoints = new ArrayList<Integer>();
@@ -89,7 +91,7 @@ public class Squad {
 			speedY=0f;
 		}
 		
-		rect.setRect((int)topX, (int)topY,xImagine, yImagine);
+		rect.setBounds((int) topX, (int) topY, xImagine, yImagine);
 		
 	}
 

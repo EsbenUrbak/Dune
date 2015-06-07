@@ -2,6 +2,7 @@ package com.baseframework.game.main;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,7 @@ public class Resources {
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
 	public static URL URLmap1;
+	public static BasicStroke strokeSize;
 	
 	public static void load(){
 		background = loadImage("background.png");
@@ -22,10 +24,14 @@ public class Resources {
 		subTitleFont1 = new Font("Arial", Font.ITALIC, 30);
 		titleColor1 = Color.DARK_GRAY;
 		subTitleColor1 = Color.LIGHT_GRAY;
+		strokeSize = new BasicStroke(2f);
 		
 		tileOcean = loadImage("tiledirt.png");
 		tileDirt = loadImage("tileocean.png");
 		background = loadImage("background.png");
+		
+		//squadImagine = loadImage("elliopic.png");
+		//squadClickedImagine = loadImage("elliopic.png");
 		squadImagine = loadImage("squad.png");
 		squadClickedImagine= loadImage("squadClicked.png");
 		

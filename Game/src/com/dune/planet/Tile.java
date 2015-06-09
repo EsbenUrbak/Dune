@@ -1,27 +1,21 @@
-package planet;
-import gameEngine.StartingClass;
+package com.dune.planet;
 
-import java.applet.Applet;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.net.URL;
+
+import com.baseframework.game.main.Resources;
+
 
 
 public class Tile {
-	//Creating variables: 
-	// TileX  = X pixel position  ; TileY = Y pixel position ; speedY = speed in x direction; speedY speed in y direction
-	//Type = Type of landscape; SizeX = size of tile; sizeY = size of tile
-	private int tileX, tileY, speedX, speedY, type;
+
+	private int tileX, tileY, type;
 	private static int sizeX=40, sizeY=40;
 	public Image tileImage;
 	private Rectangle r;
-	private URL base;
 	
 	public static Image tileocean, tiledirt;
-	
-	//private ViewFrame viewframe = StartingClass.getViewFrame();
-	
-	
+		
 	//Loading the tile imagine from data base of landscapes
 	public Tile(int x, int y, int typeInt) {
 		
@@ -35,9 +29,9 @@ public class Tile {
 		r.setBounds(tileX, tileY, sizeX, sizeY);
 
 		if (type == 1) {
-			tileImage = StartingClass.tiledirt;
+			tileImage = Resources.tileDirt;
 		} else if (type == 2) {
-			tileImage = StartingClass.tileocean;
+			tileImage = Resources.tileOcean;
 		} else {
 			type = 0;
 		}
@@ -45,7 +39,7 @@ public class Tile {
 	}
 	
 	
-	public void update() {
+	public void update(float delta) {
 		// absolute coordinates - no need to update the tile movement anymore
 		
 	}
@@ -67,21 +61,6 @@ public class Tile {
 		this.tileY = tileY;
 	}
 
-	public int getSpeedX() {
-		return speedX;
-	}
-
-	public void setSpeedX(int speedX) {
-		this.speedX = speedX;
-	}
-
-	public int getSpeedY() {
-		return speedY;
-	}
-
-	public void setSpeedY(int speedY) {
-		this.speedY = speedY;
-	}
 
 	public int getType() {
 		return type;

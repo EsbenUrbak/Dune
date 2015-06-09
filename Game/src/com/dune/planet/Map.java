@@ -1,13 +1,13 @@
-package planet;
+package com.dune.planet;
 
-import gameEngine.StartingClass;
-
-import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
+
+import com.baseframework.screen.PlayScreen;
 
 public class Map {
 	
@@ -17,7 +17,7 @@ public class Map {
 	private Rectangle rCatch; 
 	private final int DEFAULTPIXELSIZE = 40;
 
-	public Map(String filename) throws IOException {
+	public Map(URL mapURL) throws IOException {
 		
 		// master array that contains ALL the tiles in the map
 		ArrayList lines = new ArrayList();
@@ -26,7 +26,8 @@ public class Map {
 		rCatch = new Rectangle();		
 		
 		// loads the tiles from the txt file
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(mapURL.openStream()));
+		
 		while (true) {
 			String line = reader.readLine();
 			height++;
@@ -56,7 +57,7 @@ public class Map {
 
 			}
 		}	
-		init(StartingClass.INITIALSCREENX, StartingClass.INITIALSCREENY, StartingClass.screenSizeX, StartingClass.screenSizeY, false);
+		init(PlayScreen.INITIALSCREENX, PlayScreen.INITIALSCREENY, PlayScreen.screenSizeX, PlayScreen.screenSizeY, false);
 	}
 	
 	private void init(int viewX, int viewY, int screenSizeX, int screenSizeY, boolean reSized){
@@ -64,9 +65,9 @@ public class Map {
 		// sets it to the coordinate of the view frame, plus the screen height and width, 
 		// extends it in both directions by the screen scrolling speed to ensure tiles
 		// affected in the next screen movement will be displayed
-		rCatch.setBounds(viewX - StartingClass.SCROLLSPEED - 1, viewY - StartingClass.SCROLLSPEED -1, 
-							screenSizeX + StartingClass.SCROLLSPEED * 2 + 2, 
-							screenSizeY + StartingClass.SCROLLSPEED * 2 + 2);
+		rCatch.setBounds(viewX - PlayScreen.SCROLLSPEED - 1, viewY - PlayScreen.SCROLLSPEED -1, 
+							screenSizeX + PlayScreen.SCROLLSPEED * 2 + 2, 
+							screenSizeY + PlayScreen.SCROLLSPEED * 2 + 2);
 
 		
 		// initializes the list that contains only the tiles in the catch zone
@@ -207,7 +208,6 @@ public class Map {
 			}
 			scopeHeight--;
 		}
-
 		
 		scopeTileArray.trimToSize();
 		

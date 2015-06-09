@@ -15,7 +15,7 @@ public class Map {
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
 	private Rectangle rCatch; 
-	private final int DEFAULTPIXELSIZE = 40;
+	private final int DEFAULTTILESIZE = 40;
 
 	public Map(URL mapURL) throws IOException {
 		
@@ -65,9 +65,9 @@ public class Map {
 		// sets it to the coordinate of the view frame, plus the screen height and width, 
 		// extends it in both directions by the screen scrolling speed to ensure tiles
 		// affected in the next screen movement will be displayed
-		rCatch.setBounds(viewX - PlayScreen.SCROLLSPEED - 1, viewY - PlayScreen.SCROLLSPEED -1, 
-							screenSizeX + PlayScreen.SCROLLSPEED * 2 + 2, 
-							screenSizeY + PlayScreen.SCROLLSPEED * 2 + 2);
+		rCatch.setBounds(viewX - ViewFrame.SCROLLSPEED - 1, viewY - ViewFrame.SCROLLSPEED -1, 
+							screenSizeX + ViewFrame.SCROLLSPEED * 2 + 2, 
+							screenSizeY + ViewFrame.SCROLLSPEED * 2 + 2);
 
 		
 		// initializes the list that contains only the tiles in the catch zone
@@ -235,7 +235,7 @@ public class Map {
 	public int getWidth(boolean inPixel) {
 		if (inPixel) {
 			if (tilearray.isEmpty()) {
-				return DEFAULTPIXELSIZE * width;
+				return DEFAULTTILESIZE * width;
 			} else {
 				return Tile.getSizeX() * width;
 			}
@@ -248,7 +248,7 @@ public class Map {
 	public int getHeight(boolean inPixel) {
 		if (inPixel) {
 			if (tilearray.isEmpty()) {
-				return DEFAULTPIXELSIZE * height;
+				return DEFAULTTILESIZE * height;
 			} else {
 				return Tile.getSizeY() * height;
 			}

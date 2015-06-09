@@ -5,6 +5,8 @@ public class ViewFrame {
 	private float frameX, frameY, speedX, speedY;
 	private int sizeX, sizeY, boundX, boundY;
 
+	public static final int SCROLLSPEED = 400;
+	
 	public ViewFrame(float x, float y, int sx, int sy) {
 		frameX = x;
 		frameY = y;
@@ -18,6 +20,7 @@ public class ViewFrame {
 
 	public void update(float delta) {
 		//makes sure the view frame does not get out of the map 
+
 		if (frameX + speedX * delta <= 0f && speedX < 0f) {
 			frameX = 0f;
 			speedX = 0f;
@@ -37,6 +40,8 @@ public class ViewFrame {
 		} else {
 			frameY += speedY * delta;
 		}
+		
+
 
 	}
 
@@ -105,6 +110,22 @@ public class ViewFrame {
 	public void setSizeY(int sizeY) {
 		this.boundY += this.sizeY - sizeY;
 		this.sizeY = sizeY;
+	}
+
+	public void scrollUp(){
+		this.speedY = -SCROLLSPEED;
+	}
+	
+	public void scrollDown(){
+		this.speedY = SCROLLSPEED;
+	}
+	
+	public void scrollLeft(){
+		this.speedX = -SCROLLSPEED;
+	}
+	
+	public void scrollRight(){
+		this.speedX = SCROLLSPEED;
 	}
 
 }

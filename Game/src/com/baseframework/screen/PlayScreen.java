@@ -30,7 +30,6 @@ public class PlayScreen extends GameScreen{
 	Graphics2D g2;
 	
 	// numerical variables
-	public static final int SCROLLSPEED = 400;
 	public static int screenSizeX = 800;
 	public static int screenSizeY = 480;
 	public static final int INITIALSCREENX = 0;
@@ -69,7 +68,7 @@ public class PlayScreen extends GameScreen{
 	public void update(float delta) {
 		// Updating the screen, squad, and zone of the map to be displayed
 		viewframe.update(delta);
-		squad.update(delta);	
+		squad.update(delta);
 		
 		map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
 		
@@ -126,25 +125,15 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderSquad(Graphics g) {
-		//g.drawRect((int)(squad.getTopX() - viewframe.getFrameX()), (int)(squad.getTopY() - viewframe.getFrameY()), 
-		//		squad.getxImagine(), squad.getyImagine());
-
+		
 		if(squadSelected){
 			Resources.selectAnim.render(g, 
 					(int) (squad.getTopX() - viewframe.getFrameX() + (squad.xImagine - Resources.selectAnim.getCurrentWidth())/2), 
-					(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.selectAnim.getCurrentHeight()/2 - 5);
-			
-			//g.drawImage(Resources.squadSelect, 
-			//		(int) (squad.getTopX() - viewframe.getFrameX() + (squad.xImagine - Resources.squadSelect.getTileWidth())/2), 
-			//		(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.squadSelect.getTileHeight()/2 - 5, null);			
+					(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.selectAnim.getCurrentHeight()/2 - 5);			
 		}
 		
-		//if(pathXPoints.isEmpty()){
-			//g.drawImage(squad.getCurrentImage(), (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()), null);
-		//} else {
-			squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
-		//}
-		
+		squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
+
 	}
 	
 	
@@ -161,12 +150,12 @@ public class PlayScreen extends GameScreen{
 		// is selected
 
 		// Logic to check whether it was within the rectangle (in relative coordinate)
-		if (squad.rect.contains(xPos, yPos)) {
+		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
 			squadSelected = !squadSelected;
 		}
 		
 		if(squadSelected){
-			if (!squad.rect.contains(xPos, yPos)){
+			if (!squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())){
 				
 				if(pathXPoints.size() ==0){
 					addNewPath = true;
@@ -191,19 +180,19 @@ public class PlayScreen extends GameScreen{
 	public void onKeyPress(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			viewframe.setSpeedY(-SCROLLSPEED);
+			viewframe.scrollUp();
 			break;
 
 		case KeyEvent.VK_DOWN:
-			viewframe.setSpeedY(SCROLLSPEED);
+			viewframe.scrollDown();
 			break;
 
 		case KeyEvent.VK_LEFT:
-			viewframe.setSpeedX(-SCROLLSPEED);
+			viewframe.scrollLeft();
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			viewframe.setSpeedX(SCROLLSPEED);
+			viewframe.scrollRight();
 			break;
 			
 		case KeyEvent.VK_Z:
@@ -220,19 +209,19 @@ public class PlayScreen extends GameScreen{
 	public void onKeyRelease(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			if(viewframe.getSpeedY() < 0) viewframe.setSpeedY(0);
+			if(viewframe.getSpeedY() < 0f) viewframe.setSpeedY(0f);
 			break;
 
 		case KeyEvent.VK_DOWN:
-			if(viewframe.getSpeedY() >0) viewframe.setSpeedY(0);
+			if(viewframe.getSpeedY() >0f) viewframe.setSpeedY(0f);
 			break;
 
 		case KeyEvent.VK_LEFT:
-			if(viewframe.getSpeedX() <0) viewframe.setSpeedX(0);
+			if(viewframe.getSpeedX() <0f) viewframe.setSpeedX(0f);
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			if(viewframe.getSpeedX() > 0) viewframe.setSpeedX(0);
+			if(viewframe.getSpeedX() > 0f) viewframe.setSpeedX(0f);
 			break;
 		}
 	}

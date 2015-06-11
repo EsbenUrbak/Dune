@@ -21,6 +21,8 @@ public class Resources {
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
 	private static BufferedImage squadBlink;
+	private static BufferedImage G, G_W1_G2_W3,G_W1_W2_W3,G_W1,G_W3_G4_W5,G_W3_W4_W5,G_W3,G_W5_W6_W7,G_W5_G6_W7,G_W5,G_W7_G8_W9,G_W7_W8_W9,G_W7;  
+	private static BufferedImage W, W_G1_G2_G3,W_G1,W_G3_G4_G5,W_G3,W_G5_G6_G7,W_G5,W_G7_G8_G9,W_G7, W_W1_G2_W3,W_W3_G4_W5,W_W5_G6_W7,W_W7_G8_W9;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
 	public static BufferedReader map1;
@@ -31,7 +33,7 @@ public class Resources {
 	private static final String DIRECTORY = "/resources/";
 	
 	public static void load(){
-		map1 = loadFile("map1.txt");
+		map1 = loadFile("map2.txt");
 		
 		background = loadImage("background.png");
 		
@@ -45,6 +47,35 @@ public class Resources {
 		tileDirt = loadImage("tileocean.png");
 		background = loadImage("background.png");
 
+		//loading all pictures for the tiles generation
+		G=loadImage("G.png");
+		G_W1_G2_W3=loadImage("G_W1_G2_W3.png");
+		G_W1_W2_W3=loadImage("G_W1_W2_W3.png");
+		G_W1=loadImage("G_W1.png");
+		G_W3_G4_W5=loadImage("G_W3_G4_W5.png");
+		G_W3_W4_W5=loadImage("G_W3_W4_W5.png");
+		G_W3=loadImage("G_W3.png");
+		G_W5_W6_W7=loadImage("G_W5_W6_W7.png");
+		G_W5_G6_W7=loadImage("G_W5_G6_W7.png");
+		G_W5=loadImage("G_W5.png");
+		G_W7_G8_W9=loadImage("G_W7_G8_W9.png");
+		G_W7_W8_W9=loadImage("G_W7_W8_W9.png");
+		G_W7=loadImage("G_W7.png");
+		
+		W=loadImage("W.png");
+		W_G1_G2_G3=loadImage("W_G1_G2_G3.png");
+		W_G1=loadImage("W_G1.png");
+		W_G3_G4_G5=loadImage("W_G3_G4_G5.png");
+		W_G3=loadImage("W_G3.png");
+		W_G5_G6_G7=loadImage("W_G5_G6_G7.png");
+		W_G5=loadImage("W_G5.png");
+		W_G7_G8_G9=loadImage("W_G7_G8_G9.png");
+		W_G7=loadImage("W_G7.png");
+		W_W1_G2_W3=loadImage("W_W1_G2_W3.png");
+		W_W3_G4_W5=loadImage("W_W3_G4_W5.png");
+		W_W5_G6_W7=loadImage("W_W5_G6_W7.png");
+		W_W7_G8_W9=loadImage("W_W7_G8_W9.png");
+		
 		// animate the selector
 		squadSelect = loadImage("selector.png");		
 		squadSelect1 = ImageHandler.resize(squadSelect, (int)(squadSelect.getWidth()*1.03), (int)(squadSelect.getHeight()*1.01));

@@ -25,7 +25,8 @@ public class Map {
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					char ch = line.charAt(i);
-					Tile t = new Tile(i, j, Character.getNumericValue(ch));
+					Tile t = new Tile(i, j, Character.toString(ch));
+					System.out.println("Tile ID ="+Character.toString(ch));
 					tilearray.add(t);
 				}
 			}
@@ -262,5 +263,82 @@ public class Map {
 		}
 	}
 
+public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArray, int widthArray){
 
+	
+		
+		ArrayList<Tile> tilearrayNew=new ArrayList<Tile>();
+		String S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9;
+		
+		
+		
+		int bugID=0;
+		for(int j = 0; j<heightArray;j++){
+		for (int i = 0; i < widthArray; i++) {
+			 bugID+=1;
+			
+				//edge of map problem solving -> "tiles" outside of map => are 0 tiles
+				S0=tilearray.get((i+j*widthArray));
+				
+				if((i+j*widthArray)>0){
+					S1 =tilearray.get((i+j*widthArray)-widthArray);
+				}else{
+					S1=S0;
+				}
+				
+				if((i+j*widthArray)-widthArray+1>0){
+					S2=tilearray.get((i+j*widthArray)-widthArray+1);
+				}else{
+					S2=S0;
+				}
+
+				if((i+j*widthArray)+1>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
+					S3 =tilearray.get((i+j*widthArray)+1);
+				}else{
+					S3=S0;
+				}
+
+				if((i+j*widthArray)+widthArray+1<((height-1)*heightArray)){
+					S4=tilearray.get((i+j*widthArray)+widthArray+1);
+				}else{
+					S4=S0;
+				}
+				
+				if((i+j*widthArray)+widthArray+1<((height-1)*heightArray)){
+					S5 =tilearray.get((i+j*widthArray)+widthArray);
+				}else{
+					S5=S0;
+				}
+
+				if((i+j*widthArray)+widthArray-1<((height-1)*heightArray)){
+					S6 =tilearray.get((i+j*widthArray)+widthArray-1);
+				}else{
+					S6=S0;
+				}
+				
+				if((i+j*widthArray)-1>0){
+					S7 =tilearray.get((i+j*widthArray)-1);
+				}else{
+					S7=S0;
+				}
+				
+				if((i+j*widthArray)-widthArray-1>0){
+					S8 =tilearray.get((i+j*widthArray)-widthArray-1);
+				}else{
+					S8=S0;
+				}
+
+				S9=S1;
+
+		
+			Tile t = new Tile(i, j, S0,S1,S2,S3,S4,S5,S6,S7,S8,S9);
+			tilearrayNew.add(t);
+		}	
+		}
+		
+		return tilearrayNew;
+			
+	}
+	
+	
 }

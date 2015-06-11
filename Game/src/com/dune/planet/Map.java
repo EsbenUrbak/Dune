@@ -272,7 +272,8 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 		
 		ArrayList<Tile> tilearrayNew=new ArrayList<Tile>();
 		String S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9;
-		
+		String E0,  E1, E2, E3, E4, E5, E6, E7, E8, E9;
+
 		
 		
 		int bugID=0;
@@ -334,8 +335,65 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				S9=S1;
 
 				System.out.println(S0+S1+S2+S3+S4+S5+S6+S7+S8);
-			Tile t = new Tile(i, j, S0,S1,S2,S3,S4,S5,S6,S7,S8,S9);
-			tilearrayNew.add(t);
+				
+				E0=S0;
+				if(S0.equals(S1)){
+					E1=S0+"_"+S1;
+				}else{
+					E1=S0+"_"+S1+"1";
+				}
+
+				if(S0.equals(S2)){
+					E2=S0+"_"+S2;
+				}else{
+					E2=S0+"_"+S1+"1"+"_"+S2+"2"+"_"+S3+"3";
+				}
+
+				if(S0.equals(S3)){
+					E3=S0+"_"+S3;
+				}else{
+					E3=S0+"_"+S3+"3";
+				}
+				
+				if(S0.equals(S4)){
+					E4=S0+"_"+S4;
+				}else{
+					E4=S0+"_"+S3+"3"+"_"+S4+"4"+"_"+S5+"5";
+				}				
+
+				if(S0.equals(S5)){
+					E5=S0+"_"+S5;
+				}else{
+					E5=S0+"_"+S5+"5";
+				}
+
+				if(S0.equals(S6)){
+					E6=S0+"_"+S6;
+				}else{
+					E6=S0+"_"+S5+"5"+"_"+S6+"6"+"_"+S7+"7";
+				}
+				
+				if(S0.equals(S7)){
+					E7=S0+"_"+S7;
+				}else{
+					E7=S0+"_"+S7+"7";
+				}
+
+				if(S0.equals(S8)){
+					E8=S0+"_"+S8;
+				}else{
+					E8=S0+"_"+S7+"7"+S8+"8"+"_"+S9+"9";
+				}
+				
+
+
+				
+				System.out.println("E0 = "+E0 +" E1 = "+E1+" E2 = "+E2+" E3 = "+E3+" E4 = "+E4+" E5 = "+E5+" E6 = "+E6+" E7 = "+E7+" E8 = "+E8 );
+				
+			//Tile t = new Tile(i, j, S0,S1,S2,S3,S4,S5,S6,S7,S8);
+				Tile t = new Tile(i, j, E0,E1,E2,E3,E4,E5,E6,E7,E8);
+				
+				tilearrayNew.add(t);
 		}	
 		}
 		

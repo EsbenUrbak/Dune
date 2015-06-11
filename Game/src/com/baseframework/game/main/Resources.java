@@ -23,8 +23,8 @@ public class Resources {
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
 	private static BufferedImage squadBlink;
-	public static BufferedImage G, G_W1_G2_W3,G_W1_W2_W3,G_W1,G_W3_G4_W5,G_W3_W4_W5,G_W3,G_W5_W6_W7,G_W5_G6_W7,G_W5,G_W7_G8_W9,G_W7_W8_W9,G_W7;  
-	public static BufferedImage W, W_G1_G2_G3,W_G1,W_G3_G4_G5,W_G3,W_G5_G6_G7,W_G5,W_G7_G8_G9,W_G7, W_W1_G2_W3,W_W3_G4_W5,W_W5_G6_W7,W_W7_G8_W9;
+	public static BufferedImage G,G_G,G_G_G_G, G_W1_G2_W3,G_W1_W2_W3,G_W1,G_W3_G4_W5,G_W3_W4_W5,G_W3,G_W5_W6_W7,G_W5_G6_W7,G_W5,G_W7_G8_W9,G_W7_W8_W9,G_W7;  
+	public static BufferedImage W,W_W,W_W_W_W, W_G1_G2_G3,W_G1,W_G3_G4_G5,W_G3,W_G5_G6_G7,W_G5,W_G7_G8_G9,W_G7, W_W1_G2_W3,W_W3_G4_W5,W_W5_G6_W7,W_W7_G8_W9;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
 	public static BufferedReader map1;
@@ -54,6 +54,12 @@ public class Resources {
 		//loading all pictures for the tiles generation
 		G=loadImage("G.png");
 		imageMap.put("G", G);
+		
+		G_G=loadImage("G_G.png");
+		imageMap.put("G_G", G_G);
+		
+		G_G_G_G=loadImage("G_G_G_G.png");
+		imageMap.put("G_G_G_G", G_G_G_G);
 		
 		G_W1_G2_W3=loadImage("G_W1_G2_W3.png");
 		imageMap.put("G_W1_G2_W3", G_W1_G2_W3);
@@ -95,6 +101,12 @@ public class Resources {
 		
 		W=loadImage("w.png");
 		imageMap.put("W", W);
+		
+		W_W=loadImage("w_W.png");
+		imageMap.put("W_W", W_W);
+		
+		W_W_W_W=loadImage("W_W_W_W.png");
+		imageMap.put("W_W_W_W", W_W_W_W);
 		
 		W_G1_G2_G3=loadImage("W_G1_G2_G3.png");
 		imageMap.put("W_G1_G2_G3", W_G1_G2_G3);

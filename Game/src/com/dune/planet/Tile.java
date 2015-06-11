@@ -21,7 +21,7 @@ public class Tile {
 	public static Image tileocean, tiledirt;
 		
 	//Loading the tile imagine from data base of landscapes
-	public Tile(int x, int y, String S0,String S1,String S2,String S3,String S4,String S5,String S6,String S7,String S8,String S9) {
+	public Tile(int x, int y, String S0,String S1,String S2,String S3,String S4,String S5,String S6,String S7,String S8) {
 		
 		
 		tileX = x * sizeX;
@@ -33,12 +33,12 @@ public class Tile {
 		r.setBounds(tileX, tileY, sizeX, sizeY);
 		System.out.println("Middle Picture "+S0);
 		//tileImage=Resources.getImage(S0);
-		tileImage = ImageMerge(type, sizeX,sizeY,S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9);
+		tileImage = ImageMerge(type, sizeX,sizeY,S0,  S1, S2, S3, S4, S5, S6, S7, S8);
 		
 
 	}
 	
-	public BufferedImage ImageMerge(int type, int sizeX, int sizeY,String S0,String S1,String S2,String S3,String S4,String S5,String S6,String S7,String S8,String S9){
+	public BufferedImage ImageMerge(int type, int sizeX, int sizeY,String S0,String S1,String S2,String S3,String S4,String S5,String S6,String S7,String S8){
 		
 		CombinedTileImage=new BufferedImage(sizeX, sizeY, type);
 		

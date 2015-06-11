@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -27,6 +29,8 @@ public class Resources {
 	public static Color titleColor1, subTitleColor1;
 	public static BufferedReader map1;
 	public static BasicStroke strokeSize;
+	
+	public static Map<String, BufferedImage> imageMap = new HashMap<>();
 	
 	public static Animation squadMoveRightAnim, squadMoveLeftAnim, squadStandRightAnim, squadStandLeftAnim, selectAnim;
 	
@@ -49,32 +53,84 @@ public class Resources {
 
 		//loading all pictures for the tiles generation
 		G=loadImage("G.png");
-		G_W1_G2_W3=loadImage("G_W1_G2_W3.png");
-		G_W1_W2_W3=loadImage("G_W1_W2_W3.png");
-		G_W1=loadImage("G_W1.png");
-		G_W3_G4_W5=loadImage("G_W3_G4_W5.png");
-		G_W3_W4_W5=loadImage("G_W3_W4_W5.png");
-		G_W3=loadImage("G_W3.png");
-		G_W5_W6_W7=loadImage("G_W5_W6_W7.png");
-		G_W5_G6_W7=loadImage("G_W5_G6_W7.png");
-		G_W5=loadImage("G_W5.png");
-		G_W7_G8_W9=loadImage("G_W7_G8_W9.png");
-		G_W7_W8_W9=loadImage("G_W7_W8_W9.png");
-		G_W7=loadImage("G_W7.png");
+		imageMap.put("G", G);
 		
-		W=loadImage("W.png");
+		G_W1_G2_W3=loadImage("G_W1_G2_W3.png");
+		imageMap.put("G_W1_G2_W3", G_W1_G2_W3);
+		
+		G_W1_W2_W3=loadImage("G_W1_W2_W3.png");
+		imageMap.put("G_W1_W2_W3", G_W1_W2_W3);
+		
+		G_W1=loadImage("G_W1.png");
+		imageMap.put("G_W1", G_W1);
+		
+		G_W3_G4_W5=loadImage("G_W3_G4_W5.png");
+		imageMap.put("G_W3_G4_W5", G_W3_G4_W5);
+		
+		G_W3_W4_W5=loadImage("G_W3_W4_W5.png");
+		imageMap.put("G_W3_W4_W5", G_W3_W4_W5);
+		
+		G_W3=loadImage("G_W3.png");
+		imageMap.put("G_W3", G_W3);
+		
+		G_W5_W6_W7=loadImage("G_W5_W6_W7.png");
+		imageMap.put("G_W1_G2_W3", G_W1_G2_W3);
+		
+		G_W5_G6_W7=loadImage("G_W5_G6_W7.png");
+		imageMap.put("G_W5_W6_W7", G_W5_W6_W7);
+		
+		G_W5=loadImage("G_W5.png");
+		imageMap.put("G_W5", G_W5);
+		
+		G_W7_G8_W9=loadImage("G_W7_G8_W9.png");
+		imageMap.put("G_W7_G8_W9", G_W7_G8_W9);
+		
+		G_W7_W8_W9=loadImage("G_W7_W8_W9.png");
+		imageMap.put("G_W7_W8_W9", G_W7_W8_W9);
+		
+		G_W7=loadImage("G_W7.png");
+		imageMap.put("G_W7", G_W7);
+		
+		
+		
+		W=loadImage("w.png");
+		imageMap.put("W", W);
+		
 		W_G1_G2_G3=loadImage("W_G1_G2_G3.png");
+		imageMap.put("W_G1_G2_G3", W_G1_G2_G3);
+		
 		W_G1=loadImage("W_G1.png");
+		imageMap.put("W_G1", W_G1);
+		
 		W_G3_G4_G5=loadImage("W_G3_G4_G5.png");
+		imageMap.put("W_G3_G4_G5", W_G3_G4_G5);
+		
 		W_G3=loadImage("W_G3.png");
+		imageMap.put("W_G3", W_G3);
+		
 		W_G5_G6_G7=loadImage("W_G5_G6_G7.png");
+		imageMap.put("W_G5_G6_G7", W_G5_G6_G7);
+		
 		W_G5=loadImage("W_G5.png");
+		imageMap.put("W_G5", W_G5);
+		
 		W_G7_G8_G9=loadImage("W_G7_G8_G9.png");
+		imageMap.put("W_G7_G8_G9", W_G7_G8_G9);
+		
 		W_G7=loadImage("W_G7.png");
+		imageMap.put("W_G7", W_G7);
+		
 		W_W1_G2_W3=loadImage("W_W1_G2_W3.png");
+		imageMap.put("W_W1_G2_W3", W_W1_G2_W3);
+		
 		W_W3_G4_W5=loadImage("W_W3_G4_W5.png");
+		imageMap.put("W_W3_G4_W5", W_W3_G4_W5);
+		
 		W_W5_G6_W7=loadImage("W_W5_G6_W7.png");
+		imageMap.put("W_W5_G6_W7", W_W5_G6_W7);
+		
 		W_W7_G8_W9=loadImage("W_W7_G8_W9.png");
+		imageMap.put("W_W7_G8_W9", W_W7_G8_W9);
 		
 		// animate the selector
 		squadSelect = loadImage("selector.png");		
@@ -123,6 +179,11 @@ public class Resources {
 		Frame f11_1 = new Frame(ImageHandler.horizontalflip(squadBlink), .1f);
 		squadStandLeftAnim = new Animation(f11_0, f11_1, f11_0);		
 		
+	}
+	
+	public static BufferedImage getImage(String imageName)
+	{
+		return imageMap.get(imageName);
 	}
 	
 	private static AudioClip loadSound(String filename){

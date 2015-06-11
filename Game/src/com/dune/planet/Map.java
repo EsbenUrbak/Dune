@@ -9,7 +9,7 @@ import com.baseframework.screen.PlayScreen;
 public class Map {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
-	private ArrayList<Tile> mapArray = new ArrayList<Tile>();	
+	private ArrayList<String> mapArray = new ArrayList<String>();	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
 	private Rectangle rCatch; 
@@ -26,12 +26,15 @@ public class Map {
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					char ch = line.charAt(i);
-					Tile t = new Tile(i, j, Character.toString(ch),"w","w","w","w","w","w","w","w","w");
-					tilearray.add(t);
+					//Tile t = new Tile(i, j, Character.toString(ch),"w","w","w","w","w","w","w","w","w");
+					//tilearray.add(t);
+					mapArray.add(Character.toString(ch));
 				}
 			}
 		}
-				
+		
+		tilearray=transitionAlgo( mapArray, height, width);
+		
 		// defines the catch area of the map in which tiles may have to be displayed
 		rCatch = new Rectangle();	
 		
@@ -280,49 +283,49 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				//edge of map problem solving -> "tiles" outside of map => are 0 tiles
 				S0=tilearray.get((i+j*widthArray));
 				
-				if((i+j*widthArray)>0){
+				if(j>0){
 					S1 =tilearray.get((i+j*widthArray)-widthArray);
 				}else{
 					S1=S0;
 				}
 				
-				if((i+j*widthArray)-widthArray+1>0){
+				if(j>0){
 					S2=tilearray.get((i+j*widthArray)-widthArray+1);
 				}else{
 					S2=S0;
 				}
 
-				if((i+j*widthArray)+1>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
+				if(j>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
 					S3 =tilearray.get((i+j*widthArray)+1);
 				}else{
 					S3=S0;
 				}
 
-				if((i+j*widthArray)+widthArray+1<((height-1)*heightArray)){
+				if(j<heightArray-1&&((i+j*widthArray)+widthArray+1)<widthArray*heightArray){
 					S4=tilearray.get((i+j*widthArray)+widthArray+1);
 				}else{
 					S4=S0;
 				}
 				
-				if((i+j*widthArray)+widthArray+1<((height-1)*heightArray)){
+				if((j<heightArray-1)){
 					S5 =tilearray.get((i+j*widthArray)+widthArray);
 				}else{
 					S5=S0;
 				}
 
-				if((i+j*widthArray)+widthArray-1<((height-1)*heightArray)){
+				if(j<heightArray-1){
 					S6 =tilearray.get((i+j*widthArray)+widthArray-1);
 				}else{
 					S6=S0;
 				}
 				
-				if((i+j*widthArray)-1>0){
+				if(i>0){
 					S7 =tilearray.get((i+j*widthArray)-1);
 				}else{
 					S7=S0;
 				}
 				
-				if((i+j*widthArray)-widthArray-1>0){
+				if(j>0&&(i+j*widthArray)-widthArray-1>0){
 					S8 =tilearray.get((i+j*widthArray)-widthArray-1);
 				}else{
 					S8=S0;
@@ -330,7 +333,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 
 				S9=S1;
 
-		
+				System.out.println(S0+S1+S2+S3+S4+S5+S6+S7+S8);
 			Tile t = new Tile(i, j, S0,S1,S2,S3,S4,S5,S6,S7,S8,S9);
 			tilearrayNew.add(t);
 		}	

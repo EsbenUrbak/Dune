@@ -5,15 +5,16 @@ import java.applet.AudioClip;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import com.baseframework.animation.Animation;
 import com.baseframework.animation.Frame;
+import com.baseframework.util.ImageHandler;
 
 public class Resources {
 	public static BufferedImage background, tileOcean, tileDirt, squadRight, squadLeft, squadSelect;
@@ -22,13 +23,15 @@ public class Resources {
 	private static BufferedImage squadBlink;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
-	public static URL URLmap1;
+	public static BufferedReader map1;
 	public static BasicStroke strokeSize;
 	
 	public static Animation squadMoveRightAnim, squadMoveLeftAnim, squadStandRightAnim, squadStandLeftAnim, selectAnim;
 	
+	private static final String DIRECTORY = "/resources/";
+	
 	public static void load(){
-		URLmap1 = Resources.class.getResource("/resources/map1.txt");
+		map1 = loadFile("map1.txt");
 		
 		background = loadImage("background.png");
 		
@@ -44,16 +47,16 @@ public class Resources {
 
 		// animate the selector
 		squadSelect = loadImage("selector.png");		
-		squadSelect1 = resize(squadSelect, (int)(squadSelect.getWidth()*1.03), (int)(squadSelect.getHeight()*1.01));
-		squadSelect2 = resize(squadSelect, (int)(squadSelect.getWidth()*1.06), (int)(squadSelect.getHeight()*1.02));
-		squadSelect3 = resize(squadSelect, (int)(squadSelect.getWidth()*0.97), (int)(squadSelect.getHeight()*0.99));
-		squadSelect4 = resize(squadSelect, (int)(squadSelect.getWidth()*0.94), (int)(squadSelect.getHeight()*0.98));		
+		squadSelect1 = ImageHandler.resize(squadSelect, (int)(squadSelect.getWidth()*1.03), (int)(squadSelect.getHeight()*1.01));
+		squadSelect2 = ImageHandler.resize(squadSelect, (int)(squadSelect.getWidth()*1.06), (int)(squadSelect.getHeight()*1.02));
+		squadSelect3 = ImageHandler.resize(squadSelect, (int)(squadSelect.getWidth()*0.97), (int)(squadSelect.getHeight()*0.99));
+		squadSelect4 = ImageHandler.resize(squadSelect, (int)(squadSelect.getWidth()*0.94), (int)(squadSelect.getHeight()*0.98));		
 
-		Frame f0_0 = new Frame(squadSelect, .1f);
-		Frame f0_1 = new Frame(squadSelect1, .1f);
-		Frame f0_2 = new Frame(squadSelect2, .1f);
-		Frame f0_3 = new Frame(squadSelect3, .1f);
-		Frame f0_4 = new Frame(squadSelect4, .1f);
+		Frame f0_0 = new Frame(squadSelect, .05f);
+		Frame f0_1 = new Frame(squadSelect1, .05f);
+		Frame f0_2 = new Frame(squadSelect2, .15f);
+		Frame f0_3 = new Frame(squadSelect3, .05f);
+		Frame f0_4 = new Frame(squadSelect4, .15f);
 		selectAnim = new Animation(f0_0, f0_1, f0_2, f0_1, f0_0, f0_3, f0_4, f0_3);
 		
 		// animate the squad movement
@@ -63,7 +66,7 @@ public class Resources {
 		squadMoveRg4 = loadImage("squad_move4.png");
 		squadMoveRg5 = loadImage("squad_move5.png");
 		squadRight = squadMoveRg1;
-		squadLeft = horizontalflip(squadMoveRg1);
+		squadLeft = ImageHandler.horizontalflip(squadMoveRg1);
 		
 		Frame f1_1 = new Frame(squadMoveRg1, .1f);
 		Frame f1_2 = new Frame(squadMoveRg2, .1f);
@@ -72,11 +75,11 @@ public class Resources {
 		Frame f1_5 = new Frame(squadMoveRg5, .1f);
 		squadMoveRightAnim = new Animation(f1_1, f1_2, f1_3, f1_4, f1_5);
 
-		Frame f2_1 = new Frame(horizontalflip(squadMoveRg1), .1f);
-		Frame f2_2 = new Frame(horizontalflip(squadMoveRg2), .1f);
-		Frame f2_3 = new Frame(horizontalflip(squadMoveRg3), .1f);
-		Frame f2_4 = new Frame(horizontalflip(squadMoveRg4), .1f);
-		Frame f2_5 = new Frame(horizontalflip(squadMoveRg5), .1f);
+		Frame f2_1 = new Frame(ImageHandler.horizontalflip(squadMoveRg1), .1f);
+		Frame f2_2 = new Frame(ImageHandler.horizontalflip(squadMoveRg2), .1f);
+		Frame f2_3 = new Frame(ImageHandler.horizontalflip(squadMoveRg3), .1f);
+		Frame f2_4 = new Frame(ImageHandler.horizontalflip(squadMoveRg4), .1f);
+		Frame f2_5 = new Frame(ImageHandler.horizontalflip(squadMoveRg5), .1f);
 		squadMoveLeftAnim = new Animation(f2_1, f2_2, f2_3, f2_4, f2_5);
 		
 		// animate the squad standing position
@@ -86,13 +89,13 @@ public class Resources {
 		squadStandRightAnim = new Animation(f10_0, f10_1, f10_0);
 
 		Frame f11_0 = new Frame(squadLeft, 1f);
-		Frame f11_1 = new Frame(horizontalflip(squadBlink), .1f);
+		Frame f11_1 = new Frame(ImageHandler.horizontalflip(squadBlink), .1f);
 		squadStandLeftAnim = new Animation(f11_0, f11_1, f11_0);		
 		
 	}
 	
 	private static AudioClip loadSound(String filename){
-		URL fileURL = Resources.class.getResource("/resources/" + filename);
+		URL fileURL = Resources.class.getResource(DIRECTORY + filename);
 		return Applet.newAudioClip(fileURL);
 	}
 	
@@ -100,7 +103,7 @@ public class Resources {
 		BufferedImage img = null;
 		
 		try {
-			URL fileURL = Resources.class.getResource("/resources/" + filename);
+			URL fileURL = Resources.class.getResource(DIRECTORY + filename);
 			img = ImageIO.read(fileURL);
 		} catch (Exception e){
 			e.printStackTrace();
@@ -109,46 +112,18 @@ public class Resources {
 		return img;
 	}
 	
-	public static BufferedImage horizontalflip(BufferedImage img) {  
-        int w = img.getWidth();  
-        int h = img.getHeight();  
-        BufferedImage dimg = new BufferedImage(w, h, img.getType());  
-        Graphics2D g = dimg.createGraphics();  
-        g.drawImage(img, 0, 0, w, h, w, 0, 0, h, null);  
-        g.dispose();  
-        return dimg;  
-    }
+	private static BufferedReader loadFile(String filename){
+		BufferedReader reader = null;
+		try {
+			URL fileURL = Resources.class.getResource(DIRECTORY + filename);
+			reader = new BufferedReader(new InputStreamReader(fileURL.openStream()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return reader;
+	}	
 	
-    private static BufferedImage verticalflip(BufferedImage img) {  
-        int w = img.getWidth();  
-        int h = img.getHeight();  
-        BufferedImage dimg = new BufferedImage(w, h, img.getColorModel().getTransparency());  
-        Graphics2D g = dimg.createGraphics();  
-        g.drawImage(img, 0, 0, w, h, 0, h, w, 0, null);  
-        g.dispose();  
-        return dimg;  
-    }
-    
-    private static BufferedImage resize(BufferedImage img, int newW, int newH) {  
-        int w = img.getWidth();  
-        int h = img.getHeight();  
-        BufferedImage dimg = new BufferedImage(newW, newH, img.getType());  
-        Graphics2D g = dimg.createGraphics();  
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
-        g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);  
-        g.dispose();  
-        return dimg;  
-    }
-    
-    public static BufferedImage rotate(BufferedImage img, int angle) {  
-        int w = img.getWidth();  
-        int h = img.getHeight();  
-        BufferedImage dimg = new BufferedImage(w, h, img.getType());  
-        Graphics2D g = dimg.createGraphics();  
-        g.rotate(Math.toRadians(angle), w/2, h/2);  
-        g.drawImage(img, null, 0, 0);  
-        return dimg;  
-    }  
+  
 }  
     
     

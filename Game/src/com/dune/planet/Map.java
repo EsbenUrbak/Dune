@@ -2,9 +2,6 @@ package com.dune.planet;
 
 import java.awt.Rectangle;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 
 import com.baseframework.screen.PlayScreen;
@@ -17,47 +14,54 @@ public class Map {
 	private Rectangle rCatch; 
 	private final int DEFAULTTILESIZE = 40;
 
-	public Map(URL mapURL) throws IOException {
-		
+	public Map(BufferedReader mapfile) {
 		// master array that contains ALL the tiles in the map
-		ArrayList lines = new ArrayList();
-		
-		// defines the catch area of the map in which tiles may have to be displayed
-		rCatch = new Rectangle();		
-		
-		// loads the tiles from the txt file
-		BufferedReader reader = new BufferedReader(new InputStreamReader(mapURL.openStream()));
-		
-		while (true) {
-			String line = reader.readLine();
-			height++;
-			if (line == null) {
-				reader.close();
-				break;
-			}
+		ArrayList mapParser = parsemap(mapfile);
 
-			if (!line.startsWith("!")) {
-				lines.add(line);
-				width = Math.max(width, line.length());
-
-			}
-		}
-		height = lines.size();
-
+		// creates each tile and puts it in tilearray
 		for (int j = 0; j < height; j++) {
-			String line = (String) lines.get(j);
+			String line = (String) mapParser.get(j);
+			
 			for (int i = 0; i < width; i++) {
-				// System.out.println(i + "is i ");
-
 				if (i < line.length()) {
 					char ch = line.charAt(i);
 					Tile t = new Tile(i, j, Character.getNumericValue(ch));
 					tilearray.add(t);
 				}
-
 			}
-		}	
-		init(PlayScreen.INITIALSCREENX, PlayScreen.INITIALSCREENY, PlayScreen.screenSizeX, PlayScreen.screenSizeY, false);
+		}
+				
+		// defines the catch area of the map in which tiles may have to be displayed
+		rCatch = new Rectangle();	
+		
+		init(PlayScreen.SCREEN_X, PlayScreen.SCREEN_Y, PlayScreen.screenSizeX, PlayScreen.screenSizeY, false);
+	}
+	
+	private ArrayList parsemap(BufferedReader mapfile){
+		ArrayList mapParser = new ArrayList();
+		
+		// loads the tiles from the txt file
+		while (true) {
+			try{
+				String line = mapfile.readLine();
+			
+				height++;
+				if (line == null) {
+					mapfile.close();
+					break;
+				}
+				if (!line.startsWith("!")) {
+					mapParser.add(line);
+					width = Math.max(width, line.length());
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		
+		}
+		height = mapParser.size();
+		
+		return mapParser;
 	}
 	
 	private void init(int viewX, int viewY, int screenSizeX, int screenSizeY, boolean reSized){

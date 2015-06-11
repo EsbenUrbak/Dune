@@ -10,7 +10,7 @@ import com.baseframework.game.main.Resources;
 public class Tile {
 
 	private int tileX, tileY;
-	String type;
+	String type,S0,S1,S2,S3,S4,S5,S6,S7,S8,S9;
 	private static int sizeX=40, sizeY=40;
 	public Image tileImage;
 	private Rectangle r;
@@ -18,21 +18,21 @@ public class Tile {
 	public static Image tileocean, tiledirt;
 		
 	//Loading the tile imagine from data base of landscapes
-	public Tile(int x, int y, String typeInt) {
+	public Tile(int x, int y, String S0,String S1,String S2,String S3,String S4,String S5,String S6,String S7,String S8,String S9) {
 		
 		
 		tileX = x * sizeX;
 		tileY = y * sizeY;
 
-		type = typeInt;
+		type = S0;
 
 		r = new Rectangle();
 		r.setBounds(tileX, tileY, sizeX, sizeY);
 
 		if (type.equals("G")) {
-			tileImage = Resources.tileDirt;
+			tileImage = Resources.G;
 		} else if (type.equals("W")) {
-			tileImage = Resources.tileOcean;
+			tileImage = Resources.W;
 		} else {
 
 		}

@@ -9,6 +9,7 @@ import com.baseframework.screen.PlayScreen;
 public class Map {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
+	private ArrayList<Tile> mapArray = new ArrayList<Tile>();	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
 	private Rectangle rCatch; 
@@ -25,8 +26,7 @@ public class Map {
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					char ch = line.charAt(i);
-					Tile t = new Tile(i, j, Character.toString(ch));
-					System.out.println("Tile ID ="+Character.toString(ch));
+					Tile t = new Tile(i, j, Character.toString(ch),"w","w","w","w","w","w","w","w","w");
 					tilearray.add(t);
 				}
 			}

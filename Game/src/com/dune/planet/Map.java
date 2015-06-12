@@ -343,7 +343,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 					E1=S0+"_"+S1+"1";
 				}
 
-				if(S0.equals(S2)){
+				if(S0.equals(S2)&&S0.equals(S1)&&S0.equals(S3)){
 					E2=S0+"_"+S2;
 				}else{
 					E2=S0+"_"+S1+"1"+"_"+S2+"2"+"_"+S3+"3";
@@ -355,8 +355,8 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 					E3=S0+"_"+S3+"3";
 				}
 				
-				if(S0.equals(S4)){
-					E4=S0+"_"+S4;
+				if(S0.equals(S4)&&S0.equals(S3)&&S0.equals(S5)){
+					E4=S0;
 				}else{
 					E4=S0+"_"+S3+"3"+"_"+S4+"4"+"_"+S5+"5";
 				}				
@@ -367,8 +367,8 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 					E5=S0+"_"+S5+"5";
 				}
 
-				if(S0.equals(S6)){
-					E6=S0+"_"+S6;
+				if(S0.equals(S6)&&S0.equals(S5)&&S0.equals(S7)){
+					E6=S0;
 				}else{
 					E6=S0+"_"+S5+"5"+"_"+S6+"6"+"_"+S7+"7";
 				}
@@ -379,17 +379,17 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 					E7=S0+"_"+S7+"7";
 				}
 
-				if(S0.equals(S8)){
+				if(S0.equals(S8)&&S0.equals(S9)&&S0.equals(S7)){
 					E8=S0+"_"+S8;
 				}else{
-					E8=S0+"_"+S7+"7"+S8+"8"+"_"+S9+"9";
+					E8=S0+"_"+S7+"7"+"_"+S8+"8"+"_"+S9+"9";
 				}
 				
 
 
-				
-				System.out.println("E0 = "+E0 +" E1 = "+E1+" E2 = "+E2+" E3 = "+E3+" E4 = "+E4+" E5 = "+E5+" E6 = "+E6+" E7 = "+E7+" E8 = "+E8 );
-				
+				if(j<3){
+				System.out.println("j = "+j+" E0 = "+E0 +" E1 = "+E1+" E2 = "+E2+" E3 = "+E3+" E4 = "+E4+" E5 = "+E5+" E6 = "+E6+" E7 = "+E7+" E8 = "+E8 );
+				}
 			//Tile t = new Tile(i, j, S0,S1,S2,S3,S4,S5,S6,S7,S8);
 				Tile t = new Tile(i, j, E0,E1,E2,E3,E4,E5,E6,E7,E8);
 				

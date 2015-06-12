@@ -5,10 +5,12 @@ import java.applet.AudioClip;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import com.baseframework.animation.Animation;
 import com.baseframework.animation.Frame;
+import com.baseframework.screen.PlayScreen;
 import com.baseframework.util.ImageHandler;
 
 public class Resources {
@@ -23,22 +26,29 @@ public class Resources {
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
 	private static BufferedImage squadBlink;
-	public static BufferedImage G,G_G,G_G_G_G, G_W1_G2_W3,G_W1_W2_W3,G_W1,G_W3_G4_W5,G_W3_W4_W5,G_W3,G_W5_W6_W7,G_W5_G6_W7,G_W5,G_W7_G8_W9,G_W7_W8_W9,G_W7;  
-	public static BufferedImage W,W_W,W_W_W_W, W_G1_G2_G3,W_G1,W_G3_G4_G5,W_G3,W_G5_G6_G7,W_G5,W_G7_G8_G9,W_G7, W_W1_G2_W3,W_W3_G4_W5,W_W5_G6_W7,W_W7_G8_W9;
+	public static BufferedImage G,G_W,G_G1_W5_G2,G_W1_W5_W2;  
+	public static BufferedImage W,W_G,W_W1_G5_W2,W_G1_G5_G2;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
-	public static BufferedReader map1;
+	public static BufferedReader map1, subTileMapping;
 	public static BasicStroke strokeSize;
 	
-	public static Map<String, BufferedImage> imageMap = new HashMap<>();
+	public static Map<String, String> subTileRotationMap;
+	public static Map<String, BufferedImage> subTileRotationImageMap=new HashMap<String, BufferedImage>();
 	
 	public static Animation squadMoveRightAnim, squadMoveLeftAnim, squadStandRightAnim, squadStandLeftAnim, selectAnim;
 	
 	private static final String DIRECTORY = "/resources/";
 	
 	public static void load(){
-		map1 = loadFile("map2.txt");
 		
+ 
+		map1 = loadFile("map2.txt");
+		subTileMapping = loadFile("subtileMapping.txt");
+		
+		//Create hashMap to identify which image ID correspond to which actual sub image
+		subTileRotationMap =mapfile(subTileMapping);
+				
 		background = loadImage("background.png");
 		
 		titleFont1 = new Font("Arial", Font.BOLD, 50);
@@ -53,96 +63,8 @@ public class Resources {
 
 		//loading all pictures for the tiles generation
 		G=loadImage("G.png");
-		imageMap.put("G", G);
+		subTileRotationImageMap.put("G", G);
 		
-		G_G=loadImage("G_G.png");
-		imageMap.put("G_G", G_G);
-		
-		G_G_G_G=loadImage("G_G_G_G.png");
-		imageMap.put("G_G_G_G", G_G_G_G);
-		
-		G_W1_G2_W3=loadImage("G_W1_G2_W3.png");
-		imageMap.put("G_W1_G2_W3", G_W1_G2_W3);
-		
-		G_W1_W2_W3=loadImage("G_W1_W2_W3.png");
-		imageMap.put("G_W1_W2_W3", G_W1_W2_W3);
-		
-		G_W1=loadImage("G_W1.png");
-		imageMap.put("G_W1", G_W1);
-		
-		G_W3_G4_W5=loadImage("G_W3_G4_W5.png");
-		imageMap.put("G_W3_G4_W5", G_W3_G4_W5);
-		
-		G_W3_W4_W5=loadImage("G_W3_W4_W5.png");
-		imageMap.put("G_W3_W4_W5", G_W3_W4_W5);
-		
-		G_W3=loadImage("G_W3.png");
-		imageMap.put("G_W3", G_W3);
-		
-		G_W5_W6_W7=loadImage("G_W5_W6_W7.png");
-		imageMap.put("G_W1_G2_W3", G_W1_G2_W3);
-		
-		G_W5_G6_W7=loadImage("G_W5_G6_W7.png");
-		imageMap.put("G_W5_W6_W7", G_W5_W6_W7);
-		
-		G_W5=loadImage("G_W5.png");
-		imageMap.put("G_W5", G_W5);
-		
-		G_W7_G8_W9=loadImage("G_W7_G8_W9.png");
-		imageMap.put("G_W7_G8_W9", G_W7_G8_W9);
-		
-		G_W7_W8_W9=loadImage("G_W7_W8_W9.png");
-		imageMap.put("G_W7_W8_W9", G_W7_W8_W9);
-		
-		G_W7=loadImage("G_W7.png");
-		imageMap.put("G_W7", G_W7);
-		
-		
-		
-		W=loadImage("w.png");
-		imageMap.put("W", W);
-		
-		W_W=loadImage("w_W.png");
-		imageMap.put("W_W", W_W);
-		
-		W_W_W_W=loadImage("W_W_W_W.png");
-		imageMap.put("W_W_W_W", W_W_W_W);
-		
-		W_G1_G2_G3=loadImage("W_G1_G2_G3.png");
-		imageMap.put("W_G1_G2_G3", W_G1_G2_G3);
-		
-		W_G1=loadImage("W_G1.png");
-		imageMap.put("W_G1", W_G1);
-		
-		W_G3_G4_G5=loadImage("W_G3_G4_G5.png");
-		imageMap.put("W_G3_G4_G5", W_G3_G4_G5);
-		
-		W_G3=loadImage("W_G3.png");
-		imageMap.put("W_G3", W_G3);
-		
-		W_G5_G6_G7=loadImage("W_G5_G6_G7.png");
-		imageMap.put("W_G5_G6_G7", W_G5_G6_G7);
-		
-		W_G5=loadImage("W_G5.png");
-		imageMap.put("W_G5", W_G5);
-		
-		W_G7_G8_G9=loadImage("W_G7_G8_G9.png");
-		imageMap.put("W_G7_G8_G9", W_G7_G8_G9);
-		
-		W_G7=loadImage("W_G7.png");
-		imageMap.put("W_G7", W_G7);
-		
-		W_W1_G2_W3=loadImage("W_W1_G2_W3.png");
-		imageMap.put("W_W1_G2_W3", W_W1_G2_W3);
-		
-		W_W3_G4_W5=loadImage("W_W3_G4_W5.png");
-		imageMap.put("W_W3_G4_W5", W_W3_G4_W5);
-		
-		W_W5_G6_W7=loadImage("W_W5_G6_W7.png");
-		imageMap.put("W_W5_G6_W7", W_W5_G6_W7);
-		
-		W_W7_G8_W9=loadImage("W_W7_G8_W9.png");
-		imageMap.put("W_W7_G8_W9", W_W7_G8_W9);
 		
 		// animate the selector
 		squadSelect = loadImage("selector.png");		
@@ -195,7 +117,7 @@ public class Resources {
 	
 	public static BufferedImage getImage(String imageName)
 	{
-		return imageMap.get(imageName);
+		return subTileRotationImageMap.get(imageName);
 	}
 	
 	private static AudioClip loadSound(String filename){
@@ -227,7 +149,41 @@ public class Resources {
 		return reader;
 	}	
 	
-  
+	public static Map<String, String> mapfile(BufferedReader mapfile) {
+		
+		Map<String, String> subTileMappingInner = new HashMap<String, String>();
+		
+		ArrayList<String> mapParser = new ArrayList();
+		
+		
+		// loads the tiles from the txt file
+		while (true) {
+			try{
+				String line = mapfile.readLine();
+			
+
+				if (line == null) {
+					mapfile.close();
+					break;
+				}
+				if (!line.startsWith("!")) {
+					mapParser.add(line);
+
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		
+		}
+
+		for(int i =0; i<mapParser.size();i++){
+			String[] splited =  mapParser.get(i).split("\\s+");
+			subTileMappingInner.put(splited[0], splited[1]);
+		}
+	
+		return subTileMappingInner;
+	}
+	
 }  
     
     

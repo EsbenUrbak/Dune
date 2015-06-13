@@ -43,8 +43,10 @@ public class Tile {
 			int w = imageBase.getWidth();    
 	        int h = imageBase.getHeight();    
 	        BufferedImage result = new BufferedImage(w, h, imageBase.getType());  
-	        Graphics2D g2 = result.createGraphics();  
+	        Graphics2D g2 = result.createGraphics();
+	        if(rotationDegrees==0){
 	        g2.rotate(Math.toRadians(rotationDegrees), w/2, h/2);
+	        }
 	        g2.drawImage(imageBase,null,0,0);  
 	        return result;   
 	}
@@ -57,20 +59,19 @@ public class Tile {
 		int sizeXX=sizeX/3;
 		int sizeYY=sizeY/3;
 		
-		
-		S1 = Resources.getWrapper(S1).getName();
-		CombinedTileImage =ImageRotation(Resources.getImage(Resources.getWrapper(S1).getName()),Resources.getWrapper(S1).getRotation());
 
+		//CombinedTileImage =ImageRotation(Resources.getImage(Resources.getWrapper(S1).getName()),Resources.getWrapper(S1).getRotation());
+		System.out.println("name = "+Resources.getWrapper(S3).getName()+" rotation = "+Resources.getWrapper(S3).getRotation());
 		//Load first picture
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S8),sizeYY* 0, sizeXX * 0, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S1),sizeYY * 1, sizeXX * 0, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S2),sizeYY * 2, sizeXX * 0, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S3),sizeYY * 2, sizeXX * 1, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S4),sizeYY * 2, sizeXX * 2, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S5),sizeYY * 1, sizeXX * 2, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S6),sizeYY * 0, sizeXX * 2, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S7),sizeYY * 0, sizeXX * 1, null);
-		CombinedTileImage.createGraphics().drawImage(Resources.getImage(S0),sizeYY * 1, sizeXX * 1, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S8).getName()),Resources.getWrapper(S8).getRotation()),sizeXX* 0, sizeYY * 0, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S1).getName()),Resources.getWrapper(S1).getRotation()),sizeXX * 1, sizeYY * 0, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S2).getName()),Resources.getWrapper(S2).getRotation()),sizeXX * 2, sizeYY * 1, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S3).getName()),Resources.getWrapper(S3).getRotation()),sizeXX * 1, sizeYY * 2, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S4).getName()),Resources.getWrapper(S4).getRotation()),sizeXX * 0, sizeYY * 1, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S5).getName()),Resources.getWrapper(S5).getRotation()),sizeXX * 2, sizeYY * 0, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S6).getName()),Resources.getWrapper(S6).getRotation()),sizeXX * 2, sizeYY * 2, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S7).getName()),Resources.getWrapper(S7).getRotation()),sizeXX * 0, sizeYY * 2, null);
+		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S0).getName()),Resources.getWrapper(S0).getRotation()),sizeXX * 1, sizeYY * 1, null);
 
 		System.out.println("Picture created");
 		

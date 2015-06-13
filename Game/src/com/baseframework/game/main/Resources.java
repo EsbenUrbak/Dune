@@ -20,20 +20,21 @@ import com.baseframework.animation.Animation;
 import com.baseframework.animation.Frame;
 import com.baseframework.screen.PlayScreen;
 import com.baseframework.util.ImageHandler;
+import com.dune.planet.Wrapper;
 
 public class Resources {
 	public static BufferedImage background, tileOcean, tileDirt, squadRight, squadLeft, squadSelect;
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
 	private static BufferedImage squadBlink;
-	public static BufferedImage G,G_W,G_G1_W5_G2,G_W1_W5_W2;  
-	public static BufferedImage W,W_G,W_W1_G5_W2,W_G1_G5_G2;
+	public static BufferedImage G,G_W,G_G_W_G,G_W_W_W;  
+	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
 	public static BufferedReader map1, subTileMapping;
 	public static BasicStroke strokeSize;
 	
-	public static Map<String, String> subTileRotationMap;
+	public static Map<String, Wrapper> subTileRotationMap;
 	public static Map<String, BufferedImage> subTileRotationImageMap=new HashMap<String, BufferedImage>();
 	
 	public static Animation squadMoveRightAnim, squadMoveLeftAnim, squadStandRightAnim, squadStandLeftAnim, selectAnim;
@@ -64,7 +65,20 @@ public class Resources {
 		//loading all pictures for the tiles generation
 		G=loadImage("G.png");
 		subTileRotationImageMap.put("G", G);
-		
+		G_W=loadImage("G_W.png");
+		subTileRotationImageMap.put("G_W", G_W);
+		G_G_W_G=loadImage("G_G_W_G.png");
+		subTileRotationImageMap.put("G_G_W_G", G_G_W_G);
+		G_W_W_W=loadImage("G_W_W_W.png");
+		subTileRotationImageMap.put("G_W_W_W", G_W_W_W);
+		W=loadImage("W.png");
+		subTileRotationImageMap.put("W", W);
+		W_G=loadImage("W_G.png");
+		subTileRotationImageMap.put("W_G", W_G);
+		W_W_G_W=loadImage("W_W_G_W.png");
+		subTileRotationImageMap.put("W_W_G_W", W_W_G_W);
+		W_G_G_G=loadImage("W_G_G_G.png");
+		subTileRotationImageMap.put("W_G_G_G", W_G_G_G);
 		
 		// animate the selector
 		squadSelect = loadImage("selector.png");		
@@ -149,9 +163,9 @@ public class Resources {
 		return reader;
 	}	
 	
-	public static Map<String, String> mapfile(BufferedReader mapfile) {
+	public static Map<String, Wrapper> mapfile(BufferedReader mapfile) {
 		
-		Map<String, String> subTileMappingInner = new HashMap<String, String>();
+		Map<String, Wrapper> subTileMappingInner = new HashMap<String, Wrapper>();
 		
 		ArrayList<String> mapParser = new ArrayList();
 		
@@ -178,11 +192,16 @@ public class Resources {
 
 		for(int i =0; i<mapParser.size();i++){
 			String[] splited =  mapParser.get(i).split("\\s+");
-			subTileMappingInner.put(splited[0], splited[1]);
+			System.out.println(splited);
+			Wrapper NameRotation = new Wrapper(splited[1],Integer.parseInt(splited[2]));
+			subTileMappingInner.put(splited[0], NameRotation);
 		}
 	
 		return subTileMappingInner;
 	}
+	
+
+
 	
 }  
     

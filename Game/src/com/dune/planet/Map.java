@@ -291,39 +291,39 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				}
 				
 				if(j>0){
-					S2=tilearray.get((i+j*widthArray)-widthArray+1);
-				}else{
-					S2=S0;
-				}
-
-				if(j>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
-					S3 =tilearray.get((i+j*widthArray)+1);
-				}else{
-					S3=S0;
-				}
-
-				if(j<heightArray-1&&((i+j*widthArray)+widthArray+1)<widthArray*heightArray){
-					S4=tilearray.get((i+j*widthArray)+widthArray+1);
-				}else{
-					S4=S0;
-				}
-				
-				if((j<heightArray-1)){
-					S5 =tilearray.get((i+j*widthArray)+widthArray);
+					S5=tilearray.get((i+j*widthArray)-widthArray+1);
 				}else{
 					S5=S0;
 				}
 
-				if(j<heightArray-1){
-					S6 =tilearray.get((i+j*widthArray)+widthArray-1);
+				if(j>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
+					S2 =tilearray.get((i+j*widthArray)+1);
+				}else{
+					S2=S0;
+				}
+
+				if(j<heightArray-1&&((i+j*widthArray)+widthArray+1)<widthArray*heightArray){
+					S6=tilearray.get((i+j*widthArray)+widthArray+1);
 				}else{
 					S6=S0;
 				}
 				
-				if(i>0){
-					S7 =tilearray.get((i+j*widthArray)-1);
+				if((j<heightArray-1)){
+					S3 =tilearray.get((i+j*widthArray)+widthArray);
+				}else{
+					S3=S0;
+				}
+
+				if(j<heightArray-1){
+					S7 =tilearray.get((i+j*widthArray)+widthArray-1);
 				}else{
 					S7=S0;
+				}
+				
+				if(i>0){
+					S4 =tilearray.get((i+j*widthArray)-1);
+				}else{
+					S4=S0;
 				}
 				
 				if(j>0&&(i+j*widthArray)-widthArray-1>0){
@@ -338,51 +338,51 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				
 				E0=S0;
 				if(S0.equals(S1)){
-					E1=S0+"_"+S1;
+					E1=S0;
 				}else{
 					E1=S0+"_"+S1+"1";
 				}
 
-				if(S0.equals(S2)&&S0.equals(S1)&&S0.equals(S3)){
-					E2=S0+"_"+S2;
+				if(S0.equals(S5)&&S0.equals(S1)&&S0.equals(S2)){
+					E5=S0;
 				}else{
-					E2=S0+"_"+S1+"1"+"_"+S2+"2"+"_"+S3+"3";
+					E5=S0+"_"+S1+"1"+"_"+S5+"5"+"_"+S2+"2";
 				}
 
+				if(S0.equals(S2)){
+					E2=S0;
+				}else{
+					E2=S0+"_"+S2+"2";
+				}
+				
+				if(S0.equals(S6)&&S0.equals(S2)&&S0.equals(S3)){
+					E6=S0;
+				}else{
+					E6=S0+"_"+S2+"2"+"_"+S6+"6"+"_"+S3+"3";
+				}				
+
 				if(S0.equals(S3)){
-					E3=S0+"_"+S3;
+					E3=S0;
 				}else{
 					E3=S0+"_"+S3+"3";
 				}
+
+				if(S0.equals(S7)&&S0.equals(S3)&&S0.equals(S4)){
+					E7=S0;
+				}else{
+					E7=S0+"_"+S3+"3"+"_"+S7+"7"+"_"+S4+"4";
+				}
 				
-				if(S0.equals(S4)&&S0.equals(S3)&&S0.equals(S5)){
+				if(S0.equals(S4)){
 					E4=S0;
 				}else{
-					E4=S0+"_"+S3+"3"+"_"+S4+"4"+"_"+S5+"5";
-				}				
-
-				if(S0.equals(S5)){
-					E5=S0+"_"+S5;
-				}else{
-					E5=S0+"_"+S5+"5";
+					E4=S0+"_"+S4+"4";
 				}
 
-				if(S0.equals(S6)&&S0.equals(S5)&&S0.equals(S7)){
-					E6=S0;
+				if(S0.equals(S8)&&S0.equals(S1)&&S0.equals(S4)){
+					E8=S0;
 				}else{
-					E6=S0+"_"+S5+"5"+"_"+S6+"6"+"_"+S7+"7";
-				}
-				
-				if(S0.equals(S7)){
-					E7=S0+"_"+S7;
-				}else{
-					E7=S0+"_"+S7+"7";
-				}
-
-				if(S0.equals(S8)&&S0.equals(S9)&&S0.equals(S7)){
-					E8=S0+"_"+S8;
-				}else{
-					E8=S0+"_"+S7+"7"+"_"+S8+"8"+"_"+S9+"9";
+					E8=S0+"_"+S4+"4"+"_"+S8+"8"+"_"+S1+"1";
 				}
 				
 

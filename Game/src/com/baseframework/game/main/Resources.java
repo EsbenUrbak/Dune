@@ -129,9 +129,15 @@ public class Resources {
 		
 	}
 	
+	//Mapping functions to get the values for each string
 	public static BufferedImage getImage(String imageName)
 	{
 		return subTileRotationImageMap.get(imageName);
+	}
+	
+	public static Wrapper getWrapper(String WrapperString)
+	{
+		return subTileRotationMap.get(WrapperString);
 	}
 	
 	private static AudioClip loadSound(String filename){
@@ -192,16 +198,15 @@ public class Resources {
 
 		for(int i =0; i<mapParser.size();i++){
 			String[] splited =  mapParser.get(i).split("\\s+");
-			System.out.println(splited);
+			//for(int k=0;k<3;k++){
+			//System.out.println(splited[k]);
+			//}
 			Wrapper NameRotation = new Wrapper(splited[1],Integer.parseInt(splited[2]));
 			subTileMappingInner.put(splited[0], NameRotation);
 		}
 	
 		return subTileMappingInner;
 	}
-	
-
-
 	
 }  
     

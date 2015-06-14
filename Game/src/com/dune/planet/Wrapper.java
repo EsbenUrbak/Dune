@@ -1,8 +1,8 @@
 package com.dune.planet;
 
 public class Wrapper {
-    private String name;
-    private int rotation;
+    public String name;
+    public int rotation;
     
     public Wrapper(String name, int rotation) {
        this.name = name;

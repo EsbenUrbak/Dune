@@ -334,7 +334,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 
 				S9=S1;
 
-				System.out.println(S0+S1+S2+S3+S4+S5+S6+S7+S8);
+				//System.out.println(S0+S1+S2+S3+S4+S5+S6+S7+S8);
 				
 				E0=S0;
 				if(S0.equals(S1)){

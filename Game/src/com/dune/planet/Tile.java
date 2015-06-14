@@ -32,7 +32,6 @@ public class Tile {
 
 		r = new Rectangle();
 		r.setBounds(tileX, tileY, sizeX, sizeY);
-		System.out.println("Middle Picture "+S0);
 		//tileImage=Resources.getImage(S0);
 		tileImage = ImageMerge(type, sizeX,sizeY,S0,  S1, S2, S3, S4, S5, S6, S7, S8);
 		
@@ -44,9 +43,11 @@ public class Tile {
 	        int h = imageBase.getHeight();    
 	        BufferedImage result = new BufferedImage(w, h, imageBase.getType());  
 	        Graphics2D g2 = result.createGraphics();
-	        if(rotationDegrees==0){
-	        g2.rotate(Math.toRadians(rotationDegrees), w/2, h/2);
+
+	        if(rotationDegrees!=0){
+	        	g2.rotate(Math.toRadians(rotationDegrees), w/2, h/2);
 	        }
+	        
 	        g2.drawImage(imageBase,null,0,0);  
 	        return result;   
 	}
@@ -61,7 +62,7 @@ public class Tile {
 		
 
 		//CombinedTileImage =ImageRotation(Resources.getImage(Resources.getWrapper(S1).getName()),Resources.getWrapper(S1).getRotation());
-		System.out.println("name = "+Resources.getWrapper(S3).getName()+" rotation = "+Resources.getWrapper(S3).getRotation());
+		System.out.println("name E3= "+Resources.getWrapper(S7).getName()+" rotation = "+Resources.getWrapper(S7).getRotation());
 		//Load first picture
 		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S8).getName()),Resources.getWrapper(S8).getRotation()),sizeXX* 0, sizeYY * 0, null);
 		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S1).getName()),Resources.getWrapper(S1).getRotation()),sizeXX * 1, sizeYY * 0, null);
@@ -73,7 +74,7 @@ public class Tile {
 		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S7).getName()),Resources.getWrapper(S7).getRotation()),sizeXX * 0, sizeYY * 2, null);
 		CombinedTileImage.createGraphics().drawImage(ImageRotation(Resources.getImage(Resources.getWrapper(S0).getName()),Resources.getWrapper(S0).getRotation()),sizeXX * 1, sizeYY * 1, null);
 
-		System.out.println("Picture created");
+		//System.out.println("Picture created");
 		
 		return CombinedTileImage;
 	}

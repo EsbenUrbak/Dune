@@ -33,15 +33,15 @@ public class Squad {
 	private Animation selectAnim = Resources.selectAnim;
 	
 	//squad properties
-	public Rectangle rect = new Rectangle((int) topX, (int) topY, xImagine, yImagine);	
+	public Rectangle rect; 
 	public ArrayList<Path> paths = new ArrayList<Path>();
 	
 	public Squad(float topX, float topY, boolean selected){
 		this.topX = topX;
 		this.topY = topY;
 		this.selected = selected;
+		rect = new Rectangle((int) topX, (int) topY, xImagine, yImagine);	
 	}
-	
 	
 	public void setBounds(int boundX, int boundY){
 		maxX = boundX * Tile.getSizeX() - 1 - xImagine;
@@ -54,6 +54,9 @@ public class Squad {
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;
 			
+			//safety variable to delete a path when the distance is zero
+			boolean interrupt=false;
+			
 			pathX = (float) Math.min(Math.max(paths.get(0).getX(),minX + xImagine/2),maxX + xImagine/2);
 			pathY = (float) Math.min(Math.max(paths.get(0).getY(),minY + yImagine/2),maxY + yImagine/2);
 			
@@ -63,7 +66,10 @@ public class Squad {
 			
 			//finding the diagonal distance between the two points
 			diagonalDist=(float) Math.sqrt(Math.pow((double) distX,2d)+Math.pow((double) distY,2d));
-			
+			if(diagonalDist < 0.1){
+				diagonalDist = 1f;
+				interrupt = true;
+			}
 
 			//Now find the speed in each direction -> Notice i have added a speedtile which can represent the max speed on a specific tile
 			speedX=(distX * (float) SQUADSPEED/diagonalDist);
@@ -72,13 +78,15 @@ public class Squad {
 			if(!moving){
 				moving = true;				
 				if(speedX > 0f) currentAnim = Resources.squadMoveRightAnim;
-				else if (speedX < 0f) currentAnim = Resources.squadMoveLeftAnim;							
+				else if (speedX < 0f) currentAnim = Resources.squadMoveLeftAnim;
+				// case where speed speedX=0 but speedY !=0
+				currentAnim = Resources.squadMoveRightAnim;
 			}
 			
 			//Check whether it is the last step, if so sets the squad to that precise point and sets the speeds to 0
-			if(Math.abs(pathX-(topX+(float)xImagine/2f))<Math.abs(speedX) * delta || Math.abs(pathY-(topY+(float) yImagine/2f))<Math.abs(speedY)*delta){
-				topX= pathX - (float)xImagine/2f;
-				topY= pathY - (float)yImagine/2f;	
+			if(interrupt || Math.abs(pathX-(topX+(float)xImagine/2f))<Math.abs(speedX) * delta || Math.abs(pathY-(topY+(float) yImagine/2f))<Math.abs(speedY)*delta){
+				topX= inBoundX(pathX - (float)xImagine/2f);
+				topY= inBoundY(pathY - (float)yImagine/2f);	
 				
 				// remove the path that is now reached
 				paths.remove(0);
@@ -114,6 +122,24 @@ public class Squad {
 		currentAnim.update(delta);
 		if(selected) selectAnim.update(delta);
 		
+	}
+	
+	private float inBoundX(float x){
+		if(Float.isNaN(x)){
+			System.out.println("x is not a number");
+			return (float) minX;
+		} else {
+			return Math.min(Math.max(x, (float) minX), (float) maxX);
+		}
+	}
+	
+	private float inBoundY(float y){
+		if(Float.isNaN(y)){
+			System.out.println("y is not a number");
+			return (float) minY;
+		} else {
+			return Math.min(Math.max(y, (float) minY), (float) maxY);
+		}
 	}
 
 	public void stop() {

@@ -80,7 +80,7 @@ public class Squad {
 				if(speedX > 0f) currentAnim = Resources.squadMoveRightAnim;
 				else if (speedX < 0f) currentAnim = Resources.squadMoveLeftAnim;
 				// case where speed speedX=0 but speedY !=0
-				currentAnim = Resources.squadMoveRightAnim;
+				else currentAnim = Resources.squadMoveRightAnim;
 			}
 			
 			//Check whether it is the last step, if so sets the squad to that precise point and sets the speeds to 0

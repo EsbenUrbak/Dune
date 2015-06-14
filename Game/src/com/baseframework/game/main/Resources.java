@@ -29,6 +29,9 @@ public class Resources {
 	private static BufferedImage squadBlink;
 	public static BufferedImage G,G_W,G_G_W_G,G_W_W_W;  
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
+	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
+	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
+	
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
 	public static BufferedReader map1, subTileMapping;
@@ -63,22 +66,42 @@ public class Resources {
 		background = loadImage("background.png");
 
 		//loading all pictures for the tiles generation
+		//Main Tiles
 		G=loadImage("G.png");
 		subTileRotationImageMap.put("G", G);
+		W=loadImage("W.png");
+		subTileRotationImageMap.put("W", W);
+		F=loadImage("F.png");
+		subTileRotationImageMap.put("F", F);
+		
+		//Grass - Water Transition
 		G_W=loadImage("G_W.png");
 		subTileRotationImageMap.put("G_W", G_W);
 		G_G_W_G=loadImage("G_G_W_G.png");
 		subTileRotationImageMap.put("G_G_W_G", G_G_W_G);
 		G_W_W_W=loadImage("G_W_W_W.png");
 		subTileRotationImageMap.put("G_W_W_W", G_W_W_W);
-		W=loadImage("W.png");
-		subTileRotationImageMap.put("W", W);
 		W_G=loadImage("W_G.png");
 		subTileRotationImageMap.put("W_G", W_G);
 		W_W_G_W=loadImage("W_W_G_W.png");
 		subTileRotationImageMap.put("W_W_G_W", W_W_G_W);
 		W_G_G_G=loadImage("W_G_G_G.png");
 		subTileRotationImageMap.put("W_G_G_G", W_G_G_G);
+		
+		//Grass - Forest Transition
+		G_F=loadImage("G_F.png");
+		subTileRotationImageMap.put("G_F", G_F);
+		G_G_F_G=loadImage("G_G_F_G.png");
+		subTileRotationImageMap.put("G_G_F_G", G_G_F_G);
+		G_F_F_F=loadImage("G_F_F_F.png");
+		subTileRotationImageMap.put("G_F_F_F", G_F_F_F);
+		F_G=loadImage("F_G.png");
+		subTileRotationImageMap.put("F_G", F_G);
+		F_F_G_F=loadImage("F_F_G_F.png");
+		subTileRotationImageMap.put("F_F_G_F", F_F_G_F);
+		F_G_G_G=loadImage("F_G_G_G.png");
+		subTileRotationImageMap.put("F_G_G_G", F_G_G_G);
+		
 		
 		// animate the selector
 		squadSelect = loadImage("selector.png");		

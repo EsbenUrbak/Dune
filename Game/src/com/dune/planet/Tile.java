@@ -39,9 +39,9 @@ public class Tile {
 	}
 	
 	public BufferedImage ImageRotation(BufferedImage imageBase, int rotationDegrees){
-			int w = imageBase.getWidth();    
-	        int h = imageBase.getHeight();    
-	        BufferedImage result = new BufferedImage(w, h, imageBase.getType());  
+			double w = imageBase.getWidth();    
+	        double h = imageBase.getHeight();    
+	        BufferedImage result = new BufferedImage((int)w, (int)h, imageBase.getType());  
 	        Graphics2D g2 = result.createGraphics();
 
 	        if(rotationDegrees!=0){

@@ -50,12 +50,12 @@ public class InputHandler implements KeyListener, MouseListener, ComponentListen
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-
+		currentScreen.onMousePressed(arg0);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-	
+		currentScreen.onMouseReleased(arg0);
 	}
 
 	@Override

@@ -31,6 +31,7 @@ public class Resources {
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
+	public static BufferedImage btnModeUp, btnModeDown;
 	
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
@@ -65,6 +66,10 @@ public class Resources {
 		tileDirt = loadImage("tileocean.png");
 		background = loadImage("background.png");
 
+		// load button pictures
+		btnModeUp = loadImage("btn_modeSwitch_up.png");
+		btnModeDown = loadImage("btn_modeSwitch_down.png");
+				
 		//loading all pictures for the tiles generation
 		//Main Tiles
 		G=loadImage("G.png");

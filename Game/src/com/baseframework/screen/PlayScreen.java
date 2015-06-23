@@ -7,22 +7,24 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import com.baseframework.game.main.*;
+import com.baseframework.util.*;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
 import com.dune.planet.*;
 
-
-
 public class PlayScreen extends GameScreen{
 	// Creating variables and objects
 	
-	// Creating a unit to move around on the planet
+	// units
 	public Squad squad;
 	
-	// Creating a the surface object of the planet
+	// Surface object of the planet
 	public static ViewFrame viewframe;
 	public static Map map;
 
+	// Buttons, bars and user interface inputs
+	private UIButton buttonMode;
+	
 	// Graphics objects
 	public Graphics2D g2;
 	
@@ -37,6 +39,8 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void init() {
+		int btnModeX = 10, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() - 10;
+		
 		MainHolder.setResizeable(false);
 		
 		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
@@ -48,6 +52,9 @@ public class PlayScreen extends GameScreen{
 		viewframe.setBoundX(map.getWidth(true));
 		viewframe.setBoundY(map.getHeight(true));
 		squad.setBounds(map.getWidth(false), map.getHeight(false));
+		
+		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
+								Resources.btnModeDown, Resources.btnModeUp);
 	}
 
 	@Override
@@ -63,6 +70,7 @@ public class PlayScreen extends GameScreen{
 		renderTiles(g);
 		renderPaths(g);	
 		renderSquad(g);
+		renderButtons(g);
 	}
 	
 	private void renderTiles(Graphics g) {
@@ -106,16 +114,32 @@ public class PlayScreen extends GameScreen{
 		squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
 	}
 	
+	private void renderButtons(Graphics g){
+		buttonMode.render(g);
+	}
+	
 	
 	@Override
 	public void onClick(MouseEvent e) {
+		// this function is now empty to avoid conflict with the button handlers		
+	}
+	
+
+	@Override
+	public void onMousePressed(MouseEvent e) {
 		int xPos, yPos;
 		boolean addNewPath = false;
 		
 		// Getting click coordinates
 		xPos = e.getX();
 		yPos = e.getY();
-
+		
+		//check if a button was pressed
+		buttonMode.onPressed(xPos, yPos);
+		
+		// stop performing actions if a button was pressed
+		if(buttonMode.isPressed(xPos, yPos)) return;  
+		
 		// Logic to check whether it was within the rectangle (in relative coordinate)
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
 			squad.setSelected(!squad.isSelected());
@@ -137,8 +161,19 @@ public class PlayScreen extends GameScreen{
 				}
 			}	
 		}
-		
 	}
+
+	@Override
+	public void onMouseReleased(MouseEvent e) {
+		
+		//check if 'clicked' on a button: pressed AND released within the button area
+		if(buttonMode.isPressed(e.getX(), e.getY())){
+			System.out.println("Button is clicked");
+		}
+		// in any case cancel the button activation
+		buttonMode.cancel();		
+	}
+	
 
 	@Override
 	public void onKeyPress(KeyEvent e) {

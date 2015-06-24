@@ -58,7 +58,6 @@ public class Squad {
 		xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX())/Tile.getSizeX());
 		yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY())/Tile.getSizeY());
 		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
-		System.out.println(tileInfo);
 		
 		if(tileInfo.equals("F")){
 			SQUADSPEED=75;

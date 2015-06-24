@@ -1,21 +1,31 @@
 package com.dune.planet;
 
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
+import com.baseframework.util.ImageHandler;
 
-public class Map {
+public class PlanetMap {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
 	private ArrayList<String> mapArray = new ArrayList<String>();	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
+	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
 	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
 	private Rectangle rCatch; 
 	private final int DEFAULTTILESIZE = 40;
+	BufferedImage CombinedTileImage;
+	public static Map<String, BufferedImage> TileImageMap=new HashMap<String, BufferedImage>();
 
-	public Map(BufferedReader mapfile) {
+	
+	public PlanetMap(BufferedReader mapfile) {
 		// master array that contains ALL the tiles in the map
 		ArrayList mapParser = parsemap(mapfile);
 
@@ -33,8 +43,9 @@ public class Map {
 			}
 		}
 		
-		tilearray=transitionAlgo( mapArray, height, width);
 		
+		tilearray=transitionAlgo( mapArray, height, width);
+				
 		// defines the catch area of the map in which tiles may have to be displayed
 		rCatch = new Rectangle();	
 		
@@ -273,6 +284,10 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 		ArrayList<Tile> tilearrayNew=new ArrayList<Tile>();
 		String S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9;
 		String E0,  E1, E2, E3, E4, E5, E6, E7, E8, E9;
+		String ID;
+		
+		BufferedImage value;
+		
 
 		
 		
@@ -385,14 +400,18 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 					E8=S0+"_"+S4+"4"+"_"+S8+"8"+"_"+S1+"1";
 				}
 				
+				//full ID of the picture
+				ID = E0+E1+E2+E3+E4+E5+E6+E7+E8;
 
 
-				if(j<3){
-				System.out.println("j = "+j+" E0 = "+E0 +" E1 = "+E1+" E2 = "+E2+" E3 = "+E3+" E4 = "+E4+" E5 = "+E5+" E6 = "+E6+" E7 = "+E7+" E8 = "+E8 );
-				}
-			//Tile t = new Tile(i, j, S0,S1,S2,S3,S4,S5,S6,S7,S8);
-				Tile t = new Tile(i, j, E0,E1,E2,E3,E4,E5,E6,E7,E8);
+				//Create pictures but first checks whether the picture is already in there. If then it will not create it again
+				value=TileImageMap.get(ID);
+				if(value==null){
+				TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
+				}				
 				
+				Tile t = new Tile(i, j, ID);
+								
 				tilearrayNew.add(t);
 		}	
 		}
@@ -400,6 +419,12 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 		return tilearrayNew;
 			
 	}
+
+	public static BufferedImage getImage(String imageName)
+	{
+	return TileImageMap.get(imageName);
+	}
+
 	
 	
 }

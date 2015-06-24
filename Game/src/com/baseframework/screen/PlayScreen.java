@@ -21,7 +21,7 @@ public class PlayScreen extends GameScreen{
 	
 	// Creating a the surface object of the planet
 	public static ViewFrame viewframe;
-	public static Map map;
+	public static PlanetMap map;
 
 	// Graphics objects
 	public Graphics2D g2;
@@ -43,7 +43,7 @@ public class PlayScreen extends GameScreen{
 		
 		viewframe = new ViewFrame((float) SCREEN_X, (float) SCREEN_Y, screenSizeX, screenSizeY);
 		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
-		map = new Map(Resources.map1);
+		map = new PlanetMap(Resources.map1);
 		
 		viewframe.setBoundX(map.getWidth(true));
 		viewframe.setBoundY(map.getHeight(true));

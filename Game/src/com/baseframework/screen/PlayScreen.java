@@ -81,7 +81,7 @@ public class PlayScreen extends GameScreen{
 			for ( int i = 0; i < squad.paths.size(); ++i ) {
 				if(i==0){
 					g2.drawLine((int) (squad.getTopX()+ (float)squad.getxImagine()/2f - viewframe.getFrameX()), 
-								(int) (squad.getTopY()+ (float)squad.getyImagine()/2f - viewframe.getFrameY()), 
+								(int) (squad.getTopY()+ (float)squad.getyImagine() - viewframe.getFrameY()), 
 								squad.paths.get(0).getX()- (int) viewframe.getFrameX(), 
 								squad.paths.get(0).getY()- (int) viewframe.getFrameY());
 				
@@ -109,13 +109,23 @@ public class PlayScreen extends GameScreen{
 	
 	@Override
 	public void onClick(MouseEvent e) {
-		int xPos, yPos;
+		int xPos, yPos,xTile, yTile;
 		boolean addNewPath = false;
+		String tileInfo;
 		
 		// Getting click coordinates
 		xPos = e.getX();
 		yPos = e.getY();
 
+		//Logic to check what the underlying tile is
+		xTile=(xPos+ (int) viewframe.getFrameX())/Tile.getSizeX();
+		yTile=(yPos+ (int) viewframe.getFrameY())/Tile.getSizeY();
+		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
+		System.out.println(tileInfo);
+		
+		if(tileInfo.equals("W")){
+
+		}else{
 		// Logic to check whether it was within the rectangle (in relative coordinate)
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
 			squad.setSelected(!squad.isSelected());
@@ -138,6 +148,7 @@ public class PlayScreen extends GameScreen{
 			}	
 		}
 		
+		}
 	}
 
 	@Override

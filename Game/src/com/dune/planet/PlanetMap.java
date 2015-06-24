@@ -15,10 +15,11 @@ import com.baseframework.util.ImageHandler;
 public class PlanetMap {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
-	private ArrayList<String> mapArray = new ArrayList<String>();	
+	public static ArrayList<String> mapArray = new ArrayList<String>();	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
-	private int width = 0, height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
+	public static int width=0; 
+	private int height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
 	private Rectangle rCatch; 
 	private final int DEFAULTTILESIZE = 40;
 	BufferedImage CombinedTileImage;
@@ -36,8 +37,6 @@ public class PlanetMap {
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					char ch = line.charAt(i);
-					//Tile t = new Tile(i, j, Character.toString(ch),"w","w","w","w","w","w","w","w","w");
-					//tilearray.add(t);
 					mapArray.add(Character.toString(ch));
 				}
 			}

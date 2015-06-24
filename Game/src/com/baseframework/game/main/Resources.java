@@ -25,7 +25,10 @@ import com.dune.planet.Wrapper;
 public class Resources {
 	public static BufferedImage background, tileOcean, tileDirt, squadRight, squadLeft, squadSelect;
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
-	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
+	public static BufferedImage squadSelect1;
+	private static BufferedImage squadSelect2;
+	private static BufferedImage squadSelect3;
+	private static BufferedImage squadSelect4;
 	private static BufferedImage squadBlink;
 	public static BufferedImage G,G_W,G_G_W_G,G_W_W_W;  
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;

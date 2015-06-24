@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import com.baseframework.animation.Animation;
 import com.baseframework.game.main.Resources;
+import com.baseframework.screen.PlayScreen;
+import com.dune.planet.PlanetMap;
 import com.dune.planet.Tile;
 
 public class Squad {
@@ -21,8 +23,10 @@ public class Squad {
 	private int minY = 0;
 	private int maxX = 100;
 	private int maxY = 100;
-
-	private final int SQUADSPEED = 150;
+	private int xTile, yTile;
+	private String tileInfo;
+	
+	private int SQUADSPEED = 150;
 			
 	//squad imagine size
 	public int xImagine =Resources.squadRight.getWidth();
@@ -50,6 +54,18 @@ public class Squad {
 	
 	public void update(float delta) {
 		
+		//Logic to check what the underlying tile is
+		xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX())/Tile.getSizeX());
+		yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY())/Tile.getSizeY());
+		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
+		System.out.println(tileInfo);
+		
+		if(tileInfo.equals("F")){
+			SQUADSPEED=75;
+		}else{
+			SQUADSPEED=150;
+		}
+		
 		if(paths.size()>0){
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;
@@ -58,11 +74,11 @@ public class Squad {
 			boolean interrupt=false;
 			
 			pathX = (float) Math.min(Math.max(paths.get(0).getX(),minX + xImagine/2),maxX + xImagine/2);
-			pathY = (float) Math.min(Math.max(paths.get(0).getY(),minY + yImagine/2),maxY + yImagine/2);
+			pathY = (float) Math.min(Math.max(paths.get(0).getY(),minY + yImagine),maxY + yImagine/2);
 			
 			//finding the absolute distance between the new point and the center of squad
 			distX = pathX -(topX+ (float) xImagine/2f);
-			distY = pathY -(topY+ (float) yImagine/2f);
+			distY = pathY -(topY+ (float) yImagine);
 			
 			//finding the diagonal distance between the two points
 			diagonalDist=(float) Math.sqrt(Math.pow((double) distX,2d)+Math.pow((double) distY,2d));
@@ -84,9 +100,9 @@ public class Squad {
 			}
 			
 			//Check whether it is the last step, if so sets the squad to that precise point and sets the speeds to 0
-			if(interrupt || Math.abs(pathX-(topX+(float)xImagine/2f))<Math.abs(speedX) * delta || Math.abs(pathY-(topY+(float) yImagine/2f))<Math.abs(speedY)*delta){
+			if(interrupt || Math.abs(pathX-(topX+(float)xImagine/2f))<Math.abs(speedX) * delta || Math.abs(pathY-(topY+(float) yImagine))<Math.abs(speedY)*delta){
 				topX= inBoundX(pathX - (float)xImagine/2f);
-				topY= inBoundY(pathY - (float)yImagine/2f);	
+				topY= inBoundY(pathY - (float)yImagine);	
 				
 				// remove the path that is now reached
 				paths.remove(0);

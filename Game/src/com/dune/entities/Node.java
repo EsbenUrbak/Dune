@@ -12,12 +12,12 @@ import com.dune.planet.PlanetMap;
 public class Node {
 
 	private int x, y;
-	private double F, G, H;
-	private String terrain;
+	private int F, G, H;
+	private String terrain, nodeID, nodeParentID;
 	int parentSquare;
 
 
-	public Node(int x, int y, String terrain) {
+	public Node(int x, int y, String terrain, String nodeParentID,String nodeID, int G, int H,int F) {
 		
 
 
@@ -49,25 +49,25 @@ public class Node {
 
 
 
-	public double getF() {
+	public int getF() {
 		return F;
 	}
 
 
 
-	public void setF(double f) {
+	public void setF(int f) {
 		F = f;
 	}
 
 
 
-	public double getG() {
+	public int getG() {
 		return G;
 	}
 
 
 
-	public void setG(double g) {
+	public void setG(int g) {
 		G = g;
 	}
 
@@ -79,9 +79,58 @@ public class Node {
 
 
 
-	public void setH(double h) {
+	public void setH(int h) {
 		H = h;
 	}
+
+
+
+	public String getTerrain() {
+		return terrain;
+	}
+
+
+
+	public void setTerrain(String terrain) {
+		this.terrain = terrain;
+	}
+
+
+
+	public int getParentSquare() {
+		return parentSquare;
+	}
+
+
+
+	public void setParentSquare(int parentSquare) {
+		this.parentSquare = parentSquare;
+	}
+
+
+
+	public String getNodeID() {
+		return nodeID;
+	}
+
+
+
+	public void setNodeID(String nodeID) {
+		this.nodeID = nodeID;
+	}
+
+
+
+	public String getNodeParentID() {
+		return nodeParentID;
+	}
+
+
+
+	public void setNodeParentID(String nodeParentID) {
+		this.nodeParentID = nodeParentID;
+	}
+	
 	
 	
 }

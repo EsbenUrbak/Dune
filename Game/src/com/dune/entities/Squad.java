@@ -29,8 +29,8 @@ public class Squad {
 	private int SQUADSPEED = 150;
 			
 	//squad imagine size
-	public int xImagine =Resources.squadRight.getWidth();
-	public int yImagine =Resources.squadRight.getHeight();
+	public static int xImagine =Resources.squadRight.getWidth();
+	public static int yImagine =Resources.squadRight.getHeight();
 
 	//squad graphical object
 	private Animation currentAnim = Resources.squadStandRightAnim;
@@ -59,11 +59,9 @@ public class Squad {
 		yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY())/Tile.getSizeY());
 		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
 		
-		if(tileInfo.equals("F")){
-			SQUADSPEED=75;
-		}else{
-			SQUADSPEED=150;
-		}
+
+		SQUADSPEED=Resources.getSpeed(tileInfo);
+
 		
 		if(paths.size()>0){
 			// local variables to ensure that the squad does not get out of the map

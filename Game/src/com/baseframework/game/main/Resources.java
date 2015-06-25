@@ -37,10 +37,11 @@ public class Resources {
 	
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
-	public static BufferedReader map1, subTileMapping;
+	public static BufferedReader map1, subTileMapping, speedMapping;
 	public static BasicStroke strokeSize;
 	
 	public static Map<String, Wrapper> subTileRotationMap;
+	public static Map<String, Integer> speedMap;
 	public static Map<String, BufferedImage> subTileRotationImageMap=new HashMap<String, BufferedImage>();
 	
 	public static Animation squadMoveRightAnim, squadMoveLeftAnim, squadStandRightAnim, squadStandLeftAnim, selectAnim;
@@ -52,9 +53,11 @@ public class Resources {
  
 		map1 = loadFile("map2.txt");
 		subTileMapping = loadFile("subtileMapping.txt");
+		speedMapping = loadFile("SpeedMap.txt");
 		
 		//Create hashMap to identify which image ID correspond to which actual sub image
 		subTileRotationMap =mapfile(subTileMapping);
+		speedMap =speedfile(speedMapping);
 				
 		background = loadImage("background.png");
 		
@@ -166,6 +169,11 @@ public class Resources {
 		return subTileRotationMap.get(WrapperString);
 	}
 	
+	public static Integer getSpeed(String terrain)
+	{
+		return speedMap.get(terrain);
+	}
+	
 	private static AudioClip loadSound(String filename){
 		URL fileURL = Resources.class.getResource(DIRECTORY + filename);
 		return Applet.newAudioClip(fileURL);
@@ -233,6 +241,42 @@ public class Resources {
 	
 		return subTileMappingInner;
 	}
+	
+public static Map<String, Integer> speedfile(BufferedReader mapfile) {
+		
+		Map<String, Integer> speedMap = new HashMap<String, Integer>();
+		
+		ArrayList<String> mapParser = new ArrayList();
+		
+		
+		// loads the tiles from the txt file
+		while (true) {
+			try{
+				String line = mapfile.readLine();
+			
+
+				if (line == null) {
+					mapfile.close();
+					break;
+				}
+				if (!line.startsWith("!")) {
+					mapParser.add(line);
+
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		
+		}
+
+		for(int i =0; i<mapParser.size();i++){
+			String[] splited =  mapParser.get(i).split("\\s+");
+			speedMap.put(splited[0],Integer.parseInt(splited[1]));
+		}
+	
+		return speedMap;
+	}
+	
 	
 }  
     

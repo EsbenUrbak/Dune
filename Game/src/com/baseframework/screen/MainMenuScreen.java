@@ -48,6 +48,12 @@ public class MainMenuScreen extends GameScreen {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void onMouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void onKeyPress(KeyEvent e) {

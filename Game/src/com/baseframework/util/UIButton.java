@@ -6,9 +6,9 @@ import java.awt.Rectangle;
 
 
 public class UIButton {
-	private Rectangle buttonRect;
-	private Boolean buttonDown = false;
-	private Image buttonImageDown, buttonImageUp;
+	protected Rectangle buttonRect;
+	protected Boolean buttonDown = false;
+	protected Image buttonImageDown, buttonImageUp;
 	
 	public UIButton(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp){
 		buttonRect = new Rectangle(topX, topY, sizeX, sizeY);
@@ -27,7 +27,6 @@ public class UIButton {
 		} else {
 			buttonDown = false;
 		}
-		//System.out.println("Button is pressed!");
 	}
 	
 	public void cancel(){

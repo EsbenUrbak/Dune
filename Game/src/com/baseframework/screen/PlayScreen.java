@@ -24,6 +24,7 @@ public class PlayScreen extends GameScreen{
 
 	// Buttons, bars and user interface inputs
 	private UIButton buttonMode;
+	private UIDragImage dragSquadFace;
 	
 	// Graphics objects
 	public Graphics2D g2;
@@ -55,6 +56,7 @@ public class PlayScreen extends GameScreen{
 		
 		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
 								Resources.btnModeDown, Resources.btnModeUp);
+		dragSquadFace = new UIDragImage(10,10,Resources.dragSquad);
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class PlayScreen extends GameScreen{
 		renderTiles(g);
 		renderPaths(g);	
 		renderSquad(g);
-		renderButtons(g);
+		renderUI(g);
 	}
 	
 	private void renderTiles(Graphics g) {
@@ -114,8 +116,10 @@ public class PlayScreen extends GameScreen{
 		squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
 	}
 	
-	private void renderButtons(Graphics g){
+	private void renderUI(Graphics g){
 		buttonMode.render(g);
+		dragSquadFace.render(g);
+		
 	}
 	
 	
@@ -136,9 +140,10 @@ public class PlayScreen extends GameScreen{
 		
 		//check if a button was pressed
 		buttonMode.onPressed(xPos, yPos);
+		dragSquadFace.onPressed(xPos, yPos);
 		
-		// stop performing actions if a button was pressed
-		if(buttonMode.isPressed(xPos, yPos)) return;  
+		// stop performing actions if a UI element is selected was pressed
+		if(buttonMode.isPressed(xPos, yPos) || dragSquadFace.isDragged()) return;  
 		
 		// Logic to check whether it was within the rectangle (in relative coordinate)
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
@@ -171,7 +176,14 @@ public class PlayScreen extends GameScreen{
 			System.out.println("Button is clicked");
 		}
 		// in any case cancel the button activation
-		buttonMode.cancel();		
+		buttonMode.cancel();
+		dragSquadFace.onReleased(e.getX(), e.getY());
+	}
+	
+	@Override
+	public void onMouseDragged(MouseEvent e) {
+		dragSquadFace.onDragged(e.getX(), e.getY());
+		
 	}
 	
 

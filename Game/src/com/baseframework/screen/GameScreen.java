@@ -21,6 +21,8 @@ public abstract class GameScreen {
 	
 	public abstract void onMouseReleased(MouseEvent e);
 	
+	public abstract void onMouseDragged(MouseEvent e);
+	
 	public abstract void onKeyPress(KeyEvent e);
 	
 	public abstract void onKeyRelease(KeyEvent e);

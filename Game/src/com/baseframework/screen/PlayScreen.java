@@ -5,8 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.baseframework.game.main.*;
+import com.dune.entities.AStar;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
 import com.dune.planet.*;
@@ -143,7 +147,15 @@ public class PlayScreen extends GameScreen{
 				}
 				
 				if(addNewPath){
-					squad.paths.add(new Path(xPos+(int) viewframe.getFrameX(), yPos+(int) viewframe.getFrameY(), true));
+					//create optimal path with Astar logic:
+					
+					  Map<String,ArrayList<Integer>> map =new HashMap();
+					  map=AStar.AStar((int)squad.getTopX(),(int)squad.getTopY(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
+
+					  for(int i =0;i<map.get("x").size();i++){
+					squad.paths.add(new Path(map.get("x").get(i)+(int) viewframe.getFrameX(), map.get("y").get(i)+(int) viewframe.getFrameY(), true));
+					  }
+					
 				}
 			}	
 		}

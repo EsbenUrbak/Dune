@@ -13,26 +13,36 @@ import com.dune.planet.Tile;
 public class AStar {
 
 	
-	int xNode, yNode, xDelta, yDelta;
-	int stepSize = 10;
+	static int xNode;
+	static int yNode;
+	static int xDelta;
+	static int yDelta;
+	static int stepSize = 10;
 	int speed=150;
-	int g, f, h;
-	private ArrayList<Node> openList = new ArrayList<Node>();	
-	private ArrayList<Node> closedList = new ArrayList<Node>();	
-	private ArrayList<Integer> xPath = new ArrayList<Integer>();
-	private ArrayList<Integer> yPath = new ArrayList<Integer>();
+	static int g;
+	static int f;
+	static int h;
+	private static ArrayList<Node> openList = new ArrayList<Node>();	
+	private static ArrayList<Node> closedList = new ArrayList<Node>();	
+	private static ArrayList<Integer> xPath = new ArrayList<Integer>();
+	private static ArrayList<Integer> yPath = new ArrayList<Integer>();
 	public static Map<String, Node> nodeMap=new HashMap<String, Node>();
 	
-	private String terrain;
-	Node point, startPoint, currentNode, intermidiateNode;
-	String nextNodeID;
+	private static String terrain;
+	static Node point;
+	static Node startPoint;
+	static Node currentNode;
+	static Node intermidiateNode;
+	static String nextNodeID;
 	
 	//input has to be in absolute coordinates!
-	public AStar(int xStart, int yStart, int xEnd, int yEnd) {
+	public static Map<String, ArrayList<Integer>> AStar(int xStart, int yStart, int xEnd, int yEnd) {
 
 		
 		//Adding the starting to openlist
-		startPoint = new Node(xStart, yStart,PlanetMap.mapArray.get(xStart+yStart*PlanetMap.width),"x=" + 0 + "_y=" + 0,"x=" + 0 + "_y=" + 0,0,0,0);
+		
+
+		startPoint = new Node(xStart, yStart,PlanetMap.mapArray.get((xStart+yStart*PlanetMap.width)/Tile.getSizeX()),"x=" + 0 + "_y=" + 0,"x=" + 0 + "_y=" + 0,0,0,0);
 		openList.add(startPoint);
 	
 		xNode = 0;
@@ -79,6 +89,12 @@ public class AStar {
 		Collections.reverse(xPath);
 		Collections.reverse(yPath);
 		
+		  Map<String,ArrayList<Integer>> map =new HashMap();
+		  map.put("x",xPath);
+		  map.put("y",yPath);
+		  return map;
+
+		
 	}
 	
 	public static Node getNode(String nodeName)
@@ -92,7 +108,7 @@ public class AStar {
 		
 	}
 	
-	public ArrayList<Node> adjacentNodes(Node currentNodeFunc,ArrayList<Node> openListFunc, int xStart, int yStart, int xEnd,int yEnd) {
+	public static ArrayList<Node> adjacentNodes(Node currentNodeFunc,ArrayList<Node> openListFunc, int xStart, int yStart, int xEnd,int yEnd) {
 
 		int xParent = currentNodeFunc.getX();
 		int yParent = currentNodeFunc.getY();
@@ -125,7 +141,7 @@ public class AStar {
 								// then earlier recorded
 								
 								// finding terrain type for this node point
-								terrain = PlanetMap.mapArray.get(xNode + yNode* PlanetMap.width);
+								terrain = PlanetMap.mapArray.get((xNode + yNode* PlanetMap.width)/Tile.getSizeX());
 								// Calculating the "cost of moving". I use the time to
 								// move as the cost.
 								g = gParent+ (int) Math.sqrt((Math.pow(Math.abs(i), 2) + Math.pow(Math.abs(j), 2))* stepSize)/ Resources.getSpeed(terrain);
@@ -148,7 +164,7 @@ public class AStar {
 								// if the neighbour is not on the open list we add it
 								// with parent node the current node
 								// finding terrain type for this node point
-								terrain = PlanetMap.mapArray.get(xNode + yNode* PlanetMap.width);
+								terrain = PlanetMap.mapArray.get((xNode + yNode* PlanetMap.width)/Tile.getSizeX());
 
 								// calculate g, h and F scores for the tile
 								// Calculating the "cost of moving". I use the time to
@@ -179,7 +195,7 @@ public class AStar {
 	}
 	
 	//finding the node with the lowest F:
-	public Node lowestFNode(ArrayList<Node> openListFunc){
+	public static Node lowestFNode(ArrayList<Node> openListFunc){
 
 		int f=0;
 		int fsmallest=999999999;

@@ -5,7 +5,7 @@ import java.awt.Image;
 import java.util.ArrayList;
 
 public class UIVarButton extends UIButton{
-	ArrayList <UIDragImage> dragImages;
+	ArrayList <UIDragImage> dragItems;
 	int mode = 0;
 	int varTopX, varTopY, varWidth, varHeight;
 	

@@ -56,7 +56,7 @@ public class PlayScreen extends GameScreen{
 		
 		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
 								Resources.btnModeDown, Resources.btnModeUp);
-		dragSquadFace = new UIDragImage(10,10,Resources.dragSquad);
+		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.dragSquad);
 	}
 
 	@Override

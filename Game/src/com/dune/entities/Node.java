@@ -11,96 +11,108 @@ import com.dune.planet.PlanetMap;
 
 public class Node {
 
-	private int x, y;
-	private int F, G, H;
-	private String terrain, nodeID, nodeParentID;
+	private int xNode, yNode;
+	private int FNode, GNode, HNode;
+	private String terrainNode, nodeIDNode, nodeParentIDNode;
 	int parentSquare;
 
 
 	public Node(int x, int y, String terrain, String nodeParentID,String nodeID, int G, int H,int F) {
-		
-
+		xNode = x * 1;
+		yNode = y * 1;
+		terrainNode =terrain;
+		nodeIDNode =nodeParentID;
+		nodeParentIDNode =nodeID;
+		FNode = F;
+		GNode=G;
+		HNode=H;
 
 	}
 
 
-
-	public int getX() {
-		return x;
+	public int getxNode() {
+		return xNode;
 	}
 
 
-
-	public void setX(int x) {
-		this.x = x;
+	public void setxNode(int xNode) {
+		this.xNode = xNode;
 	}
 
 
-
-	public int getY() {
-		return y;
+	public int getyNode() {
+		return yNode;
 	}
 
 
-
-	public void setY(int y) {
-		this.y = y;
+	public void setyNode(int yNode) {
+		this.yNode = yNode;
 	}
 
 
-
-	public int getF() {
-		return F;
+	public int getFNode() {
+		return FNode;
 	}
 
 
-
-	public void setF(int f) {
-		F = f;
+	public void setFNode(int fNode) {
+		FNode = fNode;
 	}
 
 
-
-	public int getG() {
-		return G;
+	public int getGNode() {
+		return GNode;
 	}
 
 
-
-	public void setG(int g) {
-		G = g;
+	public void setGNode(int gNode) {
+		GNode = gNode;
 	}
 
 
-
-	public double getH() {
-		return H;
+	public int getHNode() {
+		return HNode;
 	}
 
 
-
-	public void setH(int h) {
-		H = h;
+	public void setHNode(int hNode) {
+		HNode = hNode;
 	}
 
 
-
-	public String getTerrain() {
-		return terrain;
+	public String getTerrainNode() {
+		return terrainNode;
 	}
 
 
-
-	public void setTerrain(String terrain) {
-		this.terrain = terrain;
+	public void setTerrainNode(String terrainNode) {
+		this.terrainNode = terrainNode;
 	}
 
+
+	public String getNodeIDNode() {
+		return nodeIDNode;
+	}
+
+
+	public void setNodeIDNode(String nodeIDNode) {
+		this.nodeIDNode = nodeIDNode;
+	}
+
+
+	public String getNodeParentIDNode() {
+		return nodeParentIDNode;
+	}
+
+
+	public void setNodeParentIDNode(String nodeParentIDNode) {
+		this.nodeParentIDNode = nodeParentIDNode;
+	}
 
 
 	public int getParentSquare() {
 		return parentSquare;
 	}
-
 
 
 	public void setParentSquare(int parentSquare) {
@@ -109,27 +121,6 @@ public class Node {
 
 
 
-	public String getNodeID() {
-		return nodeID;
-	}
-
-
-
-	public void setNodeID(String nodeID) {
-		this.nodeID = nodeID;
-	}
-
-
-
-	public String getNodeParentID() {
-		return nodeParentID;
-	}
-
-
-
-	public void setNodeParentID(String nodeParentID) {
-		this.nodeParentID = nodeParentID;
-	}
 	
 	
 	

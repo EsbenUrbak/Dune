@@ -149,6 +149,9 @@ public class PlayScreen extends GameScreen{
 				if(addNewPath){
 					//create optimal path with Astar logic:
 					
+					System.out.println("xpos = "+xPos);
+					System.out.println("xpos = "+yPos);
+					
 					  Map<String,ArrayList<Integer>> map =new HashMap();
 					  map=AStar.AStar((int)squad.getTopX(),(int)squad.getTopY(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
 

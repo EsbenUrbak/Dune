@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.baseframework.game.main.*;
+import com.baseframework.game.main.MainHolder;
+import com.baseframework.game.main.Resources;
 import com.dune.entities.AStar;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
-import com.dune.planet.*;
+import com.dune.planet.PlanetMap;
+import com.dune.planet.Tile;
+import com.dune.planet.ViewFrame;
 
 
 
@@ -141,22 +144,18 @@ public class PlayScreen extends GameScreen{
 				
 				if(squad.paths.isEmpty()){
 					addNewPath = true;
-				} else if (squad.paths.get(squad.paths.size()-1).getX() != xPos+ (int) viewframe.getFrameX() || 
-						squad.paths.get(squad.paths.size()-1).getY() != yPos + (int) viewframe.getFrameY()) {
+				} else if (squad.paths.get(squad.paths.size()-1).getX() != xPos+ (int) viewframe.getFrameX() || squad.paths.get(squad.paths.size()-1).getY() != yPos + (int) viewframe.getFrameY()) {
 					addNewPath = true;
 				}
 				
 				if(addNewPath){
 					//create optimal path with Astar logic:
 					
-					System.out.println("xpos = "+xPos);
-					System.out.println("xpos = "+yPos);
-					
 					  Map<String,ArrayList<Integer>> map =new HashMap();
-					  map=AStar.AStar((int)squad.getTopX(),(int)squad.getTopY(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
+					  map=AStar.AStar((int)squad.getTopX()+ (int)squad.getxImagine()/2,(int)squad.getTopY()+ (int)squad.getyImagine(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
 
 					  for(int i =0;i<map.get("x").size();i++){
-					squad.paths.add(new Path(map.get("x").get(i)+(int) viewframe.getFrameX(), map.get("y").get(i)+(int) viewframe.getFrameY(), true));
+					squad.paths.add(new Path(map.get("x").get(i), map.get("y").get(i), true));
 					  }
 					
 				}

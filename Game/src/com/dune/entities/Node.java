@@ -12,12 +12,12 @@ import com.dune.planet.PlanetMap;
 public class Node {
 
 	private int xNode, yNode;
-	private int FNode, GNode, HNode;
+	private double FNode, GNode, HNode;
 	private String terrainNode, nodeIDNode, nodeParentIDNode;
 	int parentSquare;
 
 
-	public Node(int x, int y, String terrain, String nodeParentID,String nodeID, int G, int H,int F) {
+	public Node(int x, int y, String terrain, String nodeParentID,String nodeID, double G, double H,double F) {
 		xNode = x * 1;
 		yNode = y * 1;
 		terrainNode =terrain;
@@ -50,7 +50,7 @@ public class Node {
 	}
 
 
-	public int getFNode() {
+	public double getFNode() {
 		return FNode;
 	}
 
@@ -60,7 +60,7 @@ public class Node {
 	}
 
 
-	public int getGNode() {
+	public double getGNode() {
 		return GNode;
 	}
 
@@ -70,7 +70,7 @@ public class Node {
 	}
 
 
-	public int getHNode() {
+	public double getHNode() {
 		return HNode;
 	}
 

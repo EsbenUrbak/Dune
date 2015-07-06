@@ -11,32 +11,28 @@ import com.dune.planet.PlanetMap;
 import com.dune.planet.Tile;
 
 public class AStar {
-
+	static Map<String, Node> nodeMap=new HashMap<String, Node>();
 	
-	static int xNode;
-	static int yNode;
-	static int xDelta;
-	static int yDelta;
-	static int stepSize = 10;
-	int speed=150;
-	static int g;
-	static int f;
-	static int h;
-	private static ArrayList<Node> openList = new ArrayList<Node>();	
-	private static ArrayList<Node> closedList = new ArrayList<Node>();	
-	private static ArrayList<Integer> xPath = new ArrayList<Integer>();
-	private static ArrayList<Integer> yPath = new ArrayList<Integer>();
-	public static Map<String, Node> nodeMap=new HashMap<String, Node>();
-	
-
-	static Node point;
-	static Node startPoint;
-	static Node currentNode;
-	static Node intermidiateNode;
-	static String nextNodeID;
-	
+	 static int stepSize = 25;
 	//input has to be in absolute coordinates!
 	public static Map<String, ArrayList<Integer>> AStar(int xStart, int yStart, int xEnd, int yEnd) {
+		 int xNode;
+		 int yNode;
+		 int xDelta;
+		 int yDelta;
+
+		 int g;
+		 int f;
+		 int h;
+
+		 Node startPoint;
+		 Node currentNode;
+		 Node intermidiateNode;
+		 String nextNodeID;
+		ArrayList<Node> openList = new ArrayList<Node>();	
+		ArrayList<Node> closedList = new ArrayList<Node>();	
+		ArrayList<Integer> xPath = new ArrayList<Integer>();
+		ArrayList<Integer> yPath = new ArrayList<Integer>();
 
 		
 		//Adding the starting to openlist
@@ -45,21 +41,27 @@ public class AStar {
 	
 		xNode = 0;
 		yNode = 0;
-		xDelta=1;
-		yDelta=1;
+		xDelta=stepSize+1;
+		yDelta=stepSize+1;
 		
-		while(xDelta>0||yDelta>0){
+		currentNode=startPoint;
+		while(xDelta>stepSize&&yDelta>stepSize){
 			
 			
-			currentNode = lowestFNode(openList);
+
 			closedList.add(currentNode);
-			xNode = currentNode.getxNode();
-			yNode = currentNode.getxNode();;
-			xDelta=(int) (xEnd-(xNode+(int)Squad.xImagine/2f));
-			yDelta=(int) (yEnd-(yNode+(int)Squad.yImagine));
+			//remove it from the openlist
+			openList.remove(currentNode);
+			
+
 			
 			//adding adjacent nodes to the openlist if they are not alreayd on it and checks which is the correct parent for with node
-			openList=adjacentNodes(currentNode, openList, xStart, yStart, xEnd, yEnd);
+			openList=adjacentNodes(currentNode, openList,closedList, xStart, yStart, xEnd, yEnd);
+			currentNode = lowestFNode(openList);
+			xNode = currentNode.getxNode();
+			yNode = currentNode.getyNode();;
+			xDelta=(int) Math.abs((xEnd-(xNode+(int)Squad.xImagine/2f)));
+			yDelta=(int) Math.abs((yEnd-(yNode+(int)Squad.yImagine)));
 			
 			
 		}
@@ -83,6 +85,8 @@ public class AStar {
 			nextNodeID = intermidiateNode.getNodeParentIDNode();
 			intermidiateNode =getNode(nextNodeID);
 		}
+		
+
 
 		//inverting the nodes in the x and y list
 		Collections.reverse(xPath);
@@ -93,109 +97,142 @@ public class AStar {
 		  map.put("y",yPath);
 		  return map;
 
+		  
+		  
+		  
 		
 	}
 	
-	public static Node getNode(String nodeName)
+	public static Node getNode(String NodeID)
 	{
-		return nodeMap.get(nodeName);
+		return nodeMap.get(NodeID);
 	}
 	
-	
-	
-	public void point(int x, int y){
-		
-	}
-	
-	public static ArrayList<Node> adjacentNodes(Node currentNodeFunc,ArrayList<Node> openListFunc, int xStart, int yStart, int xEnd,int yEnd) {
 
+	
+	public static ArrayList<Node> adjacentNodes(Node currentNodeFunc,ArrayList<Node> openListFunc,ArrayList<Node> closedListFunc, int xStart, int yStart, int xEnd,int yEnd) {
+
+		 Node point;
 		int xParent = currentNodeFunc.getxNode();
-		System.out.println("xParent="+xParent);
 		int yParent = currentNodeFunc.getyNode();
-		int gParent = currentNodeFunc.getGNode();
+		double gParent = currentNodeFunc.getGNode();
 		String nodeParentID=currentNodeFunc.getNodeIDNode();
 		String nodeID;
 		String terrain;
 		int xNodef;
 		int yNodef;
-		int openListSize = openList.size();
-		int closedListSize = closedList.size();
+		int openListSize = openListFunc.size();
+		int closedListSize= closedListFunc.size();
+		double gFunc, hFunc, fFunc;
+		int nodeSpeed;
+		
+		boolean isOnOpenList;
+		int openListIndex = 0;
+		boolean isOnClosedList;
+		double sqrt,hItermidiate;
 
 		// finding all adjacent to the starting square
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
 
 				// finding neighbours coordinates
 				xNodef = xParent + stepSize * (i-1);
 				yNodef = yParent + stepSize * (j-1);
 				nodeID = "x=" + (xNodef - xStart)/stepSize + "_y=" + (yNodef - yStart)/stepSize;
+				// finding terrain type for this node point
+				terrain = PlanetMap.mapArray.get((xNodef + yNodef* PlanetMap.width)/ Tile.getSizeX());
+				nodeSpeed=Resources.getSpeed(terrain);
 
 				
-				//check whether on the closed list already:
-				for (int n = 0; n < closedListSize; n++) {
-				
-					if (nodeID.equals(closedList.get(n).getNodeIDNode())) {
+				//check whether on the closed list already or is a zero speed tile:
+				isOnClosedList = false;
+				if(nodeSpeed==0){
+					isOnClosedList=true;
+				}else{
+				for (int k = 0; k < closedListSize; k++) {
 
+					if (nodeID.equals(closedListFunc.get(k).getNodeIDNode())) {
+						isOnClosedList = true;
+					}
+				}
+				
+
+					if (isOnClosedList) {
+					//do nothing
 						
 					}else{
 
 						// Check whether neighbour is in the openlist already:
-										for (int k = 0; k < openListSize; k++) {
+						isOnOpenList = false;
+						for (int k1 = 0; k1 < openListSize; k1++) {
 
-																if (nodeID.equals(openList.get(k).getNodeIDNode())) {
-																	// if already on the list we need to check whether the
-																	// path to this node is quicker from the current node
-																	// then earlier recorded
-																	
-																	// finding terrain type for this node point
-																	terrain = PlanetMap.mapArray.get((xNodef + yNodef* PlanetMap.width)/Tile.getSizeX());
-																	// Calculating the "cost of moving". I use the time to
-																	// move as the cost.
-																	g = gParent+ (int) Math.sqrt((Math.pow(Math.abs(i), 2) + Math.pow(Math.abs(j), 2))* stepSize)/ Resources.getSpeed(terrain);
-																	// check which path has the lowest g:
-																	if (g < openList.get(k).getGNode()) {
-																		// if the g score is lower with the current node
-																		// then we remove the old node and replace it with
-																		// updated parameters.
-																		openList.remove(k);
-																		h = Math.abs((xNodef - xEnd))+ Math.abs((yNodef - yEnd));
-																		// finally f:
-																		f = g + h;
-																		// adding the node point to the openlist.
-																		point = new Node(xNodef, yNodef, terrain, nodeParentID,nodeID, g,h, f);
-																		openListFunc.add(point);
-																	}
+							if (nodeID.equals(openListFunc.get(k1).getNodeIDNode())) {
+								isOnOpenList = true;
+								openListIndex=k1;
+								
+							}
+											
+										}
+						if (isOnOpenList) {
+							// if already on the list we need to check whether
+							// the
+							// path to this node is quicker from the current
+							// node
+							// then earlier recorded
 
-																} else {
-																	// if the neighbour is not on the open list we add it
-																	// with parent node the current node
-																	// finding terrain type for this node point
-									
-																	terrain = PlanetMap.mapArray.get((xNodef + yNodef* PlanetMap.width)/Tile.getSizeX());
-									
-																	// calculate g, h and F scores for the tile
-																	// Calculating the "cost of moving". I use the time to
-																	// move as the cost.
-																	g = gParent+ (int) Math.sqrt((Math.pow(Math.abs(i), 2) + Math.pow(Math.abs(j), 2))* stepSize)/ Resources.getSpeed(terrain);
-									
-																	h = Math.abs((xNodef - xEnd)) + Math.abs((yNodef - yEnd));
-																	// finally f:
-																	f = g + h;
-									
-																	// adding the node point to the openlist.
-																	point = new Node(xNodef, yNodef, terrain, nodeParentID, nodeID, g, h, f);
-																	openListFunc.add(point);
-																}
+							// Calculating the "cost of moving". I use the time
+							// to
+							// move as the cost.
+							sqrt =Math.sqrt(((double)Math.abs(((double)i) - 1.0) + Math.abs(((double)j)- 1.0)));
+							gFunc = gParent+ sqrt * stepSize/ ((double)nodeSpeed);
+							
+							// check which path has the lowest g:
+							if (gFunc < openListFunc.get(openListIndex).getGNode()) {
+								// if the g score is lower with the current node
+								// then we remove the old node and replace it
+								// with
+								// updated parameters.
+								openListFunc.remove(openListIndex);
+								hFunc = (Math.abs(xNodef - xEnd)+ Math.abs(yNodef - yEnd))/((double)nodeSpeed);
+								// finally f:
+								fFunc = gFunc + hFunc;
+								// adding the node point to the openlist.
+								point = new Node(xNodef, yNodef, terrain,nodeID, nodeParentID, gFunc, hFunc,fFunc);
+								openListFunc.add(point);
+							}
 
-											}
+						}
+
+						else {
+							// if the neighbour is not on the open list we add
+							// it
+							// with parent node the current node
+							// finding terrain type for this node point
+
+							// calculate g, h and F scores for the tile
+							// Calculating the "cost of moving". I use the time
+							// to
+							// move as the cost.
+							sqrt =Math.sqrt(((double)Math.abs(((double)i) - 1.0) + Math.abs(((double)j)- 1.0)));
+							gFunc = gParent+ sqrt * stepSize/ ((double)nodeSpeed);
+							hItermidiate = (Math.abs(xNodef - xEnd)+ Math.abs(yNodef - yEnd));
+							hFunc = hItermidiate/((double)nodeSpeed);
+							// finally f:
+							fFunc = gFunc + hFunc;
+
+							// adding the node point to the openlist.
+							point = new Node(xNodef, yNodef, terrain, nodeID,nodeParentID, gFunc, hFunc, fFunc);
+							openListFunc.add(point);
+						}
+											
 						
 						
-					}
+					
 				}
 
 			}
-		}
-
+			}}
+		
 		return openListFunc;
 
 	}
@@ -203,8 +240,8 @@ public class AStar {
 	//finding the node with the lowest F:
 	public static Node lowestFNode(ArrayList<Node> openListFunc){
 
-		int f=0;
-		int fsmallest=999999999;
+		double f=0;
+		double fsmallest=999999999;
 		int iSmallest=0;
 
 		for(int i = 0;i<openListFunc.size();i++){

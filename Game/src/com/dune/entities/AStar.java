@@ -123,7 +123,7 @@ public class AStar {
 		int yNodef;
 		int openListSize = openListFunc.size();
 		int closedListSize= closedListFunc.size();
-		double gFunc, hFunc, fFunc;
+		double gFunc, hFunc, fFunc = 0;
 		int nodeSpeed;
 		int averageSpeed=Resources.getSpeed("A");
 		
@@ -194,7 +194,8 @@ public class AStar {
 								// with
 								// updated parameters.
 								openListFunc.remove(openListIndex);
-								hFunc = (Math.abs(xNodef - xEnd)+ Math.abs(yNodef - yEnd))/((double)nodeSpeed);
+								hItermidiate = Math.sqrt(Math.pow(xNodef - xEnd,2)+ Math.pow(yNodef - yEnd,2));
+								hFunc = hItermidiate/((double)nodeSpeed);
 								// finally f:
 								fFunc = gFunc + hFunc;
 								// adding the node point to the openlist.
@@ -216,7 +217,7 @@ public class AStar {
 							// move as the cost.
 							sqrt =Math.sqrt(((double)Math.abs(((double)i) - 1.0) + Math.abs(((double)j)- 1.0)));
 							gFunc = gParent+ sqrt * stepSize/ ((double)nodeSpeed);
-							hItermidiate = (Math.abs(xNodef - xEnd)+ Math.abs(yNodef - yEnd));
+							hItermidiate = Math.sqrt(Math.pow(xNodef - xEnd,2)+ Math.pow(yNodef - yEnd,2));
 							hFunc = hItermidiate/((double)nodeSpeed);
 							// finally f:
 							fFunc = gFunc + hFunc;
@@ -224,10 +225,12 @@ public class AStar {
 							// adding the node point to the openlist.
 							point = new Node(xNodef, yNodef, terrain, nodeParentID,nodeID, gFunc, hFunc, fFunc);
 							openListFunc.add(point);
+							System.out.println("NodeID = "+nodeID +" G = "+gFunc+" H = "+hFunc+" F = "+fFunc);							
+
 						}
 											
 						
-						
+
 					
 				}
 

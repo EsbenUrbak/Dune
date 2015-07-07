@@ -21,8 +21,8 @@ public class Node {
 		xNode = x * 1;
 		yNode = y * 1;
 		terrainNode =terrain;
-		nodeIDNode =nodeParentID;
-		nodeParentIDNode =nodeID;
+		nodeIDNode =nodeID;
+		nodeParentIDNode =nodeParentID;
 		FNode = F;
 		GNode=G;
 		HNode=H;

@@ -125,6 +125,7 @@ public class AStar {
 		int closedListSize= closedListFunc.size();
 		double gFunc, hFunc, fFunc;
 		int nodeSpeed;
+		int averageSpeed=Resources.getSpeed("A");
 		
 		boolean isOnOpenList;
 		int openListIndex = 0;
@@ -197,7 +198,7 @@ public class AStar {
 								// finally f:
 								fFunc = gFunc + hFunc;
 								// adding the node point to the openlist.
-								point = new Node(xNodef, yNodef, terrain,nodeID, nodeParentID, gFunc, hFunc,fFunc);
+								point = new Node(xNodef, yNodef, terrain, nodeParentID, nodeID, gFunc, hFunc,fFunc);
 								openListFunc.add(point);
 							}
 
@@ -221,7 +222,7 @@ public class AStar {
 							fFunc = gFunc + hFunc;
 
 							// adding the node point to the openlist.
-							point = new Node(xNodef, yNodef, terrain, nodeID,nodeParentID, gFunc, hFunc, fFunc);
+							point = new Node(xNodef, yNodef, terrain, nodeParentID,nodeID, gFunc, hFunc, fFunc);
 							openListFunc.add(point);
 						}
 											

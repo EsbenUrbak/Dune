@@ -152,8 +152,14 @@ public class PlayScreen extends GameScreen{
 					//create optimal path with Astar logic:
 					
 					  Map<String,ArrayList<Integer>> map =new HashMap();
+					  
+					  //logic to make sure it doesnt always start bulding a path from where the squad currently is:
+					  if(squad.paths.isEmpty()){
 					  map=AStar.AStar((int)squad.getTopX()+ (int)squad.getxImagine()/2,(int)squad.getTopY()+ (int)squad.getyImagine(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
-
+					  }else{
+						  map=AStar.AStar(squad.paths.get(squad.paths.size()-1).getX(),squad.paths.get(squad.paths.size()-1).getY(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY()); 
+					  }
+					  
 					  for(int i =0;i<map.get("x").size();i++){
 					squad.paths.add(new Path(map.get("x").get(i), map.get("y").get(i), true));
 					  }

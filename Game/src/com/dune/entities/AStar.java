@@ -123,7 +123,7 @@ public class AStar {
 		 Node point;
 
 		String nodeID;
-		String terrain,terrain_dia;
+		String terrain,terrain_dia1,terrain_dia2;
 		int xNodef;
 		int yNodef;
 		int terrainNumber;
@@ -145,7 +145,8 @@ public class AStar {
 		int openListSize = openListFunc.size();
 		int closedListSize= closedListFunc.size();
 
-		int xNodef_dia, yNodef_dia,terrainNumber_dia,nodeSpeed_dia = 0;
+		int xNodef_dia1, yNodef_dia1,terrainNumber_dia1,nodeSpeed_dia1 = 0, j1,i1;
+		int xNodef_dia2, yNodef_dia2,terrainNumber_dia2,nodeSpeed_dia2 = 0, j2,i2;
 		
 		// finding all adjacent to the starting square
 		for (int i = 0; i < 3; i++) {
@@ -160,19 +161,30 @@ public class AStar {
 				terrain = PlanetMap.mapArray.get(terrainNumber*1);
 				nodeSpeed=Resources.getSpeed(terrain);
 
-				//Need to check what is on the diagonal
+				//Check to make sure the squad doesnt move accross diagonals where it will get stuck
 				if(Math.abs(i-1)==Math.abs(j-1)){
-					xNodef_dia = xParent + stepSize * (i-1)/2;
-					yNodef_dia = yParent + stepSize * (j-1)/2;
+					i1=ifunction1(i,j);
+					j1=jfunction1(i,j);
+					xNodef_dia1 = xParent + stepSize * (i1-1)/2;
+					yNodef_dia1 = yParent + stepSize * (j1-1)/2;
 					
-					terrainNumber_dia =(xNodef_dia/Tile.getSizeX()) + ((yNodef_dia/Tile.getSizeX())* PlanetMap.width);
-					terrain_dia = PlanetMap.mapArray.get(terrainNumber_dia);
-					nodeSpeed_dia=Resources.getSpeed(terrain_dia);
+					terrainNumber_dia1 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
+					terrain_dia1 = PlanetMap.mapArray.get(terrainNumber_dia1);
+					nodeSpeed_dia1=Resources.getSpeed(terrain_dia1);
+					
+					i2=ifunction2(i,j);
+					j2=jfunction2(i,j);
+					xNodef_dia2 = xParent + stepSize * (i2-1)/2;
+					yNodef_dia2 = yParent + stepSize * (j2-1)/2;
+					
+					terrainNumber_dia2 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
+					terrain_dia2 = PlanetMap.mapArray.get(terrainNumber_dia2);
+					nodeSpeed_dia2=Resources.getSpeed(terrain_dia2);
 				}
 				
 				//check whether on the closed list already or is a zero speed tile:
 				isOnClosedList = false;
-				if(nodeSpeed==0||nodeSpeed_dia==0){
+				if(nodeSpeed==0||nodeSpeed_dia1==0||nodeSpeed_dia2==0){
 					//System.out.println(nodeSpeed_dia);
 					isOnClosedList=true;
 				}else{
@@ -288,6 +300,80 @@ public class AStar {
 		
 	}
 	
+	
+	
+	public static int ifunction1(int i, int j){
+		int neighbourI = 0;
+		if(i==-1&&j==-1){
+			neighbourI=0;
+		}
+		if(i==-1&&j==1){
+			neighbourI=-1;
+		}
+		if(i==1&&j==-1){
+			neighbourI=0;
+		}
+		if(i==1&&j==1){
+			neighbourI=1;
+		}
+		
+		return neighbourI;
+		
+	}
+	public static int ifunction2(int i, int j){
+		int neighbourI = 0;
+		if(i==-1&&j==-1){
+			neighbourI=-1;
+		}
+		if(i==-1&&j==1){
+			neighbourI=0;
+		}
+		if(i==1&&j==-1){
+			neighbourI=1;
+		}
+		if(i==1&&j==1){
+			neighbourI=0;
+		}
+		
+		return neighbourI;
+		
+	}
+	public static int jfunction1(int i, int j){
+		int neighbourJ = 0;
+		if(i==-1&&j==-1){
+			neighbourJ=-1;
+		}
+		if(i==-1&&j==1){
+			neighbourJ=0;
+		}
+		if(i==1&&j==-1){
+			neighbourJ=-1;
+		}
+		if(i==1&&j==1){
+			neighbourJ=0;
+		}
+		
+		return neighbourJ;
+		
+	}
+	public static int jfunction2(int i, int j){
+		int neighbourJ = 0;
+		if(i==-1&&j==-1){
+			neighbourJ=0;
+		}
+		if(i==-1&&j==1){
+			neighbourJ=1;
+		}
+		if(i==1&&j==-1){
+			neighbourJ=0;
+		}
+		if(i==1&&j==1){
+			neighbourJ=1;
+		}
+		
+		return neighbourJ;
+		
+	}
 	
 	
 }

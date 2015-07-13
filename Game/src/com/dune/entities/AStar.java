@@ -161,7 +161,7 @@ public class AStar {
 				nodeSpeed=Resources.getSpeed(terrain);
 
 				//Need to check what is on the diagonal
-				if(Math.abs(i)==Math.abs(j)){
+				if(Math.abs(i-1)==Math.abs(j-1)){
 					xNodef_dia = xParent + stepSize * (i-1)/2;
 					yNodef_dia = yParent + stepSize * (j-1)/2;
 					

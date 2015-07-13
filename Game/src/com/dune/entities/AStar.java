@@ -13,7 +13,7 @@ import com.dune.planet.Tile;
 public class AStar {
 	static Map<String, Node> nodeMap=new HashMap<String, Node>();
 	
-	 static int stepSize = 5;
+	 static int stepSize = 20;
 	 
 	//input has to be in absolute coordinates!
 	public static Map<String, ArrayList<Integer>> AStar(int xStart, int yStart, int xEnd, int yEnd) {
@@ -119,7 +119,7 @@ public class AStar {
 		 Node point;
 
 		String nodeID;
-		String terrain;
+		String terrain,terrain_dia;
 		int xNodef;
 		int yNodef;
 		int terrainNumber;
@@ -141,6 +141,7 @@ public class AStar {
 		int openListSize = openListFunc.size();
 		int closedListSize= closedListFunc.size();
 
+		int xNodef_dia, yNodef_dia,terrainNumber_dia,nodeSpeed_dia = 0;
 		
 		// finding all adjacent to the starting square
 		for (int i = 0; i < 3; i++) {
@@ -155,10 +156,19 @@ public class AStar {
 				terrain = PlanetMap.mapArray.get(terrainNumber*1);
 				nodeSpeed=Resources.getSpeed(terrain);
 
+				//Need to check what is on the diagonal
+				if(Math.abs(i)==Math.abs(j)){
+					xNodef_dia = xParent + stepSize * (i-1)/2;
+					yNodef_dia = yParent + stepSize * (j-1)/2;
+					
+					terrainNumber_dia =(xNodef_dia/Tile.getSizeX()) + ((yNodef_dia/Tile.getSizeX())* PlanetMap.width);
+					terrain_dia = PlanetMap.mapArray.get(terrainNumber_dia);
+					nodeSpeed_dia=Resources.getSpeed(terrain_dia);
+				}
 				
 				//check whether on the closed list already or is a zero speed tile:
 				isOnClosedList = false;
-				if(nodeSpeed==0){
+				if(nodeSpeed==0||nodeSpeed_dia==0){
 					isOnClosedList=true;
 				}else{
 				for (int k = 0; k < closedListSize; k++) {

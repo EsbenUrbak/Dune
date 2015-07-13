@@ -21,6 +21,7 @@ public class AStar {
 		 int yNode;
 		 int xDelta;
 		 int yDelta;
+		 int Delta;
 
 		 int g;
 		 int f;
@@ -44,10 +45,11 @@ public class AStar {
 		yNode = 0;
 		xDelta=stepSize+1;
 		yDelta=stepSize+1;
+		Delta=stepSize+1;
 		
 		currentNode=startPoint;
 		
-		while(xDelta>stepSize&&yDelta>stepSize){
+		while(Delta>stepSize){
 			
 			
 
@@ -63,6 +65,8 @@ public class AStar {
 			System.out.println("Node ID ="+currentNode.getNodeID() + "Parent Node ID ="+currentNode.getParentNodeID() + " G SScore = " +currentNode.getGNode()+ " H Score = " +currentNode.getHNode()+" F Score = " +currentNode.getFNode()+" Terrain = " +currentNode.getTerrainNode());
 			xNode = currentNode.getxNode();
 			yNode = currentNode.getyNode();;
+			
+			Delta = (int) Math.sqrt((Math.pow(xEnd-xNode,2)+Math.pow(yEnd-yNode,2)));
 			xDelta=(int) Math.abs((xEnd-(xNode+(int)Squad.xImagine/2f)));
 			yDelta=(int) Math.abs((yEnd-(yNode+(int)Squad.yImagine)));
 			

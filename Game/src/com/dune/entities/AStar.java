@@ -13,7 +13,7 @@ import com.dune.planet.Tile;
 public class AStar {
 	static Map<String, Node> nodeMap=new HashMap<String, Node>();
 	
-	 static int stepSize = 20;
+	 static int stepSize = 10;
 	 
 	//input has to be in absolute coordinates!
 	public static Map<String, ArrayList<Integer>> AStar(int xStart, int yStart, int xEnd, int yEnd) {
@@ -62,7 +62,7 @@ public class AStar {
 			//adding adjacent nodes to the openlist if they are not already on it and checks which is the correct parent for these nodes
 			openList=adjacentNodes(currentNode, openList,closedList, xStart, yStart, xEnd, yEnd);
 			currentNode = lowestFNode(openList);
-			System.out.println("Node ID ="+currentNode.getNodeID() + "Parent Node ID ="+currentNode.getParentNodeID() + " G SScore = " +currentNode.getGNode()+ " H Score = " +currentNode.getHNode()+" F Score = " +currentNode.getFNode()+" Terrain = " +currentNode.getTerrainNode());
+			//System.out.println("Node ID ="+currentNode.getNodeID() + "Parent Node ID ="+currentNode.getParentNodeID() + " G SScore = " +currentNode.getGNode()+ " H Score = " +currentNode.getHNode()+" F Score = " +currentNode.getFNode()+" Terrain = " +currentNode.getTerrainNode());
 			xNode = currentNode.getxNode();
 			yNode = currentNode.getyNode();;
 			
@@ -173,6 +173,7 @@ public class AStar {
 				//check whether on the closed list already or is a zero speed tile:
 				isOnClosedList = false;
 				if(nodeSpeed==0||nodeSpeed_dia==0){
+					//System.out.println(nodeSpeed_dia);
 					isOnClosedList=true;
 				}else{
 				for (int k = 0; k < closedListSize; k++) {

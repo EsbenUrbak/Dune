@@ -13,7 +13,8 @@ import com.dune.planet.Tile;
 public class AStar {
 	static Map<String, Node> nodeMap=new HashMap<String, Node>();
 	
-	 static int stepSize = 25;
+	 static int stepSize = 5;
+	 
 	//input has to be in absolute coordinates!
 	public static Map<String, ArrayList<Integer>> AStar(int xStart, int yStart, int xEnd, int yEnd) {
 		 int xNode;
@@ -45,6 +46,7 @@ public class AStar {
 		yDelta=stepSize+1;
 		
 		currentNode=startPoint;
+		
 		while(xDelta>stepSize&&yDelta>stepSize){
 			
 			
@@ -55,9 +57,10 @@ public class AStar {
 			
 
 			
-			//adding adjacent nodes to the openlist if they are not alreayd on it and checks which is the correct parent for with node
+			//adding adjacent nodes to the openlist if they are not already on it and checks which is the correct parent for these nodes
 			openList=adjacentNodes(currentNode, openList,closedList, xStart, yStart, xEnd, yEnd);
 			currentNode = lowestFNode(openList);
+			System.out.println("Node ID ="+currentNode.getNodeID() + "Parent Node ID ="+currentNode.getParentNodeID() + " G SScore = " +currentNode.getGNode()+ " H Score = " +currentNode.getHNode()+" F Score = " +currentNode.getFNode()+" Terrain = " +currentNode.getTerrainNode());
 			xNode = currentNode.getxNode();
 			yNode = currentNode.getyNode();;
 			xDelta=(int) Math.abs((xEnd-(xNode+(int)Squad.xImagine/2f)));
@@ -66,11 +69,12 @@ public class AStar {
 			
 		}
 		
+		closedList.add(currentNode);
 		
 		//create a map of find the path
 		for(int i=closedList.size()-1;i>-1;i--){
 			intermidiateNode= closedList.get(i);
-			nodeMap.put(intermidiateNode.getNodeIDNode(),intermidiateNode);
+			nodeMap.put(intermidiateNode.getNodeID(),intermidiateNode);
 		}
 		
 		//now going back through the closed list to find the path and make the path.
@@ -82,7 +86,7 @@ public class AStar {
 		while(intermidiateNode!=startPoint){
 			xPath.add(intermidiateNode.getxNode());
 			yPath.add(intermidiateNode.getyNode());
-			nextNodeID = intermidiateNode.getNodeParentIDNode();
+			nextNodeID = intermidiateNode.getParentNodeID();
 			intermidiateNode =getNode(nextNodeID);
 		}
 		
@@ -113,25 +117,31 @@ public class AStar {
 	public static ArrayList<Node> adjacentNodes(Node currentNodeFunc,ArrayList<Node> openListFunc,ArrayList<Node> closedListFunc, int xStart, int yStart, int xEnd,int yEnd) {
 
 		 Node point;
-		int xParent = currentNodeFunc.getxNode();
-		int yParent = currentNodeFunc.getyNode();
-		double gParent = currentNodeFunc.getGNode();
-		String nodeParentID=currentNodeFunc.getNodeIDNode();
+
 		String nodeID;
 		String terrain;
 		int xNodef;
 		int yNodef;
-		int openListSize = openListFunc.size();
-		int closedListSize= closedListFunc.size();
+		int terrainNumber;
+
 		double gFunc, hFunc, fFunc = 0;
 		int nodeSpeed;
-		int averageSpeed=Resources.getSpeed("A");
+
 		
 		boolean isOnOpenList;
 		int openListIndex = 0;
 		boolean isOnClosedList;
 		double sqrt,hItermidiate;
 
+		
+		int xParent = currentNodeFunc.getxNode();
+		int yParent = currentNodeFunc.getyNode();
+		double gParent = currentNodeFunc.getGNode();
+		String nodeParentID=currentNodeFunc.getNodeID();
+		int openListSize = openListFunc.size();
+		int closedListSize= closedListFunc.size();
+
+		
 		// finding all adjacent to the starting square
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -141,7 +151,8 @@ public class AStar {
 				yNodef = yParent + stepSize * (j-1);
 				nodeID = "x=" + (xNodef - xStart)/stepSize + "_y=" + (yNodef - yStart)/stepSize;
 				// finding terrain type for this node point
-				terrain = PlanetMap.mapArray.get((xNodef + yNodef* PlanetMap.width)/ Tile.getSizeX());
+				terrainNumber =(xNodef/Tile.getSizeX()) + ((yNodef/Tile.getSizeX())* PlanetMap.width);
+				terrain = PlanetMap.mapArray.get(terrainNumber*1);
 				nodeSpeed=Resources.getSpeed(terrain);
 
 				
@@ -152,8 +163,9 @@ public class AStar {
 				}else{
 				for (int k = 0; k < closedListSize; k++) {
 
-					if (nodeID.equals(closedListFunc.get(k).getNodeIDNode())) {
+					if (nodeID.equals(closedListFunc.get(k).getNodeID())) {
 						isOnClosedList = true;
+						break;
 					}
 				}
 				
@@ -167,10 +179,10 @@ public class AStar {
 						isOnOpenList = false;
 						for (int k1 = 0; k1 < openListSize; k1++) {
 
-							if (nodeID.equals(openListFunc.get(k1).getNodeIDNode())) {
+							if (nodeID.equals(openListFunc.get(k1).getNodeID())) {
 								isOnOpenList = true;
 								openListIndex=k1;
-								
+								break;
 							}
 											
 										}
@@ -225,7 +237,7 @@ public class AStar {
 							// adding the node point to the openlist.
 							point = new Node(xNodef, yNodef, terrain, nodeParentID,nodeID, gFunc, hFunc, fFunc);
 							openListFunc.add(point);
-							System.out.println("NodeID = "+nodeID +" G = "+gFunc+" H = "+hFunc+" F = "+fFunc);							
+							//System.out.println("NodeID = "+nodeID +" G = "+gFunc+" H = "+hFunc+" F = "+fFunc);							
 
 						}
 											

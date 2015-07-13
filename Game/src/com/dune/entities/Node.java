@@ -13,7 +13,7 @@ public class Node {
 
 	private int xNode, yNode;
 	private double FNode, GNode, HNode;
-	private String terrainNode, nodeIDNode, nodeParentIDNode;
+	private String terrainNode, NodeID, ParentNodeID;
 	int parentSquare;
 
 
@@ -21,8 +21,8 @@ public class Node {
 		xNode = x * 1;
 		yNode = y * 1;
 		terrainNode =terrain;
-		nodeIDNode =nodeID;
-		nodeParentIDNode =nodeParentID;
+		NodeID =nodeID;
+		ParentNodeID =nodeParentID;
 		FNode = F;
 		GNode=G;
 		HNode=H;
@@ -55,7 +55,7 @@ public class Node {
 	}
 
 
-	public void setFNode(int fNode) {
+	public void setFNode(double fNode) {
 		FNode = fNode;
 	}
 
@@ -65,7 +65,7 @@ public class Node {
 	}
 
 
-	public void setGNode(int gNode) {
+	public void setGNode(double gNode) {
 		GNode = gNode;
 	}
 
@@ -75,7 +75,7 @@ public class Node {
 	}
 
 
-	public void setHNode(int hNode) {
+	public void setHNode(double hNode) {
 		HNode = hNode;
 	}
 
@@ -90,23 +90,23 @@ public class Node {
 	}
 
 
-	public String getNodeIDNode() {
-		return nodeIDNode;
+	public String getNodeID() {
+		return NodeID;
 	}
 
 
-	public void setNodeIDNode(String nodeIDNode) {
-		this.nodeIDNode = nodeIDNode;
+	public void setNodeID(String nodeID) {
+		NodeID = nodeID;
 	}
 
 
-	public String getNodeParentIDNode() {
-		return nodeParentIDNode;
+	public String getParentNodeID() {
+		return ParentNodeID;
 	}
 
 
-	public void setNodeParentIDNode(String nodeParentIDNode) {
-		this.nodeParentIDNode = nodeParentIDNode;
+	public void setParentNodeID(String parentNodeID) {
+		ParentNodeID = parentNodeID;
 	}
 
 

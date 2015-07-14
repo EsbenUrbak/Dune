@@ -7,18 +7,21 @@ import java.awt.Rectangle;
 
 public class UIButton {
 	protected Rectangle buttonRect;
-	protected Boolean buttonDown = false;
+	protected Boolean display, buttonDown = false;
 	protected Image buttonImageDown, buttonImageUp;
 	
 	public UIButton(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp){
+		display = true;
 		buttonRect = new Rectangle(topX, topY, sizeX, sizeY);
 		this.buttonImageDown = buttonImageDown;
 		this.buttonImageUp = buttonImageUp;
 	}
 	
 	public void render(Graphics g){
-		Image currentButtonImage = buttonDown ? buttonImageDown : buttonImageUp;
-		g.drawImage(currentButtonImage, buttonRect.x, buttonRect.y, buttonRect.width, buttonRect.height, null);
+		if (display){
+			Image currentButtonImage = buttonDown ? buttonImageDown : buttonImageUp;
+			g.drawImage(currentButtonImage, buttonRect.x, buttonRect.y, buttonRect.width, buttonRect.height, null);
+		}
 	}
 	
 	public void onPressed(int x, int y){
@@ -35,6 +38,14 @@ public class UIButton {
 	
 	public boolean isPressed(int x, int y){
 		return buttonDown && buttonRect.contains(x, y);
+	}
+
+	public Boolean getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(Boolean display) {
+		this.display = display;
 	}
 	
 }

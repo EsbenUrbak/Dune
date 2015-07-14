@@ -20,11 +20,11 @@ public class Tile {
 	private Rectangle r;
 	BufferedImage CombinedTileImage;
 	ArrayList<Integer> elevationActionTile=new ArrayList<Integer>();
-	
+	boolean eUpT, eDownT, eRightT, eLeftT;
 	public static Image tileocean, tiledirt;
 		
 	//Loading the tile imagine from data base of landscapes
-	public Tile(int x, int y, String ID, ArrayList<Integer> elevationAction) {
+	public Tile(int x, int y, String ID,boolean eUp, boolean eDown,boolean eRight, boolean eLeft) {
 		
 		
 		tileX = x * sizeX;
@@ -36,7 +36,10 @@ public class Tile {
 		r.setBounds(tileX, tileY, sizeX, sizeY);
 		tileImage = PlanetMap.getImage(ID);
 
-		elevationActionTile=elevationAction;
+		eUpT= eUp;
+		eDownT = eDown;
+		eRightT= eRight;
+		eLeftT =eLeft;
 
 		
 		
@@ -100,14 +103,50 @@ public class Tile {
 
 
 
-	public ArrayList<Integer> getElevationActionTile() {
-		return elevationActionTile;
+	public boolean iseUpT() {
+		return eUpT;
 	}
 
 
 
-	public void setElevationActionTile(ArrayList<Integer> elevationActionTile) {
-		this.elevationActionTile = elevationActionTile;
+	public void seteUpT(boolean eUpT) {
+		this.eUpT = eUpT;
+	}
+
+
+
+	public boolean iseDownT() {
+		return eDownT;
+	}
+
+
+
+	public void seteDownT(boolean eDownT) {
+		this.eDownT = eDownT;
+	}
+
+
+
+	public boolean iseRightT() {
+		return eRightT;
+	}
+
+
+
+	public void seteRightT(boolean eRightT) {
+		this.eRightT = eRightT;
+	}
+
+
+
+	public boolean iseLeftT() {
+		return eLeftT;
+	}
+
+
+
+	public void seteLeftT(boolean eLeftT) {
+		this.eLeftT = eLeftT;
 	}
 
 

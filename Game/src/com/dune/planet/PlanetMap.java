@@ -47,7 +47,7 @@ public class PlanetMap {
 
 		// creates each tile and puts it in tilearray
 		for (int j = 0; j < height; j++) {
-			String line = (String) mapParser.get(j);
+			String line = (String) elevationParser.get(j);
 			
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
@@ -296,7 +296,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 	
 		
 		ArrayList<Tile> tilearrayNew=new ArrayList<Tile>();
-		ArrayList<Integer> elevationAction=new ArrayList<Integer>();
+
 		String S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9;
 		String E0,  E1, E2, E3, E4, E5, E6, E7, E8, E9;
 		String ID;
@@ -304,7 +304,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 		BufferedImage value;
 		
 		int elevation =0,elevationUP, elevationDown, elevationRight, elevationLeft = 0;
-		int e[];
+		boolean eUp, eDown, eRight, eLeft;
 
 		
 		
@@ -431,11 +431,11 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				
 
 				//logic to check elevation boundary:
-				elevationAction.clear();
-				elevationAction.add((elevation==elevationUP)?0:1);
-				elevationAction.add((elevation==elevationUP)?0:1);
-				elevationAction.add((elevation==elevationUP)?0:1);
-				elevationAction.add((elevation==elevationUP)?0:1);
+
+				eUp=elevation==elevationUP?false:true;
+				eLeft=elevation==elevationLeft?false:true;
+				eDown=elevation==elevationDown?false:true;
+				eRight=elevation==elevationRight?false:true;
 				
 
 				//Create pictures but first checks whether the picture is already in there. If then it will not create it again
@@ -444,7 +444,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
 				}				
 				
-				Tile t = new Tile(i, j, ID, elevationAction);
+				Tile t = new Tile(i, j, ID, eUp, eDown, eRight, eLeft);
 								
 				tilearrayNew.add(t);
 		}	

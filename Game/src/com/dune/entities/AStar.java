@@ -165,8 +165,8 @@ public class AStar {
 				if(Math.abs(i-1)==Math.abs(j-1)){
 					i1=ifunction1(i,j);
 					j1=jfunction1(i,j);
-					xNodef_dia1 = xParent + stepSize * (i1-1)/2;
-					yNodef_dia1 = yParent + stepSize * (j1-1)/2;
+					xNodef_dia1 = xParent + stepSize * (i1-1);
+					yNodef_dia1 = yParent + stepSize * (j1-1);
 					
 					terrainNumber_dia1 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
 					terrain_dia1 = PlanetMap.mapArray.get(terrainNumber_dia1);
@@ -174,8 +174,8 @@ public class AStar {
 					
 					i2=ifunction2(i,j);
 					j2=jfunction2(i,j);
-					xNodef_dia2 = xParent + stepSize * (i2-1)/2;
-					yNodef_dia2 = yParent + stepSize * (j2-1)/2;
+					xNodef_dia2 = xParent + stepSize * (i2-1);
+					yNodef_dia2 = yParent + stepSize * (j2-1);
 					
 					terrainNumber_dia2 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
 					terrain_dia2 = PlanetMap.mapArray.get(terrainNumber_dia2);
@@ -185,7 +185,7 @@ public class AStar {
 				//check whether on the closed list already or is a zero speed tile:
 				isOnClosedList = false;
 				if(nodeSpeed==0||nodeSpeed_dia1==0||nodeSpeed_dia2==0){
-					//System.out.println(nodeSpeed_dia);
+
 					isOnClosedList=true;
 				}else{
 				for (int k = 0; k < closedListSize; k++) {
@@ -314,7 +314,7 @@ public class AStar {
 			neighbourI=0;
 		}
 		if(i==1&&j==1){
-			neighbourI=1;
+			neighbourI=0;
 		}
 		
 		return neighbourI;
@@ -332,7 +332,7 @@ public class AStar {
 			neighbourI=1;
 		}
 		if(i==1&&j==1){
-			neighbourI=0;
+			neighbourI=1;
 		}
 		
 		return neighbourI;
@@ -350,7 +350,7 @@ public class AStar {
 			neighbourJ=-1;
 		}
 		if(i==1&&j==1){
-			neighbourJ=0;
+			neighbourJ=1;
 		}
 		
 		return neighbourJ;
@@ -368,7 +368,7 @@ public class AStar {
 			neighbourJ=0;
 		}
 		if(i==1&&j==1){
-			neighbourJ=1;
+			neighbourJ=0;
 		}
 		
 		return neighbourJ;

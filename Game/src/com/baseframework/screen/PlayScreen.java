@@ -50,7 +50,7 @@ public class PlayScreen extends GameScreen{
 		
 		viewframe = new ViewFrame((float) SCREEN_X, (float) SCREEN_Y, screenSizeX, screenSizeY);
 		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
-		map = new PlanetMap(Resources.map1);
+		map = new PlanetMap(Resources.map1,Resources.elevationMap);
 		
 		viewframe.setBoundX(map.getWidth(true));
 		viewframe.setBoundY(map.getHeight(true));
@@ -77,6 +77,17 @@ public class PlayScreen extends GameScreen{
 		for (int i = 0; i < map.getScopeTileArray().size(); i++) {
 			Tile t = (Tile) map.getScopeTileArray().get(i);
 			g.drawImage(t.getTileImage(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), null);
+		
+			//Drawing elevation lines
+			for(int j = 0; j<t.getElevationActionTile().size();j++){
+				
+				if(t.getElevationActionTile().get(i)==1){
+					
+				}
+				
+			}
+			
+		
 		}	
 	}
 

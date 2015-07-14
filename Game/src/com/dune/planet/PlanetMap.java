@@ -16,6 +16,7 @@ public class PlanetMap {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
 	public static ArrayList<String> mapArray = new ArrayList<String>();	
+	public static ArrayList<String> elevationArray = new ArrayList<String>();	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
 	public static int width=0; 
@@ -26,7 +27,7 @@ public class PlanetMap {
 	public static Map<String, BufferedImage> TileImageMap=new HashMap<String, BufferedImage>();
 
 	
-	public PlanetMap(BufferedReader mapfile) {
+	public PlanetMap(BufferedReader mapfile,BufferedReader elevationfile ) {
 		// master array that contains ALL the tiles in the map
 		ArrayList mapParser = parsemap(mapfile);
 
@@ -42,8 +43,22 @@ public class PlanetMap {
 			}
 		}
 		
+		ArrayList elevationParser = parsemap(elevationfile);
+
+		// creates each tile and puts it in tilearray
+		for (int j = 0; j < height; j++) {
+			String line = (String) mapParser.get(j);
+			
+			for (int i = 0; i < width; i++) {
+				if (i < line.length()) {
+					char ch = line.charAt(i);
+					elevationArray.add(Character.toString(ch));
+				}
+			}
+		}
 		
-		tilearray=transitionAlgo( mapArray, height, width);
+		
+		tilearray=transitionAlgo( mapArray,elevationArray, height, width);
 				
 		// defines the catch area of the map in which tiles may have to be displayed
 		rCatch = new Rectangle();	
@@ -276,32 +291,39 @@ public class PlanetMap {
 		}
 	}
 
-public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArray, int widthArray){
+public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<String> elevationArray, int heightArray, int widthArray){
 
 	
 		
 		ArrayList<Tile> tilearrayNew=new ArrayList<Tile>();
+		ArrayList<Integer> elevationAction=new ArrayList<Integer>();
 		String S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9;
 		String E0,  E1, E2, E3, E4, E5, E6, E7, E8, E9;
 		String ID;
 		
 		BufferedImage value;
 		
+		int elevation =0,elevationUP, elevationDown, elevationRight, elevationLeft = 0;
+		int e[];
 
 		
 		
 		int bugID=0;
 		for(int j = 0; j<heightArray;j++){
 		for (int i = 0; i < widthArray; i++) {
-			 bugID+=1;
+
+			
+				elevation = Integer.parseInt(elevationArray.get(i+j*widthArray));
 			
 				//edge of map problem solving -> "tiles" outside of map => are 0 tiles
 				S0=tilearray.get((i+j*widthArray));
 				
 				if(j>0){
 					S1 =tilearray.get((i+j*widthArray)-widthArray);
+					elevationUP = Integer.parseInt(elevationArray.get((i+j*widthArray)-widthArray));
 				}else{
 					S1=S0;
+					elevationUP = 0;
 				}
 				
 				if(j>0){
@@ -312,8 +334,10 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 
 				if(j>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
 					S2 =tilearray.get((i+j*widthArray)+1);
+					elevationRight = Integer.parseInt(elevationArray.get((i+j*widthArray)+1));
 				}else{
 					S2=S0;
+					elevationRight = 0;
 				}
 
 				if(j<heightArray-1&&((i+j*widthArray)+widthArray+1)<widthArray*heightArray){
@@ -324,8 +348,10 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				
 				if((j<heightArray-1)){
 					S3 =tilearray.get((i+j*widthArray)+widthArray);
+					elevationDown = Integer.parseInt(elevationArray.get((i+j*widthArray)+widthArray));
 				}else{
 					S3=S0;
+					elevationDown=0;
 				}
 
 				if(j<heightArray-1){
@@ -336,6 +362,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				
 				if(i>0){
 					S4 =tilearray.get((i+j*widthArray)-1);
+					elevationLeft = Integer.parseInt(elevationArray.get((i+j*widthArray)-1));
 				}else{
 					S4=S0;
 				}
@@ -348,7 +375,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 
 				S9=S1;
 
-				//System.out.println(S0+S1+S2+S3+S4+S5+S6+S7+S8);
+
 				
 				E0=S0;
 				if(S0.equals(S1)){
@@ -401,7 +428,15 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				
 				//full ID of the picture
 				ID = E0+E1+E2+E3+E4+E5+E6+E7+E8;
+				
 
+				//logic to check elevation boundary:
+				elevationAction.clear();
+				elevationAction.add((elevation==elevationUP)?0:1);
+				elevationAction.add((elevation==elevationUP)?0:1);
+				elevationAction.add((elevation==elevationUP)?0:1);
+				elevationAction.add((elevation==elevationUP)?0:1);
+				
 
 				//Create pictures but first checks whether the picture is already in there. If then it will not create it again
 				value=TileImageMap.get(ID);
@@ -409,7 +444,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, int heightArr
 				TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
 				}				
 				
-				Tile t = new Tile(i, j, ID);
+				Tile t = new Tile(i, j, ID, elevationAction);
 								
 				tilearrayNew.add(t);
 		}	

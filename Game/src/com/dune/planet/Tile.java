@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import com.baseframework.game.main.Resources;
 
@@ -18,11 +19,12 @@ public class Tile {
 	public Image tileImage;
 	private Rectangle r;
 	BufferedImage CombinedTileImage;
+	ArrayList<Integer> elevationActionTile=new ArrayList<Integer>();
 	
 	public static Image tileocean, tiledirt;
 		
 	//Loading the tile imagine from data base of landscapes
-	public Tile(int x, int y, String ID) {
+	public Tile(int x, int y, String ID, ArrayList<Integer> elevationAction) {
 		
 		
 		tileX = x * sizeX;
@@ -34,6 +36,10 @@ public class Tile {
 		r.setBounds(tileX, tileY, sizeX, sizeY);
 		tileImage = PlanetMap.getImage(ID);
 
+		elevationActionTile=elevationAction;
+
+		
+		
 	}
 	
 	
@@ -91,6 +97,20 @@ public class Tile {
 	public void setR(Rectangle r) {
 		this.r = r;
 	}
+
+
+
+	public ArrayList<Integer> getElevationActionTile() {
+		return elevationActionTile;
+	}
+
+
+
+	public void setElevationActionTile(ArrayList<Integer> elevationActionTile) {
+		this.elevationActionTile = elevationActionTile;
+	}
+
+
 
 	
 	

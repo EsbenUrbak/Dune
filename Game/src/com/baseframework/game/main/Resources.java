@@ -37,7 +37,7 @@ public class Resources {
 	
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1;
-	public static BufferedReader map1, subTileMapping, speedMapping;
+	public static BufferedReader map1, subTileMapping, speedMapping, elevationMap;
 	public static BasicStroke strokeSize;
 	
 	public static Map<String, Wrapper> subTileRotationMap;
@@ -54,6 +54,7 @@ public class Resources {
 		map1 = loadFile("map2.txt");
 		subTileMapping = loadFile("subtileMapping.txt");
 		speedMapping = loadFile("SpeedMap.txt");
+		elevationMap = loadFile("ElevationMap.txt");
 		
 		//Create hashMap to identify which image ID correspond to which actual sub image
 		subTileRotationMap =mapfile(subTileMapping);

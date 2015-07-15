@@ -55,15 +55,18 @@ public class Squad {
 	public void update(float delta) {
 		
 		//Logic to check what the underlying tile is
-		xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX())/Tile.getSizeX());
-		yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY())/Tile.getSizeY());
-		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
+		//xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX())/Tile.getSizeX());
+		//yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY())/Tile.getSizeY());
+		//tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
 		
 
-		SQUADSPEED=Resources.getSpeed(tileInfo);
+		//SQUADSPEED=Resources.getSpeed(tileInfo);
 
 		
 		if(paths.size()>0){
+			
+			SQUADSPEED = Speed.Speed((int)topX, (int)topY, paths.get(0).getX(), paths.get(0).getY());
+			
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;
 			

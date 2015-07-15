@@ -10,19 +10,27 @@ import java.util.Map;
 
 import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
+import com.baseframework.util.ArrayHandler;
 import com.baseframework.util.ImageHandler;
 
 public class PlanetMap {
 	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
 	public static ArrayList<String> mapArray = new ArrayList<String>();	
+	public static ArrayList<String> mapArrayHighRes = new ArrayList<String>();
+	public static Map<Integer, Map<Integer, String>> terrainMap = new HashMap<Integer, Map<Integer, String>>();
+	
 	public static ArrayList<String> elevationArray = new ArrayList<String>();	
+	public static ArrayList<String> elevationArrayHighRes = new ArrayList<String>();	
+	public static Map<Integer, Map<Integer, String>> elevationMap = new HashMap<Integer, Map<Integer, String>>();
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
 	public static int width=0; 
+	public static int WIDTHSLOPE=15;
 	private int height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
+	
 	private Rectangle rCatch; 
-	private final int DEFAULTTILESIZE = 40;
+	private final int DEFAULTTILESIZE = 45;
 	BufferedImage CombinedTileImage;
 	public static Map<String, BufferedImage> TileImageMap=new HashMap<String, BufferedImage>();
 
@@ -43,6 +51,9 @@ public class PlanetMap {
 			}
 		}
 		
+		//mapArrayHighRes = ArrayHandler.resolutionIncrease(mapArray, Tile.getSizeX()/WIDTHSLOPE);
+		terrainMap =ArrayHandler.HighResMap(mapArray, Tile.getSizeX()/WIDTHSLOPE, width, height);
+		
 		ArrayList elevationParser = parsemap(elevationfile);
 
 		// creates each tile and puts it in tilearray
@@ -57,6 +68,8 @@ public class PlanetMap {
 			}
 		}
 		
+		//elevationArrayHighRes = ArrayHandler.resolutionIncrease(elevationArray, Tile.getSizeX()/WIDTHSLOPE);
+		elevationMap =ArrayHandler.HighResMap(elevationArray, Tile.getSizeX()/WIDTHSLOPE, width, height);
 		
 		tilearray=transitionAlgo( mapArray,elevationArray, height, width);
 				

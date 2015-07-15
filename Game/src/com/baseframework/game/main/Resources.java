@@ -55,6 +55,7 @@ public class Resources {
 		subTileMapping = loadFile("subtileMapping.txt");
 		speedMapping = loadFile("SpeedMap.txt");
 		elevationMap = loadFile("ElevationMap.txt");
+
 		
 		//Create hashMap to identify which image ID correspond to which actual sub image
 		subTileRotationMap =mapfile(subTileMapping);

@@ -25,6 +25,7 @@ public class PlayScreen extends GameScreen{
 	// Buttons, bars and user interface inputs
 	private UIButton buttonMode;
 	private UIDragImage dragSquadFace;
+	private UIBar mainBar;
 	
 	// Graphics objects
 	public Graphics2D g2;
@@ -40,7 +41,11 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void init() {
-		int btnModeX = 10, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() - 10;
+		int btnModeX = 10, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -20;
+		int dftBarTileCount = 5;
+		int dftBarSizeY = Resources.btnModeUp.getHeight() + 30;
+		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 10;
+		int dftBarTopY = screenSizeY - dftBarSizeY - 10;
 		
 		MainHolder.setResizeable(false);
 		
@@ -57,6 +62,7 @@ public class PlayScreen extends GameScreen{
 		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
 								Resources.btnModeDown, Resources.btnModeUp);
 		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.dragSquad);
+		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCount, dftBarSizeY);
 	}
 
 	@Override
@@ -119,7 +125,7 @@ public class PlayScreen extends GameScreen{
 	private void renderUI(Graphics g){
 		buttonMode.render(g);
 		dragSquadFace.render(g);
-		
+		mainBar.render(g);
 	}
 	
 	

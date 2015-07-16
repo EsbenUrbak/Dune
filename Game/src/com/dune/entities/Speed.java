@@ -1,6 +1,7 @@
 package com.dune.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.baseframework.game.main.Resources;
@@ -20,22 +21,22 @@ public class Speed {
 		
 
 		Resolution=Tile.getSizeX()/PlanetMap.WIDTHSLOPE;
+		Map<Integer, String> xMapTer = new HashMap<Integer, String>();
 		
 		//finding the angle of the movement
 		dist=Math.sqrt((x-xNext)*(x-xNext)+(y-yNext)*(y-yNext));
 		angle = Math.acos(Math.abs(x-xNext)/dist);
 		xX=((int) ((x)/PlanetMap.WIDTHSLOPE));
 		yY=((int) ((y)/PlanetMap.WIDTHSLOPE));
-		speedID = PlanetMap.terrainMap.get(yY).get(xX);
-		speedTerrain=Resources.getSpeed(speedID);
+		speedTerrain=PlanetMap.getTer(xX,yY);
 		speedTerrainX=(speedTerrain*Math.cos(angle));
 		speedTerrainY=(speedTerrain*Math.sin(angle));
 		
 		
 		//X direction
 		//finding whether on a slope
-		AlevelX=Integer.parseInt(PlanetMap.elevationMap.get(yY).get(xX));
-		BlevelX=Integer.parseInt(PlanetMap.elevationMap.get(yY).get(xX+PlanetMap.WIDTHSLOPE));
+		AlevelX=PlanetMap.getElev(xX,yY);
+		BlevelX=PlanetMap.getElev(xX+1,yY);
 		slopeX = (BlevelX-AlevelX)/PlanetMap.WIDTHSLOPE;
 		
 		//slope factor
@@ -52,8 +53,8 @@ public class Speed {
 		
 		//Y direction
 		//finding whether on a slope
-		AlevelY=Integer.parseInt(PlanetMap.elevationMap.get(yY).get(xX));
-		BlevelY=Integer.parseInt(PlanetMap.elevationMap.get(yY+1).get(xX));
+		AlevelY=PlanetMap.getElev(xX,yY);
+		BlevelY=PlanetMap.getElev(xX,yY+1);
 		slopeY = (BlevelY-AlevelY)/PlanetMap.WIDTHSLOPE;
 		
 		//slope factor

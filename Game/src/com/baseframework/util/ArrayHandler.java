@@ -29,20 +29,20 @@ public class ArrayHandler {
 		int k=0;
 		int a=0;
 		
-		for(int i=0;i<height*expansionFactor;i++){
+		for(int y=0;y<height*expansionFactor;y++){
 		Map<Integer, String> TerrainMapX = new HashMap<Integer, String>();
 		
-		for(int j=0;j<width*expansionFactor;j++){
-			TerrainMapX.put(j,original.get(k+a*width));
+		for(int x=0;x<width*expansionFactor;x++){
+			TerrainMapX.put(x,original.get(k+a*width));
 			
-			if(((j+1)%expansionFactor)==0){
+			if(((x+1)%expansionFactor)==0){
 				k++;	
 		}
 
 		}
-		TerrainMap.put(i,TerrainMapX);
+		TerrainMap.put(y,TerrainMapX);
 		
-		if(((i+1)%expansionFactor)==0){
+		if(((y+1)%expansionFactor)==0){
 		a++;	
 		}
 		k=0;

@@ -472,6 +472,14 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 	return TileImageMap.get(imageName);
 	}
 
+	public static int getTer(double x, double y)
+	{
+	return Resources.getSpeed(terrainMap.get((int)y).get((int)x));
+	}
 	
+	public static int getElev(double x, double y)
+	{
+	return Integer.parseInt(elevationMap.get((int)y).get((int)x));
+	}
 	
 }

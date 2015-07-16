@@ -160,7 +160,8 @@ public class AStar {
 				terrainNumber =(xNodef/Tile.getSizeX()) + ((yNodef/Tile.getSizeX())* PlanetMap.width);
 				terrain = PlanetMap.mapArray.get(terrainNumber*1);
 				nodeSpeed=Resources.getSpeed(terrain);
-
+				
+				
 				//Check to make sure the squad doesnt move accross diagonals where it will get stuck
 				if(Math.abs(i-1)==Math.abs(j-1)){
 					i1=ifunction1(i,j);

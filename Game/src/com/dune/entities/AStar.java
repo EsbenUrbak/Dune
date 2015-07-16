@@ -287,8 +287,8 @@ public class AStar {
 	//finding the node with the lowest F:
 	public static Node lowestFNode(ArrayList<Node> openListFunc){
 
-		double f=0;
-		double fsmallest=999999999;
+		double f=0.0;
+		double fsmallest=999999999.0;
 		int iSmallest=0;
 
 		for(int i = 0;i<openListFunc.size()-1;i++){

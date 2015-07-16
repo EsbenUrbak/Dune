@@ -159,28 +159,31 @@ public class AStar {
 				// finding terrain type for this node point
 				terrainNumber =(xNodef/Tile.getSizeX()) + ((yNodef/Tile.getSizeX())* PlanetMap.width);
 				terrain = PlanetMap.mapArray.get(terrainNumber*1);
-				nodeSpeed=Resources.getSpeed(terrain);
-				
+				//nodeSpeed=Resources.getSpeed(terrain);
+				nodeSpeed=Speed.Speed(xParent, yParent, xNodef, yNodef);
 				
 				//Check to make sure the squad doesnt move accross diagonals where it will get stuck
 				if(Math.abs(i-1)==Math.abs(j-1)){
-					i1=ifunction1(i,j);
-					j1=jfunction1(i,j);
-					xNodef_dia1 = xParent + stepSize * (i1-1);
-					yNodef_dia1 = yParent + stepSize * (j1-1);
+					i1=ifunction1((i-1),(j-1));
+					j1=jfunction1((i-1),(j-1));
+					xNodef_dia1 = xParent + stepSize * i1;
+					yNodef_dia1 = yParent + stepSize * j1;
 					
-					terrainNumber_dia1 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
-					terrain_dia1 = PlanetMap.mapArray.get(terrainNumber_dia1);
-					nodeSpeed_dia1=Resources.getSpeed(terrain_dia1);
+					//terrainNumber_dia1 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
+					//terrain_dia1 = PlanetMap.mapArray.get(terrainNumber_dia1);
+					//nodeSpeed_dia1=Resources.getSpeed(terrain_dia1);
+					nodeSpeed_dia1=Speed.Speed(xParent, yParent, xNodef_dia1, yNodef_dia1);
 					
-					i2=ifunction2(i,j);
-					j2=jfunction2(i,j);
-					xNodef_dia2 = xParent + stepSize * (i2-1);
-					yNodef_dia2 = yParent + stepSize * (j2-1);
+					i2=ifunction2((i-1),(j-1));
+					j2=jfunction2((i-1),(j-1));
+					xNodef_dia2 = xParent + stepSize * i2;
+					yNodef_dia2 = yParent + stepSize * j2;
 					
-					terrainNumber_dia2 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
-					terrain_dia2 = PlanetMap.mapArray.get(terrainNumber_dia2);
-					nodeSpeed_dia2=Resources.getSpeed(terrain_dia2);
+					//terrainNumber_dia2 =(xNodef_dia1/Tile.getSizeX()) + ((yNodef_dia1/Tile.getSizeX())* PlanetMap.width);
+					//terrain_dia2 = PlanetMap.mapArray.get(terrainNumber_dia2);
+					//nodeSpeed_dia2=Resources.getSpeed(terrain_dia2);
+					nodeSpeed_dia2=Speed.Speed(xParent, yParent, xNodef_dia1, yNodef_dia1);
+					
 				}
 				
 				//check whether on the closed list already or is a zero speed tile:
@@ -288,7 +291,7 @@ public class AStar {
 		double fsmallest=999999999;
 		int iSmallest=0;
 
-		for(int i = 0;i<openListFunc.size();i++){
+		for(int i = 0;i<openListFunc.size()-1;i++){
 			f=openListFunc.get(i).getFNode();
 			if(f<fsmallest){
 				fsmallest=f;

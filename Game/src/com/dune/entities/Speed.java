@@ -20,14 +20,13 @@ public class Speed {
 	public static int Speed(int x, int y, int xNext, int yNext) {
 		
 
-		Resolution=Tile.getSizeX()/PlanetMap.WIDTHSLOPE;
-		Map<Integer, String> xMapTer = new HashMap<Integer, String>();
+
 		
 		//finding the angle of the movement
 		dist=Math.sqrt((x-xNext)*(x-xNext)+(y-yNext)*(y-yNext));
 		angle = Math.acos(Math.abs(x-xNext)/dist);
-		xX=((int) ((x)/PlanetMap.WIDTHSLOPE));
-		yY=((int) ((y)/PlanetMap.WIDTHSLOPE));
+		xX=(int) (x/PlanetMap.WIDTHSLOPE);
+		yY=(int) (y/PlanetMap.WIDTHSLOPE);
 		speedTerrain=PlanetMap.getTer(xX,yY);
 		speedTerrainX=(speedTerrain*Math.cos(angle));
 		speedTerrainY=(speedTerrain*Math.sin(angle));

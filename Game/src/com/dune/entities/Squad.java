@@ -11,8 +11,8 @@ import com.dune.planet.Tile;
 
 public class Squad {
 
-	private float topX = 300f;
-	private float topY = 200f;
+	private float topX = 45f;
+	private float topY = 45f;
 	private float speedX = 0f;
 	private float speedY = 0f;	
 	
@@ -23,7 +23,7 @@ public class Squad {
 	private int minY = 0;
 	private int maxX = 100;
 	private int maxY = 100;
-	private int xTile, yTile;
+	private int xTile, yTile, xTileNext, yTileNext;
 	private String tileInfo;
 	
 	private int SQUADSPEED = 150;
@@ -54,18 +54,22 @@ public class Squad {
 	
 	public void update(float delta) {
 		
-		//Logic to check what the underlying tile is
-		//xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX())/Tile.getSizeX());
-		//yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY())/Tile.getSizeY());
-		//tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
-		
 
-		//SQUADSPEED=Resources.getSpeed(tileInfo);
 
 		
 		if(paths.size()>0){
+			//Logic to check what the underlying tile is
+			xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX()));
+			yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY()));
+			xTileNext=(int) ((paths.get(0).getX()+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX()));
+			yTileNext=(int) ((paths.get(0).getY()+yImagine+ (int) PlayScreen.viewframe.getFrameY()));
+			//tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
 			
-			SQUADSPEED = Speed.Speed((int)topX, (int)topY, paths.get(0).getX(), paths.get(0).getY());
+
+			SQUADSPEED = Speed.Speed(xTile, yTile, xTileNext, yTileNext);
+			
+			
+			//SQUADSPEED = Speed.Speed((int)topX, (int)topY, paths.get(0).getX(), paths.get(0).getY());
 			
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;

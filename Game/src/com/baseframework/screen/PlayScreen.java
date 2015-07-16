@@ -42,10 +42,10 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void init() {
 		int btnModeX = 10, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -20;
-		int dftBarTileCount = 5;
-		int dftBarSizeY = Resources.btnModeUp.getHeight() + 30;
+		int dftBarTileCountX = 5;
+		int dftBarTileCountY = 2;
 		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 10;
-		int dftBarTopY = screenSizeY - dftBarSizeY - 10;
+		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileUp.getHeight() - 10;
 		
 		MainHolder.setResizeable(false);
 		
@@ -62,7 +62,7 @@ public class PlayScreen extends GameScreen{
 		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
 								Resources.btnModeDown, Resources.btnModeUp);
 		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.dragSquad);
-		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCount, dftBarSizeY);
+		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 	}
 
 	@Override
@@ -124,8 +124,9 @@ public class PlayScreen extends GameScreen{
 	
 	private void renderUI(Graphics g){
 		buttonMode.render(g);
-		dragSquadFace.render(g);
 		mainBar.render(g);
+		dragSquadFace.render(g);
+
 	}
 	
 	
@@ -147,11 +148,12 @@ public class PlayScreen extends GameScreen{
 		//check if a button was pressed
 		buttonMode.onPressed(xPos, yPos);
 		dragSquadFace.onPressed(xPos, yPos);
+		if(!dragSquadFace.isDragged()) mainBar.onPressed(xPos, yPos);
 		
 		// stop performing actions if a UI element is selected was pressed
-		if(buttonMode.isPressed(xPos, yPos) || dragSquadFace.isDragged()) return;  
+		if(buttonMode.isPressed(xPos, yPos) || dragSquadFace.isDragged() || mainBar.isPressed(xPos, yPos)) return;
 		
-		// Logic to check whether it was within the rectangle (in relative coordinate)
+		// Logic to check whether it was within the squad rectangle (in relative coordinate)
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
 			squad.setSelected(!squad.isSelected());
 		}

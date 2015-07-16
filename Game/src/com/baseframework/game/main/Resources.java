@@ -31,9 +31,10 @@ public class Resources {
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
-	public static BufferedImage btnModeUp, btnModeDown, dragSquad, barTileUp, barTileDown;
+	public static BufferedImage btnModeUp, btnModeDown, dragSquad, barTileUp, barTileDown, barTileNW, 
+									barTileSW, barTileNE, barTileSE;
 	public static Font titleFont1, subTitleFont1;
-	public static Color titleColor1, subTitleColor1;
+	public static Color titleColor1, subTitleColor1, selectColor;
 	public static BufferedReader map1, subTileMapping;
 	public static BasicStroke strokeSize;
 	
@@ -59,6 +60,7 @@ public class Resources {
 		subTitleFont1 = new Font("Arial", Font.ITALIC, 30);
 		titleColor1 = Color.DARK_GRAY;
 		subTitleColor1 = Color.LIGHT_GRAY;
+		selectColor = Color.YELLOW;
 		strokeSize = new BasicStroke(2f);
 		
 		tileOcean = loadImage("tiledirt.png");
@@ -71,6 +73,10 @@ public class Resources {
 		dragSquad = loadImage("drag_modeSwitch_squad.png");
 		barTileUp = loadImage("bar_tile1.png");
 		barTileDown = ImageHandler.rotate(barTileUp,180);
+		barTileNW = loadImage("bar_tile2.png");
+		barTileSW = loadImage("bar_tile3.png");
+		barTileNE = ImageHandler.horizontalflip(barTileNW);
+		barTileSE = ImageHandler.horizontalflip(barTileSW);
 		
 		//loading all pictures for the tiles generation
 		//Main Tiles

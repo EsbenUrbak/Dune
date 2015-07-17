@@ -13,7 +13,7 @@ import com.dune.planet.Tile;
 public class AStar {
 	static Map<String, Node> nodeMap=new HashMap<String, Node>();
 	
-	 static int stepSize = 10;
+	 static int stepSize = 15;
 	 
 	//input has to be in absolute coordinates!
 	public static Map<String, ArrayList<Integer>> AStar(int xStart, int yStart, int xEnd, int yEnd) {

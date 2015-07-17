@@ -63,13 +63,15 @@ public class Squad {
 			yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY()));
 			xTileNext=(int) (paths.get(0).getX());
 			yTileNext=(int) (paths.get(0).getY());
-			//xTileNext=(int) ((paths.get(0).getX()+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX()));
-			//yTileNext=(int) ((paths.get(0).getY()+yImagine+ (int) PlayScreen.viewframe.getFrameY()));
-			//tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
-			
 
-			SQUADSPEED = Speed.Speed(xTile, yTile, xTileNext, yTileNext);
-			System.out.println(SQUADSPEED);
+			if(xTile==xTileNext&&yTile==yTileNext)		{
+				
+				SQUADSPEED=SQUADSPEED;
+			}else{
+				SQUADSPEED = Speed.Speed(xTile, yTile, xTileNext, yTileNext);				
+			}
+
+			//System.out.println("x= "+xTile+" y= "+yTile+"xNext= "+xTileNext+" yNext= "+yTileNext+" speed ="+ SQUADSPEED);
 			
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;

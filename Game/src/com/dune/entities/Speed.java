@@ -9,7 +9,7 @@ import com.dune.planet.PlanetMap;
 import com.dune.planet.Tile;
 
 public class Speed {
-	private static double speed, speedTerrain, speedSlope=100;
+	private static double speed, speedTerrain, speedSlope=75;
 	static String speedID;
 	private static double AlevelX, BlevelX, slopeX, slopeXFactor, xX,xXA,xXB, SlopeXSteepness,SlopeYSteepness;
 	private static double AlevelY, BlevelY, slopeY, slopeYFactor, Resolution,yY,yYA,yYB;
@@ -18,23 +18,28 @@ public class Speed {
 	
 	
 	public static int Speed(int x, int y, int xNext, int yNext) {
+
+		speedTerrain=PlanetMap.getTer(xX,yY);
 		
 		//finding the angle of the movement
 		dist=Math.sqrt((x-xNext)*(x-xNext)+(y-yNext)*(y-yNext));
-		angle = Math.acos(Math.abs(x-xNext)/dist);
+		angle = Math.acos(Math.abs((double)(x-xNext))/dist);
+		speedTerrainX=(speedTerrain*Math.cos(angle));
+		speedTerrainY=(speedTerrain*Math.sin(angle));
+		
+		
+		
 		xX=(int) (x/(double)PlanetMap.WIDTHSLOPE);
 		yY=(int) (y/(double)PlanetMap.WIDTHSLOPE);
 		
-		xXA=(int) ((x-(double)PlanetMap.WIDTHSLOPE)/(double)PlanetMap.WIDTHSLOPE);
-		yYA=(int) ((y-(double)PlanetMap.WIDTHSLOPE)/(double)PlanetMap.WIDTHSLOPE);
+		xXA=(int) (xX-1);
+		yYA=(int) (yY-1);
 		
-		xXB=(int) ((x+(double)PlanetMap.WIDTHSLOPE)/(double)PlanetMap.WIDTHSLOPE);
-		yYB=(int) ((y+(double)PlanetMap.WIDTHSLOPE)/(double)PlanetMap.WIDTHSLOPE);
+		xXB=(int) (xX+1);
+		yYB=(int) (yY+1);
 		
 		
-		speedTerrain=PlanetMap.getTer(xX,yY);
-		speedTerrainX=(speedTerrain*Math.cos(angle));
-		speedTerrainY=(speedTerrain*Math.sin(angle));
+
 		
 		
 		//X direction

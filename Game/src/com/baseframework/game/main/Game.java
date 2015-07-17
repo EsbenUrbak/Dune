@@ -72,6 +72,8 @@ public class Game extends JPanel implements Runnable {
 			long beforeTime = System.nanoTime();
 			long deltaMillis = updateTime + sleepTime;			
 			
+			//deltaMillis = 1;
+			
 			updateAndRender(deltaMillis);
 			
 			// convert time elapsed into milliseconds

@@ -81,6 +81,7 @@ public class PlayScreen extends GameScreen{
 			//Drawing elevation lines
 			if(t.iseUpT()){
 				g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY());
+						
 			}
 			if(t.iseRightT()){
 				g.drawLine(t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());

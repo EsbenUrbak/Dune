@@ -23,7 +23,7 @@ import com.baseframework.util.ImageHandler;
 import com.dune.planet.Wrapper;
 
 public class Resources {
-	public static BufferedImage background, tileOcean, tileDirt, squadRight, squadLeft, squadSelect;
+	public static BufferedImage background, squadRight, squadLeft, squadSelect;
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	private static BufferedImage squadSelect1, squadSelect2, squadSelect3, squadSelect4;
 	private static BufferedImage squadBlink;
@@ -31,8 +31,8 @@ public class Resources {
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
-	public static BufferedImage btnModeUp, btnModeDown, dragSquad, barTileUp, barTileDown, barTileNW, 
-									barTileSW, barTileNE, barTileSE;
+	public static BufferedImage btnModeUp, btnModeDown, dragSquad, barTileN, barTileS, barTileW, barTileE,
+									barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1, selectColor;
 	public static BufferedReader map1, subTileMapping;
@@ -63,20 +63,21 @@ public class Resources {
 		selectColor = Color.YELLOW;
 		strokeSize = new BasicStroke(2f);
 		
-		tileOcean = loadImage("tiledirt.png");
-		tileDirt = loadImage("tileocean.png");
 		background = loadImage("background.png");
 
 		// load user interface pictures
 		btnModeUp = loadImage("btn_modeSwitch_up.png");
 		btnModeDown = loadImage("btn_modeSwitch_down.png");
 		dragSquad = loadImage("drag_modeSwitch_squad.png");
-		barTileUp = loadImage("bar_tile1.png");
-		barTileDown = ImageHandler.rotate(barTileUp,180);
-		barTileNW = loadImage("bar_tile2.png");
-		barTileSW = loadImage("bar_tile3.png");
-		barTileNE = ImageHandler.horizontalflip(barTileNW);
-		barTileSE = ImageHandler.horizontalflip(barTileSW);
+		barTileN = loadImage("bar_north.png");
+		barTileS = loadImage("bar_south.png");
+		barTileW = loadImage("bar_west.png");
+		barTileE = loadImage("bar_east.png");
+		barTileNW = loadImage("bar_northwest.png");
+		barTileSW = loadImage("bar_southwest.png");
+		barTileNE = loadImage("bar_northeast.png");
+		barTileSE = loadImage("bar_southeast.png");
+		barTileIn = loadImage("bar_inner.png");
 		
 		//loading all pictures for the tiles generation
 		//Main Tiles

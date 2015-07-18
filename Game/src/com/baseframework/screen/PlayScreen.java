@@ -42,10 +42,10 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void init() {
 		int btnModeX = 10, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -20;
-		int dftBarTileCountX = 5;
+		int dftBarTileCountX = 7;
 		int dftBarTileCountY = 2;
 		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 10;
-		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileUp.getHeight() - 10;
+		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
 		
 		MainHolder.setResizeable(false);
 		

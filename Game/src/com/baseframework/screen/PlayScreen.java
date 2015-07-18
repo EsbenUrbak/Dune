@@ -23,7 +23,7 @@ public class PlayScreen extends GameScreen{
 	public static Map map;
 
 	// Buttons, bars and user interface inputs
-	private UIButton buttonMode;
+	private UIButton buttonMode, buttonCollapse, buttonExtend;
 	private UIDragImage dragSquadFace;
 	private UIBar mainBar;
 	
@@ -41,10 +41,10 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void init() {
-		int btnModeX = 10, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -20;
+		int btnModeX = 15, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -10;
 		int dftBarTileCountX = 7;
-		int dftBarTileCountY = 2;
-		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 10;
+		int dftBarTileCountY = 3;
+		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 20;
 		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
 		
 		MainHolder.setResizeable(false);
@@ -61,7 +61,13 @@ public class PlayScreen extends GameScreen{
 		
 		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
 								Resources.btnModeDown, Resources.btnModeUp);
-		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.dragSquad);
+		buttonCollapse = new UIButton(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
+								Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp);
+		buttonExtend = new UIButton(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
+				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp);
+		
+		
+		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.itemSquad);
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 	}
 
@@ -124,9 +130,10 @@ public class PlayScreen extends GameScreen{
 	
 	private void renderUI(Graphics g){
 		buttonMode.render(g);
+		buttonCollapse.render(g);
+		buttonExtend.render(g);
 		mainBar.render(g);
 		dragSquadFace.render(g);
-
 	}
 	
 	
@@ -147,11 +154,14 @@ public class PlayScreen extends GameScreen{
 		
 		//check if a button was pressed
 		buttonMode.onPressed(xPos, yPos);
+		buttonCollapse.onPressed(xPos, yPos);
+		buttonExtend.onPressed(xPos, yPos);
 		dragSquadFace.onPressed(xPos, yPos);
 		if(!dragSquadFace.isDragged()) mainBar.onPressed(xPos, yPos);
 		
 		// stop performing actions if a UI element is selected was pressed
-		if(buttonMode.isPressed(xPos, yPos) || dragSquadFace.isDragged() || mainBar.isPressed(xPos, yPos)) return;
+		if(buttonMode.isPressed(xPos, yPos) || buttonCollapse.isPressed(xPos, yPos) || buttonExtend.isPressed(xPos,  yPos) ||
+				dragSquadFace.isDragged() || mainBar.isPressed(xPos, yPos)) return;
 		
 		// Logic to check whether it was within the squad rectangle (in relative coordinate)
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
@@ -181,10 +191,24 @@ public class PlayScreen extends GameScreen{
 		
 		//check if 'clicked' on a button: pressed AND released within the button area
 		if(buttonMode.isPressed(e.getX(), e.getY())){
-			System.out.println("Button is clicked");
+			mainBar.switchDisplay();
+			//System.out.println("Button is clicked");
 		}
+		if(buttonCollapse.isPressed(e.getX(), e.getY())){
+			//mainBar.collapsedown();
+			mainBar.collapseleft();
+		}
+		if(buttonExtend.isPressed(e.getX(), e.getY())){
+			//mainBar.extendup();
+			mainBar.extendright();
+		}		
+		
+		
 		// in any case cancel the button activation
 		buttonMode.cancel();
+		buttonCollapse.cancel();
+		buttonExtend.cancel();
+		
 		dragSquadFace.onReleased(e.getX(), e.getY());
 	}
 	

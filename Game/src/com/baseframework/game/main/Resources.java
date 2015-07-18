@@ -31,10 +31,10 @@ public class Resources {
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
-	public static BufferedImage btnModeUp, btnModeDown, dragSquad, barTileN, barTileS, barTileW, barTileE,
-									barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
+	public static BufferedImage btnModeUp, btnModeDown, itemSquad, btnExtendUp, btnExtendDown, btnCollapseUp, btnCollapseDown;
+	public static BufferedImage barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	public static Font titleFont1, subTitleFont1;
-	public static Color titleColor1, subTitleColor1, selectColor;
+	public static Color titleColor1, subTitleColor1, frameColor, selectColor;
 	public static BufferedReader map1, subTileMapping;
 	public static BasicStroke strokeSize;
 	
@@ -60,6 +60,7 @@ public class Resources {
 		subTitleFont1 = new Font("Arial", Font.ITALIC, 30);
 		titleColor1 = Color.DARK_GRAY;
 		subTitleColor1 = Color.LIGHT_GRAY;
+		frameColor = Color.DARK_GRAY;
 		selectColor = Color.YELLOW;
 		strokeSize = new BasicStroke(2f);
 		
@@ -68,7 +69,12 @@ public class Resources {
 		// load user interface pictures
 		btnModeUp = loadImage("btn_modeSwitch_up.png");
 		btnModeDown = loadImage("btn_modeSwitch_down.png");
-		dragSquad = loadImage("drag_modeSwitch_squad.png");
+		btnCollapseUp = loadImage("btn_collapse_up.png");
+		btnCollapseDown = loadImage("btn_collapse_down.png");
+		btnExtendUp = loadImage("btn_extend_up.png");
+		btnExtendDown = loadImage("btn_extend_down.png");
+				
+		itemSquad = loadImage("item_squad.png");
 		barTileN = loadImage("bar_north.png");
 		barTileS = loadImage("bar_south.png");
 		barTileW = loadImage("bar_west.png");

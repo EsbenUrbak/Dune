@@ -14,10 +14,13 @@ public class UIBarItem {
 	private Rectangle frameRect;
 	public Rectangle catchRect;
 	
-	public UIBarItem(UIBar refBar, int relX, int relY){
+	public UIBarItem(UIBar refBar){
 		this.refBar = refBar;		
-		frameRect = new Rectangle(relX + refBar.catchRect.x, relY + refBar.catchRect.y, width, height);
 		visible = true;
+	}
+	
+	public void setInBar(int relX, int relY){
+		frameRect = new Rectangle(relX + refBar.catchRect.x, relY + refBar.catchRect.y, width, height);		
 	}
 
 	public void render(Graphics g){

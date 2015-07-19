@@ -22,7 +22,7 @@ public class PlayScreen extends GameScreen{
 	public static ViewFrame viewframe;
 	public static Map map;
 
-	// Buttons, bars and user interface inputs
+	// Buttons, bars and user interface items
 	private UIButton buttonMode, buttonCollapse, buttonExtend;
 	private UIDragImage dragSquadFace;
 	private UIBar mainBar;
@@ -191,13 +191,15 @@ public class PlayScreen extends GameScreen{
 		
 		//check if 'clicked' on a button: pressed AND released within the button area
 		if(buttonMode.isPressed(e.getX(), e.getY())){
-			mainBar.switchDisplay();
+			//mainBar.switchDisplay();
+			mainBar.pullLvl(1);
+			mainBar.pullLvl(2);
 			//System.out.println("Button is clicked");
 		}
 		if(buttonCollapse.isPressed(e.getX(), e.getY())){
 			//mainBar.collapsedown();
 			//mainBar.collapseleft();
-			mainBar.pullLvl(1);
+			mainBar.pushLvl(2);
 		}
 		if(buttonExtend.isPressed(e.getX(), e.getY())){
 			//mainBar.extendup();

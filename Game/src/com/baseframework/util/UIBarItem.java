@@ -6,15 +6,18 @@ import java.awt.Rectangle;
 
 import com.baseframework.game.main.Resources;
 
-public class UIBarItemHolder {
+public class UIBarItem {
 	
 	public static int width=45, height=45;
 	private boolean visible, empty = true;
+	private UIBar refBar;
 	private Rectangle frameRect;
 	public Rectangle catchRect;
 	
-	public UIBarItemHolder(int topX, int topY){
-		frameRect = new Rectangle(topX, topY, width, height);
+	public UIBarItem(UIBar refBar, int relX, int relY){
+		this.refBar = refBar;		
+		frameRect = new Rectangle(relX + refBar.catchRect.x, relY + refBar.catchRect.y, width, height);
+		visible = true;
 	}
 
 	public void render(Graphics g){

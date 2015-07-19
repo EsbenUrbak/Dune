@@ -42,8 +42,8 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void init() {
 		int btnModeX = 15, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -10;
-		int dftBarTileCountX = 7;
-		int dftBarTileCountY = 3;
+		int dftBarTileCountX = 2;
+		int dftBarTileCountY = 2;
 		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 20;
 		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
 		
@@ -196,11 +196,13 @@ public class PlayScreen extends GameScreen{
 		}
 		if(buttonCollapse.isPressed(e.getX(), e.getY())){
 			//mainBar.collapsedown();
-			mainBar.collapseleft();
+			//mainBar.collapseleft();
+			mainBar.pullLvl(1);
 		}
 		if(buttonExtend.isPressed(e.getX(), e.getY())){
 			//mainBar.extendup();
-			mainBar.extendright();
+			//mainBar.extendright();
+			mainBar.pushLvl(1);
 		}		
 		
 		

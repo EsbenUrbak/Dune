@@ -10,14 +10,16 @@ import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
 
 public class UIBar {
-	private static final int MINTILEX = 2, MAXTILEX=10, MINTILEY = 2, MAXTILEY=5; 
+	private static final int MINTILEX = 2, MAXTILEX=10, MINTILEY = 2, MAXTILEY=5;
+	private static final int MAXITEMS = 5;
+	public static final int EDGESIZEX=20, EDGESIZEY=10, MINGAPX=5, MINGAPY=5;
 	
 	private boolean selected=false, visible=true;
-	private Rectangle frameRect;
+	public Rectangle frameRect;
 	public Rectangle catchRect;
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
-	private int tileCountX, tileCountY, tileHeight, tileWidth;
-	private ArrayList<UIBarItemHolder> lvl1items, lvl2items;
+	private int tileCountX, tileCountY, itemCount1=0, itemCount2=0, tileHeight, tileWidth;
+	private ArrayList<UIBarItem> lvl1items, lvl2items;
 	
 	public UIBar(int topX, int topY, int tileCountX, int tileCountY) {
 		barTileN = Resources.barTileN;
@@ -38,8 +40,8 @@ public class UIBar {
 		frameRect = new Rectangle(topX, topY, tileCountX * tileWidth, tileCountY * tileHeight);
 		catchRect = new Rectangle (topX, topY, tileCountX * tileWidth,PlayScreen.screenSizeY - topY);
 		
-		lvl1items = new ArrayList<UIBarItemHolder>();
-		lvl2items = new ArrayList<UIBarItemHolder>();
+		lvl1items = new ArrayList<UIBarItem>();
+		lvl2items = new ArrayList<UIBarItem>();
 	}
 	
 	public void onPressed(int x, int y){
@@ -86,6 +88,17 @@ public class UIBar {
 			g2.setColor(Resources.frameColor);
 		}
 		g2.drawRoundRect(frameRect.x, frameRect.y, frameRect.width, frameRect.height, 20, 20);
+		
+		// display items within the bar
+		for(UIBarItem lvl1item : lvl1items){
+			lvl1item.render(g);
+		}
+		
+		for(UIBarItem lvl2item : lvl2items){
+			lvl2item.render(g);
+		}
+		
+		
 		
 	}
 	
@@ -145,14 +158,71 @@ public class UIBar {
 		}
 	}
 	
-	public void addItemHolder(int level){
-		if(level == 1){
-		} else if(level == 2){
+	public void addItem(int level, UIBarItem newItem){
+		
+		if(level == 1 && lvl1items.size() <= MAXITEMS ){
+			lvl1items.add(newItem);
+			itemCount1++;
+			
+		} else if(level == 2 && lvl2items.size() <= MAXITEMS ){
+			lvl2items.add(newItem);
+			itemCount2++;
+			
+			//if just added a second level, check if the bar needs to be extended upward
+			if(itemCount2==1 && 2*UIBarItem.height + 2*EDGESIZEY + MINGAPY > tileCountY * tileHeight){
+					this.extendup();
+			}
+			
 		} else {
-			System.out.println("item level " + level + " is invalid");
+			System.out.println("item level " + level + " is invalid or too many items already");
+		}
+
+		//extends the bar to the right to fit in more items if necessary
+		if (Math.max(itemCount1, itemCount2) * UIBarItem.width + 2 * EDGESIZEX + 
+				Math.max(Math.max(itemCount1, itemCount2)-1,0) * MINGAPX > tileCountX * tileWidth){
+			this.extendright();
 		}
 	}
 	
-	public void removeItemHolder(){
+	public void removeItem(int level, UIBarItem item){
+		if(level == 1 && lvl1items.contains(item)){
+			lvl1items.remove(item);
+			itemCount1--;
+		} else if(level == 2 && lvl2items.contains(item)){
+			lvl2items.remove(item);
+			itemCount2--;
+			
+			//shrinks the bar downward if just removed the last item from the second level
+			if(itemCount2==0 && UIBarItem.height + 2*EDGESIZEY > tileCountY * tileHeight) this.collapsedown();
+			
+		} else {
+			System.out.println("item level " + level + " is invalid or too many items already");
+		}
+
+		//shrinks the bar left if all items do not need the space anymore
+		if (Math.max(itemCount1, itemCount2) * UIBarItem.width + 2 * EDGESIZEX + 
+				Math.max(Math.max(itemCount1, itemCount2)-1,0) * MINGAPX < (tileCountX-1) * tileWidth){
+			this.collapseleft();
+		}
+	}
+	
+	//temporary method to manually add an item
+	public void pushLvl(int level){
+		if (level !=1 && level !=2) return;
+		
+		UIBarItem newItem;
+		int itemCount = level == 1 ? itemCount1 : itemCount2;
+		
+		newItem = new UIBarItem(this, 
+					EDGESIZEX + itemCount * UIBarItem.width + itemCount*MINGAPX, 
+					frameRect.height -EDGESIZEY -UIBarItem.height - (level-1)*(UIBarItem.height + MINGAPY));
+		this.addItem(level, newItem);
+	}
+	
+	//temporary method to manually remove an item
+	public void pullLvl(int level){
+		if (level !=1 && level !=2) return;
+		if(level == 1 && !lvl1items.isEmpty()) this.removeItem(1, lvl1items.get(lvl1items.size()-1));
+		if(level == 2 && !lvl2items.isEmpty()) this.removeItem(2, lvl2items.get(lvl2items.size()-1));
 	}
 }

@@ -194,7 +194,6 @@ public class PlayScreen extends GameScreen{
 			//mainBar.switchDisplay();
 			mainBar.pullLvl(1);
 			mainBar.pullLvl(2);
-			//System.out.println("Button is clicked");
 		}
 		if(buttonCollapse.isPressed(e.getX(), e.getY())){
 			//mainBar.collapsedown();

@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
@@ -19,7 +21,7 @@ public class UIBar {
 	public Rectangle catchRect;
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	private int tileCountX, tileCountY, itemCount1=0, itemCount2=0, tileHeight, tileWidth;
-	private ArrayList<UIBarItem> lvl1items, lvl2items;
+	private CopyOnWriteArrayList<UIBarItem> lvl1items, lvl2items;
 	
 	public UIBar(int topX, int topY, int tileCountX, int tileCountY) {
 		barTileN = Resources.barTileN;
@@ -40,8 +42,8 @@ public class UIBar {
 		frameRect = new Rectangle(topX, topY, tileCountX * tileWidth, tileCountY * tileHeight);
 		catchRect = new Rectangle (topX, topY, tileCountX * tileWidth,PlayScreen.screenSizeY - topY);
 		
-		lvl1items = new ArrayList<UIBarItem>();
-		lvl2items = new ArrayList<UIBarItem>();
+		lvl1items = new CopyOnWriteArrayList<UIBarItem>();
+		lvl2items = new CopyOnWriteArrayList<UIBarItem>();
 	}
 	
 	public void onPressed(int x, int y){
@@ -120,16 +122,19 @@ public class UIBar {
 		}
 			
 		// display items within the bar
-		for(UIBarItem lvl1item : lvl1items){
+		this.renderBarItems(g);
+	}
+	
+	private void renderBarItems(Graphics g){
+		for (Iterator<UIBarItem> iterator = lvl1items.iterator(); iterator.hasNext();) {
+			UIBarItem lvl1item = iterator.next();
 			lvl1item.render(g);
 		}
 		
-		for(UIBarItem lvl2item : lvl2items){
+		for(Iterator<UIBarItem> iterator = lvl2items.iterator(); iterator.hasNext();){
+			UIBarItem lvl2item = iterator.next();
 			lvl2item.render(g);
-		}
-		
-		
-		
+		}		
 	}
 	
 	public void switchDisplay(){

@@ -1,7 +1,6 @@
 package com.baseframework.animation;
 
 import java.awt.Graphics;
-import java.awt.Image;
 
 public class Animation {
 	private Frame[] frames;

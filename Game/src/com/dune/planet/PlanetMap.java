@@ -479,7 +479,15 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 	
 	public static int getElev(double x, double y)
 	{
-	return Integer.parseInt(elevationMap.get((int)y).get((int)x));
-	}
+		int elevation =0;
+		try{
+			elevation= Integer.parseInt(elevationMap.get((int)y).get((int)x));
+		}catch (Exception err ) {
+			elevation =0;
+		}
+		
+		return elevation;
+	
+		}
 	
 }

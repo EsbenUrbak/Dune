@@ -71,7 +71,7 @@ public class Squad {
 				SQUADSPEED = Speed.Speed(xTile, yTile, xTileNext, yTileNext);				
 			}
 
-			//System.out.println("x= "+xTile+" y= "+yTile+"xNext= "+xTileNext+" yNext= "+yTileNext+" speed ="+ SQUADSPEED);
+			System.out.println(" speed ="+ SQUADSPEED);
 			
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;

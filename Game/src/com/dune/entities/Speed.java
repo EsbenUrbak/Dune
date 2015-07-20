@@ -14,14 +14,9 @@ public class Speed {
 
 	public static int Speed(int x, int y, int xNext, int yNext) {
 		double speed, speedTerrain, speedSlope=100;
-		double x1, y1, x2, y2, h1_1, h1_2, h2_2, h2_1, pX, pY;
-		double height, heightNext, changeInHeight;
-		int movingRight, movingUp;
 		double Alevel1, Blevel1, slopeA,  xX = 0,xXA1,xXA2,xXB1,xXB2, SlopeASteepness,SlopeBSteepness;
 		double Alevel2, Blevel2, slopeB, yY = 0,yYA1,yYA2,yYB1,yYB2;
-		double angle, dist, speedTerrainX, speedTerrainY; 
 		
-
 				
 		xX=(int) (x/(double)PlanetMap.WIDTHSLOPE);
 		yY=(int) (y/(double)PlanetMap.WIDTHSLOPE);
@@ -47,20 +42,25 @@ public class Speed {
 		Alevel1=PlanetMap.getElev(xXA1,yYA1);
 		Alevel2=PlanetMap.getElev(xXA2,yYA2);
 		SlopeASteepness = (Alevel1-Alevel2);
-		//slopeA = (Alevel1-Alevel2)/((double)PlanetMap.WIDTHSLOPE);
 
 		Blevel1=PlanetMap.getElev(xXB1,yYB1);
 		Blevel2=PlanetMap.getElev(xXB2,yYB2);
 		SlopeBSteepness = (Blevel1-Blevel2);
-		//slopeB = (Blevel1-Blevel2)/((double)PlanetMap.WIDTHSLOPE);
 		
 		
 		//if on a slope we need to alter the speed accordingly
 		if(SlopeASteepness!=0||SlopeBSteepness!=0){
+			int movingRight, movingUp;
+			double x1, y1, x2, y2, h1_1, h1_2, h2_2, h2_1, pX, pY;
+			double height, heightNext, changeInHeight;
+			double angle, dist;
 			
 			//finding the angle of the movement
 			dist=Math.sqrt((x-xNext)*(x-xNext)+(y-yNext)*(y-yNext));
 			angle = Math.acos(Math.abs((double)(x-xNext))/dist);
+			
+			//Using a bilinear intepolation to find the height difference. Please see Miscellaneous (and wikipedia for the formula)
+			//These are the corner points of my know rectangle
 			x1 = (xXB2+1)*PlanetMap.WIDTHSLOPE;
 			x2 = (xXA2+1)*PlanetMap.WIDTHSLOPE;
 			y1 = (yYB2+1)*PlanetMap.WIDTHSLOPE;
@@ -72,7 +72,6 @@ public class Speed {
 			
 			height = Miscellaneous.BilinearInterpolator(x1, y1, x2, y2, h1_1, h1_2, h2_2, h2_1, x, y);	
 			
-			//next point 
 			//finding whether we are moving to the moving to the right or left
 			movingRight=(x-xNext)<0?1:-1;
 			//finding whether we are moving to the moving to the right or left
@@ -82,6 +81,7 @@ public class Speed {
 			pY= y+movingUp*Math.sin(angle);
 			
 			heightNext = Miscellaneous.BilinearInterpolator(x1, y1, x2, y2, h1_1, h1_2, h2_2, h2_1, pX, pY);	
+			
 			changeInHeight=heightNext-height;
 			
 			if(changeInHeight>0){

@@ -474,7 +474,15 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 
 	public static int getTer(double x, double y)
 	{
-	return Resources.getSpeed(terrainMap.get((int)y).get((int)x));
+		int speed = 0;
+		try{
+			speed = Resources.getSpeed(terrainMap.get((int)y).get((int)x));
+		}catch (Exception err ) {
+			speed = 0;
+		}
+		
+		return speed;
+			
 	}
 	
 	public static int getElev(double x, double y)

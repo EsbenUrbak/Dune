@@ -125,8 +125,8 @@ public class AStar {
 				yNodef = yParent + stepSize * (j-1);
 				nodeID = "x=" + (xNodef - xStart)/stepSize + "_y=" + (yNodef - yStart)/stepSize;
 				// finding terrain type for this node point
-				terrainNumber =(xNodef/Tile.getSizeX()) + ((yNodef/Tile.getSizeX())* PlanetMap.width);
-				terrain = PlanetMap.mapArray.get(terrainNumber*1);
+				//terrainNumber =(xNodef/Tile.getSizeX()) + ((yNodef/Tile.getSizeX())* PlanetMap.width);
+				//terrain = PlanetMap.mapArray.get(terrainNumber*1);
 				//nodeSpeed=Resources.getSpeed(terrain);
 				nodeSpeed=Speed.Speed(xParent, yParent, xNodef, yNodef);
 				
@@ -144,7 +144,7 @@ public class AStar {
 					xNodef_dia2 = xParent + stepSize * i2;
 					yNodef_dia2 = yParent + stepSize * j2;
 					
-					nodeSpeed_dia2=Speed.Speed(xParent, yParent, xNodef_dia1, yNodef_dia1);
+					nodeSpeed_dia2=Speed.Speed(xParent, yParent, xNodef_dia2, yNodef_dia2);
 					
 				}
 				
@@ -170,7 +170,7 @@ public class AStar {
 								// finally f:
 								fFunc = gFunc + hFunc;
 								// adding the node point to the openlist.
-								point = new Node(xNodef, yNodef, terrain, nodeParentID, nodeID, gFunc, hFunc,fFunc);
+								point = new Node(xNodef, yNodef, "NA", nodeParentID, nodeID, gFunc, hFunc,fFunc);
 								openListFunc.add(point);
 								nodeMapOpen.put(nodeID,point);	
 							}
@@ -189,7 +189,7 @@ public class AStar {
 							fFunc = gFunc + hFunc;
 
 							// adding the node point to the openlist.
-							point = new Node(xNodef, yNodef, terrain, nodeParentID,nodeID, gFunc, hFunc, fFunc);
+							point = new Node(xNodef, yNodef, "NA", nodeParentID,nodeID, gFunc, hFunc, fFunc);
 							openListFunc.add(point);
 							nodeMapOpen.put(nodeID,point);						
 						}

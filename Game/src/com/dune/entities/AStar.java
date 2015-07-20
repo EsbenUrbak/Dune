@@ -19,7 +19,6 @@ public class AStar {
     public static Comparator<Node> fComparator = new Comparator<Node>(){
         @Override
         public int compare(Node n1, Node n2) {
-
         	return Double.compare(n1.getFNode(), n2.getFNode());
         }
     };
@@ -125,9 +124,6 @@ public class AStar {
 				yNodef = yParent + stepSize * (j-1);
 				nodeID = "x=" + (xNodef - xStart)/stepSize + "_y=" + (yNodef - yStart)/stepSize;
 				// finding terrain type for this node point
-				//terrainNumber =(xNodef/Tile.getSizeX()) + ((yNodef/Tile.getSizeX())* PlanetMap.width);
-				//terrain = PlanetMap.mapArray.get(terrainNumber*1);
-				//nodeSpeed=Resources.getSpeed(terrain);
 				nodeSpeed=Speed.Speed(xParent, yParent, xNodef, yNodef);
 				
 				//Check to make sure the squad doesnt move accross diagonals where it will get stuck
@@ -137,14 +133,14 @@ public class AStar {
 					xNodef_dia1 = xParent + stepSize * i1;
 					yNodef_dia1 = yParent + stepSize * j1;
 					
-					nodeSpeed_dia1=Speed.Speed(xParent, yParent, xNodef_dia1, yNodef_dia1);
+					nodeSpeed_dia1=Speed.Speed(xNodef_dia1, yNodef_dia1, xNodef_dia1, yNodef_dia1);
 					
 					i2=ifunction2((i-1),(j-1));
 					j2=jfunction2((i-1),(j-1));
 					xNodef_dia2 = xParent + stepSize * i2;
 					yNodef_dia2 = yParent + stepSize * j2;
 					
-					nodeSpeed_dia2=Speed.Speed(xParent, yParent, xNodef_dia2, yNodef_dia2);
+					nodeSpeed_dia2=Speed.Speed(xNodef_dia2, yNodef_dia2, xNodef_dia2, yNodef_dia2);
 					
 				}
 				
@@ -251,7 +247,7 @@ public class AStar {
 		if(i==1&&j==1){
 			neighbourJ=1;
 		}
-		if(i==1&&j==-11){
+		if(i==1&&j==-1){
 			neighbourJ=0;
 		}
 		

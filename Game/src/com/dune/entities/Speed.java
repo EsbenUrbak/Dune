@@ -22,14 +22,7 @@ public class Speed {
 		double angle, dist, speedTerrainX, speedTerrainY; 
 		
 
-		
-		//finding the angle of the movement
-		dist=Math.sqrt((x-xNext)*(x-xNext)+(y-yNext)*(y-yNext));
-		angle = Math.acos(Math.abs((double)(x-xNext))/dist);
-		//speedTerrainX=(speedTerrain*Math.cos(angle));
-		//speedTerrainY=(speedTerrain*Math.sin(angle));
-		
-		
+				
 		xX=(int) (x/(double)PlanetMap.WIDTHSLOPE);
 		yY=(int) (y/(double)PlanetMap.WIDTHSLOPE);
 		
@@ -50,8 +43,6 @@ public class Speed {
 		yYB2=(int) (yY+1);
 		
 		
-		
-
 		//finding whether on a slope
 		Alevel1=PlanetMap.getElev(xXA1,yYA1);
 		Alevel2=PlanetMap.getElev(xXA2,yYA2);
@@ -66,6 +57,10 @@ public class Speed {
 		
 		//if on a slope we need to alter the speed accordingly
 		if(SlopeASteepness!=0||SlopeBSteepness!=0){
+			
+			//finding the angle of the movement
+			dist=Math.sqrt((x-xNext)*(x-xNext)+(y-yNext)*(y-yNext));
+			angle = Math.acos(Math.abs((double)(x-xNext))/dist);
 			x1 = (xXB2+1)*PlanetMap.WIDTHSLOPE;
 			x2 = (xXA2+1)*PlanetMap.WIDTHSLOPE;
 			y1 = (yYB2+1)*PlanetMap.WIDTHSLOPE;

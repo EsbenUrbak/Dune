@@ -1,21 +1,16 @@
 package com.dune.entities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.baseframework.game.main.Resources;
 import com.baseframework.util.Miscellaneous;
 import com.dune.planet.PlanetMap;
-import com.dune.planet.Tile;
 
 
 public class Speed {
 
-	public static int Speed(int x, int y, int xNext, int yNext) {
+	public static int speed(int x, int y, int xNext, int yNext) {
 		double speed, speedTerrain, speedSlope=100;
-		double Alevel1, Blevel1, slopeA,  xX = 0,xXA1,xXA2,xXB1,xXB2, SlopeASteepness,SlopeBSteepness;
-		double Alevel2, Blevel2, slopeB, yY = 0,yYA1,yYA2,yYB1,yYB2;
+		double Alevel1, Blevel1, xX = 0, xXA1, xXA2, xXB1, xXB2, SlopeASteepness, SlopeBSteepness;
+		double Alevel2, Blevel2, yY = 0, yYA1, yYA2, yYB1, yYB2;
 		
 				
 		xX=(int) (x/(double)PlanetMap.WIDTHSLOPE);

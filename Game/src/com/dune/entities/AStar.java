@@ -124,7 +124,7 @@ public class AStar {
 				yNodef = yParent + stepSize * (j-1);
 				nodeID = "x=" + (xNodef - xStart)/stepSize + "_y=" + (yNodef - yStart)/stepSize;
 				// finding terrain type for this node point
-				nodeSpeed=Speed.Speed(xParent, yParent, xNodef, yNodef);
+				nodeSpeed=Speed.speed(xParent, yParent, xNodef, yNodef);
 				
 				//Check to make sure the squad doesnt move accross diagonals where it will get stuck
 				if(Math.abs(i-1)==Math.abs(j-1)){
@@ -133,14 +133,14 @@ public class AStar {
 					xNodef_dia1 = xParent + stepSize * i1;
 					yNodef_dia1 = yParent + stepSize * j1;
 					
-					nodeSpeed_dia1=Speed.Speed(xNodef_dia1, yNodef_dia1, xNodef_dia1, yNodef_dia1);
+					nodeSpeed_dia1=Speed.speed(xNodef_dia1, yNodef_dia1, xNodef_dia1, yNodef_dia1);
 					
 					i2=ifunction2((i-1),(j-1));
 					j2=jfunction2((i-1),(j-1));
 					xNodef_dia2 = xParent + stepSize * i2;
 					yNodef_dia2 = yParent + stepSize * j2;
 					
-					nodeSpeed_dia2=Speed.Speed(xNodef_dia2, yNodef_dia2, xNodef_dia2, yNodef_dia2);
+					nodeSpeed_dia2=Speed.speed(xNodef_dia2, yNodef_dia2, xNodef_dia2, yNodef_dia2);
 					
 				}
 				

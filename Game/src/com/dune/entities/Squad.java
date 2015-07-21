@@ -68,7 +68,7 @@ public class Squad {
 				
 				SQUADSPEED=SQUADSPEED;
 			}else{
-				SQUADSPEED = Speed.Speed(xTile, yTile, xTileNext, yTileNext);				
+				SQUADSPEED = Speed.speed(xTile, yTile, xTileNext, yTileNext);				
 			}
 
 			System.out.println(" speed ="+ SQUADSPEED);

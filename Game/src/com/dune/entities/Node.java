@@ -1,14 +1,5 @@
 package com.dune.entities;
 
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.Map;
-
-import com.baseframework.game.main.Resources;
-import com.dune.planet.PlanetMap;
-
-
 public class Node {
 
 	private int xNode, yNode;

@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.dune.planet.Tile;
+
 public class ArrayHandler {
 
 	public static ArrayList<String> resolutionIncrease(ArrayList<String> original, int expansionFactor) {
@@ -52,6 +54,48 @@ public class ArrayHandler {
 		return TerrainMap;
 	}
 			
+public static Map<Integer, Map<Integer, Tile>> tileMap(ArrayList<Tile> original, int width, int height){
+		
+		Map<Integer, Map<Integer, Tile>> TerrainMap = new HashMap<Integer, Map<Integer, Tile>>();
+
+		int k=0;
+		int a=0;
+		
+		for(int y=0;y<height;y++){
+		Map<Integer, Tile> TerrainMapX = new HashMap<Integer, Tile>();
+		
+			for(int x=0;x<width;x++){
+				TerrainMapX.put(x,original.get(x+y*width));
+			}
+
+		TerrainMap.put(y,TerrainMapX);
+		
+		}
+						
+		return TerrainMap;
+	}	
+	
+	public static Map<Integer, Map<Integer, String>> tMap(ArrayList<String> original, int width, int height){
+		
+		Map<Integer, Map<Integer, String>> TerrainMap = new HashMap<Integer, Map<Integer, String>>();
+
+		int k=0;
+		int a=0;
+		
+		for(int y=0;y<height;y++){
+		Map<Integer, String> TerrainMapX = new HashMap<Integer, String>();
+		
+			for(int x=0;x<width;x++){
+				TerrainMapX.put(x,original.get(x+y*width));
+			}
+
+		TerrainMap.put(y,TerrainMapX);
+		
+		}
+						
+		return TerrainMap;
+	}
+	
 	
 	
 	

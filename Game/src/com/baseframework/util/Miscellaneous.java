@@ -2,6 +2,7 @@ package com.baseframework.util;
 
 public class Miscellaneous {
 	
+
 	
 	public static double BilinearInterpolator(double x1, double y1, double x2, double y2, double h1_1,double h1_2,double h2_2,double h2_1, double pX, double pY){
 		double h;
@@ -11,4 +12,94 @@ public class Miscellaneous {
 		return h;
 	}
 
+	public static int neighbourX(int x, int i, int j){
+		
+		if(i==-1&&j==-1){
+			x=x-2;
+		}
+		if(i==-1&&j==0){
+			x=x-1;
+		}
+		if(i==-1&&j==1){
+			x=x;
+		}
+		if(i==0&&j==-1){
+			x=x-1;
+		}
+		if(i==0&&j==0){
+			x=x;
+		}
+		if(i==0&&j==1){
+			x=x+1;
+		}
+		if(i==1&&j==-1){
+			x=x;
+		}
+		if(i==1&&j==0){
+			x=x+1;
+		}
+		if(i==1&&j==1){
+			x=x+2;
+		}
+		
+		return x;
+	}
+	public static int neighbourY(int x, int i, int j){
+		
+		if(i==-1&&j==-1){
+			x=x;
+		}
+		if(i==-1&&j==0){
+			x=x+1;
+		}
+		if(i==-1&&j==1){
+			x=x+2;
+		}
+		if(i==0&&j==-1){
+			x=x-1;
+		}
+		if(i==0&&j==0){
+			x=x;
+		}
+		if(i==0&&j==1){
+			x=x+1;
+		}
+		if(i==1&&j==-1){
+			x=x-2;
+		}
+		if(i==1&&j==0){
+			x=x-1;
+		}
+		if(i==1&&j==1){
+			x=x;
+		}
+		
+		return x;
+	}
+	
+	public static int carToIsoX(int xNumber, int yNumber, int tileWidth){
+		int x;
+		if(yNumber%2==0){
+		x = xNumber*tileWidth;
+		}else{
+		x = xNumber*tileWidth+tileWidth/2;
+		}
+				
+		return x;
+	}
+	
+	public static int carToIsoY(int xNumber, int yNumber, int tileHeight){
+		int y;
+		
+		y=yNumber*tileHeight/2;
+		
+		return y;
+	}
+	
+
+	
+	
+	
+	
+	
 }

@@ -95,11 +95,21 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderTiles(Graphics g) {
-		// paint ONLY the tiles in the catch zone, and adjusts for relative coordinates
-		for (int i = 0; i < map.getScopeTileArray().size(); i++) {
-			Tile t = (Tile) map.getScopeTileArray().get(i);
-			g.drawImage(t.getTileImage(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), null);
+		int pX, pY;
+		for (int y = 0; y <PlanetMap.tileMap.size() ; y++) {
+		for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
+	
+			Tile t = PlanetMap.tileMap.get(y).get(x);
+			
+			pX = t.getTileX();
+			pY= t.getTileY();
+			
+			//Use these to get Isometric positions
+			//pX = Miscellaneous.carToIsoX(t.getTileX(), t.getTileY(), t.getTileImage().getWidth(null));
+			//pY = Miscellaneous.carToIsoY(t.getTileX(), t.getTileY(), t.getTileImage().getHeight(null));
 		
+			g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
+			
 			//Drawing elevation lines
 			if(t.iseUpT()){
 				g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY());			
@@ -114,8 +124,10 @@ public class PlayScreen extends GameScreen{
 				g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
 			}
 			
+			
+		}}
 		
-		}	
+		
 	}
 
 	private void renderPaths(Graphics g) {

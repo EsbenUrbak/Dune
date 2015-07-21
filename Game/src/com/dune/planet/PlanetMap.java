@@ -23,6 +23,8 @@ public class PlanetMap {
 	public static ArrayList<String> elevationArray = new ArrayList<String>();	
 	public static ArrayList<String> elevationArrayHighRes = new ArrayList<String>();	
 	public static Map<Integer, Map<Integer, String>> elevationMap = new HashMap<Integer, Map<Integer, String>>();
+	public static Map<Integer, Map<Integer, String>> TerMap = new HashMap<Integer, Map<Integer, String>>();
+	public static Map<Integer, Map<Integer, Tile>> tileMap = new HashMap<Integer, Map<Integer, Tile>>();
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
 	public static int width=0; 
@@ -52,6 +54,7 @@ public class PlanetMap {
 		}
 		
 		//mapArrayHighRes = ArrayHandler.resolutionIncrease(mapArray, Tile.getSizeX()/WIDTHSLOPE);
+		TerMap = ArrayHandler.tMap(mapArray, width, height);
 		terrainMap =ArrayHandler.HighResMap(mapArray, Tile.getSizeX()/WIDTHSLOPE, width, height);
 		
 		ArrayList elevationParser = parsemap(elevationfile);
@@ -72,7 +75,10 @@ public class PlanetMap {
 		elevationMap =ArrayHandler.HighResMap(elevationArray, Tile.getSizeX()/WIDTHSLOPE, width, height);
 		
 		tilearray=transitionAlgo( mapArray,elevationArray, height, width);
-				
+		
+		//tilearray => tileMap
+		tileMap = ArrayHandler.tileMap(tilearray, height, width);
+		
 		// defines the catch area of the map in which tiles may have to be displayed
 		rCatch = new Rectangle();	
 		
@@ -322,66 +328,66 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 		
 		
 		int bugID=0;
-		for(int j = 0; j<heightArray;j++){
-		for (int i = 0; i < widthArray; i++) {
+		for(int y = 0; y<heightArray;y++){
+		for (int x = 0; x < widthArray; x++) {
 
 			
-				elevation = Integer.parseInt(elevationArray.get(i+j*widthArray));
+				elevation = Integer.parseInt(elevationArray.get(x+y*widthArray));
 			
 				//edge of map problem solving -> "tiles" outside of map => are 0 tiles
-				S0=tilearray.get((i+j*widthArray));
+				S0=tilearray.get((x+y*widthArray));
 				
-				if(j>0){
-					S1 =tilearray.get((i+j*widthArray)-widthArray);
-					elevationUP = Integer.parseInt(elevationArray.get((i+j*widthArray)-widthArray));
+				if(y>0){
+					S1 =tilearray.get((x+y*widthArray)-widthArray);
+					elevationUP = Integer.parseInt(elevationArray.get((x+y*widthArray)-widthArray));
 				}else{
 					S1=S0;
 					elevationUP = 0;
 				}
 				
-				if(j>0){
-					S5=tilearray.get((i+j*widthArray)-widthArray+1);
+				if(y>0){
+					S5=tilearray.get((x+y*widthArray)-widthArray+1);
 				}else{
 					S5=S0;
 				}
 
-				if(j>0&&(i+j*widthArray)+1<(widthArray*heightArray)){
-					S2 =tilearray.get((i+j*widthArray)+1);
-					elevationRight = Integer.parseInt(elevationArray.get((i+j*widthArray)+1));
+				if(y>0&&(x+y*widthArray)+1<(widthArray*heightArray)){
+					S2 =tilearray.get((x+y*widthArray)+1);
+					elevationRight = Integer.parseInt(elevationArray.get((x+y*widthArray)+1));
 				}else{
 					S2=S0;
 					elevationRight = 0;
 				}
 
-				if(j<heightArray-1&&((i+j*widthArray)+widthArray+1)<widthArray*heightArray){
-					S6=tilearray.get((i+j*widthArray)+widthArray+1);
+				if(y<heightArray-1&&((x+y*widthArray)+widthArray+1)<widthArray*heightArray){
+					S6=tilearray.get((x+y*widthArray)+widthArray+1);
 				}else{
 					S6=S0;
 				}
 				
-				if((j<heightArray-1)){
-					S3 =tilearray.get((i+j*widthArray)+widthArray);
-					elevationDown = Integer.parseInt(elevationArray.get((i+j*widthArray)+widthArray));
+				if((y<heightArray-1)){
+					S3 =tilearray.get((x+y*widthArray)+widthArray);
+					elevationDown = Integer.parseInt(elevationArray.get((x+y*widthArray)+widthArray));
 				}else{
 					S3=S0;
 					elevationDown=0;
 				}
 
-				if(j<heightArray-1){
-					S7 =tilearray.get((i+j*widthArray)+widthArray-1);
+				if(y<heightArray-1){
+					S7 =tilearray.get((x+y*widthArray)+widthArray-1);
 				}else{
 					S7=S0;
 				}
 				
-				if(i>0){
-					S4 =tilearray.get((i+j*widthArray)-1);
-					elevationLeft = Integer.parseInt(elevationArray.get((i+j*widthArray)-1));
+				if(x>0){
+					S4 =tilearray.get((x+y*widthArray)-1);
+					elevationLeft = Integer.parseInt(elevationArray.get((x+y*widthArray)-1));
 				}else{
 					S4=S0;
 				}
 				
-				if(j>0&&(i+j*widthArray)-widthArray-1>0){
-					S8 =tilearray.get((i+j*widthArray)-widthArray-1);
+				if(y>0&&(x+y*widthArray)-widthArray-1>0){
+					S8 =tilearray.get((x+y*widthArray)-widthArray-1);
 				}else{
 					S8=S0;
 				}
@@ -457,7 +463,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
 				}				
 				
-				Tile t = new Tile(i, j, ID, eUp, eDown, eRight, eLeft);
+				Tile t = new Tile(x, y, ID, eUp, eDown, eRight, eLeft);
 								
 				tilearrayNew.add(t);
 		}	

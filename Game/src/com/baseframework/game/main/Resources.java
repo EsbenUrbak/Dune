@@ -23,7 +23,7 @@ import com.baseframework.util.ImageHandler;
 import com.dune.planet.Wrapper;
 
 public class Resources {
-	public static BufferedImage background, tileOcean, tileDirt, squadRight, squadLeft, squadSelect;
+	public static BufferedImage background, squadRight, squadLeft, squadSelect;
 	private static BufferedImage squadMoveRg1, squadMoveRg2, squadMoveRg3, squadMoveRg4, squadMoveRg5;
 	public static BufferedImage squadSelect1;
 	private static BufferedImage squadSelect2;
@@ -34,12 +34,14 @@ public class Resources {
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
+	public static BufferedImage btnModeUp, btnModeDown, itemSquad, btnExtendUp, btnExtendDown, btnCollapseUp, btnCollapseDown;
+	public static BufferedImage barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	
 	public static Font titleFont1, subTitleFont1;
-	public static Color titleColor1, subTitleColor1;
-	public static BufferedReader map1, subTileMapping, speedMapping, elevationMap;
+	public static Color titleColor1, subTitleColor1, frameColor, selectColor;
 	public static BasicStroke strokeSize;
 	
+	public static BufferedReader map1, subTileMapping, speedMapping, elevationMap;
 	public static Map<String, Wrapper> subTileRotationMap;
 	public static Map<String, Integer> speedMap;
 	public static Map<String, BufferedImage> subTileRotationImageMap=new HashMap<String, BufferedImage>();
@@ -67,12 +69,31 @@ public class Resources {
 		subTitleFont1 = new Font("Arial", Font.ITALIC, 30);
 		titleColor1 = Color.DARK_GRAY;
 		subTitleColor1 = Color.LIGHT_GRAY;
+		frameColor = Color.DARK_GRAY;
+		selectColor = Color.YELLOW;
 		strokeSize = new BasicStroke(2f);
 		
-		tileOcean = loadImage("tiledirt.png");
-		tileDirt = loadImage("tileocean.png");
 		background = loadImage("background.png");
 
+		// load user interface pictures
+		btnModeUp = loadImage("btn_modeSwitch_up.png");
+		btnModeDown = loadImage("btn_modeSwitch_down.png");
+		btnCollapseUp = loadImage("btn_collapse_up.png");
+		btnCollapseDown = loadImage("btn_collapse_down.png");
+		btnExtendUp = loadImage("btn_extend_up.png");
+		btnExtendDown = loadImage("btn_extend_down.png");
+				
+		itemSquad = loadImage("item_squad.png");
+		barTileN = loadImage("bar_north.png");
+		barTileS = loadImage("bar_south.png");
+		barTileW = loadImage("bar_west.png");
+		barTileE = loadImage("bar_east.png");
+		barTileNW = loadImage("bar_northwest.png");
+		barTileSW = loadImage("bar_southwest.png");
+		barTileNE = loadImage("bar_northeast.png");
+		barTileSE = loadImage("bar_southeast.png");
+		barTileIn = loadImage("bar_inner.png");
+		
 		//loading all pictures for the tiles generation
 		//Main Tiles
 		G=loadImage("G.png");

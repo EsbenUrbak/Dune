@@ -60,6 +60,7 @@ public class Game extends JPanel implements Runnable {
 		inputHandler = new InputHandler();
 		addKeyListener(inputHandler);
 		addMouseListener(inputHandler);
+		addMouseMotionListener(inputHandler);
 		addComponentListener(inputHandler);
 	}
 

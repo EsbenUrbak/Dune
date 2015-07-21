@@ -31,6 +31,25 @@ public class LoadScreen extends GameScreen {
 		// TODO Auto-generated method stub
 		
 	}
+	
+
+	@Override
+	public void onMousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onMouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void onKeyPress(KeyEvent e) {
@@ -49,5 +68,8 @@ public class LoadScreen extends GameScreen {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
 
 }

@@ -12,24 +12,29 @@ import java.util.Map;
 import com.baseframework.game.main.MainHolder;
 import com.baseframework.game.main.Resources;
 import com.dune.entities.AStar;
+import com.baseframework.game.main.*;
+import com.baseframework.util.*;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
 import com.dune.planet.PlanetMap;
 import com.dune.planet.Tile;
 import com.dune.planet.ViewFrame;
 
-
-
 public class PlayScreen extends GameScreen{
 	// Creating variables and objects
 	
-	// Creating a unit to move around on the planet
+	// units
 	public Squad squad;
 	
-	// Creating a the surface object of the planet
+	// Surface object of the planet
 	public static ViewFrame viewframe;
 	public static PlanetMap map;
 
+	// Buttons, bars and user interface items
+	private UIButton buttonMode, buttonCollapse, buttonExtend;
+	private UIDragImage dragSquadFace;
+	private UIBar mainBar;
+	
 	// Graphics objects
 	public Graphics2D g2;
 	
@@ -44,6 +49,12 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void init() {
+		int btnModeX = 15, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -10;
+		int dftBarTileCountX = 2;
+		int dftBarTileCountY = 2;
+		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 20;
+		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
+		
 		MainHolder.setResizeable(false);
 		
 		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
@@ -55,6 +66,17 @@ public class PlayScreen extends GameScreen{
 		viewframe.setBoundX(map.getWidth(true));
 		viewframe.setBoundY(map.getHeight(true));
 		squad.setBounds(map.getWidth(false), map.getHeight(false));
+		
+		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
+								Resources.btnModeDown, Resources.btnModeUp);
+		buttonCollapse = new UIButton(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
+								Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp);
+		buttonExtend = new UIButton(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
+				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp);
+		
+		
+		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.itemSquad);
+		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 	}
 
 	@Override
@@ -70,6 +92,7 @@ public class PlayScreen extends GameScreen{
 		renderTiles(g);
 		renderPaths(g);	
 		renderSquad(g);
+		renderUI(g);
 	}
 	
 	private void renderTiles(Graphics g) {
@@ -130,10 +153,24 @@ public class PlayScreen extends GameScreen{
 		squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
 	}
 	
+	private void renderUI(Graphics g){
+		buttonMode.render(g);
+		buttonCollapse.render(g);
+		buttonExtend.render(g);
+		mainBar.render(g);
+		dragSquadFace.render(g);
+	}
+	
 	
 	@Override
 	public void onClick(MouseEvent e) {
-		int xPos, yPos,xTile, yTile;
+		// this function is now empty to avoid conflict with the button handlers		
+	}
+	
+
+	@Override
+	public void onMousePressed(MouseEvent e) {
+		int xPos, yPos, xTile, yTile;
 		boolean addNewPath = false;
 		String tileInfo;
 		
@@ -147,17 +184,33 @@ public class PlayScreen extends GameScreen{
 		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
 		System.out.println(tileInfo);
 		
-		if(tileInfo.equals("W")){
 
-		}else{
-		// Logic to check whether it was within the rectangle (in relative coordinate)
+		
+		//check if a button was pressed
+		buttonMode.onPressed(xPos, yPos);
+		buttonCollapse.onPressed(xPos, yPos);
+		buttonExtend.onPressed(xPos, yPos);
+		dragSquadFace.onPressed(xPos, yPos);
+		if(!dragSquadFace.isDragged()) mainBar.onPressed(xPos, yPos);
+		
+		// stop performing actions if a UI element is selected was pressed
+		if(buttonMode.isPressed(xPos, yPos) || buttonCollapse.isPressed(xPos, yPos) || buttonExtend.isPressed(xPos,  yPos) ||
+				dragSquadFace.isDragged() || mainBar.isPressed(xPos, yPos)) return;
+		
+
+		// Logic to check whether it was within the squad rectangle (in relative coordinate)
+		
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
 			squad.setSelected(!squad.isSelected());
 		}
 
+		
 		// adding path to the list but only if outside of squad and if the squad is selected
 		if(squad.isSelected()){
 			if (!squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())){
+				
+				// exit if on forbidden terrain type
+				if(tileInfo.equals("W")) return;
 				
 				if(squad.paths.isEmpty()){
 					addNewPath = true;
@@ -168,25 +221,58 @@ public class PlayScreen extends GameScreen{
 				if(addNewPath){
 					//create optimal path with Astar logic:
 					
-					  Map<String,ArrayList<Integer>> map =new HashMap();
+					Map<String,ArrayList<Integer>> map =new HashMap();
 					  
-					  //logic to make sure it doesnt always start bulding a path from where the squad currently is:
-					  if(squad.paths.isEmpty()){
-					  map=AStar.AStarFunction((int)squad.getTopX()+ (int)squad.getxImagine()/2,(int)squad.getTopY()+ (int)squad.getyImagine(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
-					  }else{
-						  map=AStar.AStarFunction(squad.paths.get(squad.paths.size()-1).getX(),squad.paths.get(squad.paths.size()-1).getY(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY()); 
-					  }
+					//logic to make sure it doesnt always start bulding a path from where the squad currently is:
+					if(squad.paths.isEmpty()){
+						map=AStar.AStarFunction((int)squad.getTopX()+ (int)squad.getxImagine()/2,(int)squad.getTopY()+ (int)squad.getyImagine(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY());
+					}else{
+						map=AStar.AStarFunction(squad.paths.get(squad.paths.size()-1).getX(),squad.paths.get(squad.paths.size()-1).getY(), xPos+(int) viewframe.getFrameX(),yPos+(int) viewframe.getFrameY()); 
+					}
 					  
-					  for(int i =0;i<map.get("x").size();i++){
-					squad.paths.add(new Path(map.get("x").get(i), map.get("y").get(i), true));
-					  }
-					
+					for(int i =0;i<map.get("x").size();i++){
+						squad.paths.add(new Path(map.get("x").get(i), map.get("y").get(i), true));
+					}
 				}
-			}	
-		}
-		
+			}
 		}
 	}
+
+
+	@Override
+	public void onMouseReleased(MouseEvent e) {
+		
+		//check if 'clicked' on a button: pressed AND released within the button area
+		if(buttonMode.isPressed(e.getX(), e.getY())){
+			//mainBar.switchDisplay();
+			mainBar.pullLvl(1);
+			mainBar.pullLvl(2);
+		}
+		if(buttonCollapse.isPressed(e.getX(), e.getY())){
+			//mainBar.collapsedown();
+			//mainBar.collapseleft();
+			mainBar.pushLvl(2);
+		}
+		if(buttonExtend.isPressed(e.getX(), e.getY())){
+			//mainBar.extendup();
+			//mainBar.extendright();
+			mainBar.pushLvl(1);
+		}		
+		
+		
+		// in any case cancel the button activation
+		buttonMode.cancel();
+		buttonCollapse.cancel();
+		buttonExtend.cancel();
+		
+		dragSquadFace.onReleased(e.getX(), e.getY());
+	}
+	
+	@Override
+	public void onMouseDragged(MouseEvent e) {
+		dragSquadFace.onDragged(e.getX(), e.getY());
+	}
+	
 
 	@Override
 	public void onKeyPress(KeyEvent e) {

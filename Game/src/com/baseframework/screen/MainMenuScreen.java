@@ -36,6 +36,24 @@ public class MainMenuScreen extends GameScreen {
 	public void onClick(MouseEvent e) {
 		setCurrentScreen(new PlayScreen());		
 	}
+	
+	@Override
+	public void onMousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onMouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void onKeyPress(KeyEvent e) {

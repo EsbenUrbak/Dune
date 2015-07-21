@@ -176,13 +176,6 @@ public class PlayScreen extends GameScreen{
 		xPos = e.getX();
 		yPos = e.getY();
 
-		//Logic to check what the underlying tile is
-		xTile=(xPos+ (int) viewframe.getFrameX())/Tile.getSizeX();
-		yTile=(yPos+ (int) viewframe.getFrameY())/Tile.getSizeY();
-		tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
-		System.out.println(tileInfo);
-		
-
 		
 		//check if a button was pressed
 		buttonMode.onPressed(xPos, yPos);
@@ -206,6 +199,12 @@ public class PlayScreen extends GameScreen{
 		// adding path to the list but only if outside of squad and if the squad is selected
 		if(squad.isSelected()){
 			if (!squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())){
+				
+				//Logic to check what the underlying tile is
+				xTile=(xPos+ (int) viewframe.getFrameX())/Tile.getSizeX();
+				yTile=(yPos+ (int) viewframe.getFrameY())/Tile.getSizeY();
+				tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
+				//System.out.println(tileInfo);					
 				
 				// exit if on forbidden terrain type
 				if(tileInfo.equals("W")) return;

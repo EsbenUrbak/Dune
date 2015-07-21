@@ -11,13 +11,13 @@ import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
 
 public class UIBar {
-	private static final int MINTILEX = 2, MAXTILEX=10, MINTILEY = 2, MAXTILEY=5;
-	private static final int MAXITEMS = 5;
+	private static final int MINTILEX =2, MAXTILEX=10, MINTILEY =2, MAXTILEY=5;
+	private static final int MAXITEMS =5;
 	public static final int EDGESIZEX=20, EDGESIZEY=10, MINGAPX=5, MINGAPY=5;
 	
 	private boolean selected=false, visible=true;
 	public Rectangle frameRect;
-	public Rectangle catchRect;
+	public Rectangle catchRect, lvl1catchRect; // if not in lvl1catchRect, then assumes it will be on lvl2
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	private int tileCountX, tileCountY, itemCount1=0, itemCount2=0, tileHeight, tileWidth;
 	private CopyOnWriteArrayList<UIBarItem> lvl1items, lvl2items;
@@ -40,6 +40,7 @@ public class UIBar {
 		
 		frameRect = new Rectangle(topX, topY, tileCountX * tileWidth, tileCountY * tileHeight);
 		catchRect = new Rectangle (topX, topY, tileCountX * tileWidth,PlayScreen.screenSizeY - topY);
+		lvl1catchRect = new Rectangle(catchRect);
 		
 		lvl1items = new CopyOnWriteArrayList<UIBarItem>();
 		lvl2items = new CopyOnWriteArrayList<UIBarItem>();

@@ -8,7 +8,8 @@ public class UIDragImage {
 	private Image dragImage;
 	
 	// positions rectangles
-	private Rectangle rPos, rScope; 
+	private Rectangle rPos;
+	private static Rectangle rScope = new Rectangle(0,0,0,0); 
 	
 	// enable to drag from the selected point in the image (when selected elsewhere than top left)
 	private int offsetX=0, offsetY=0;
@@ -17,7 +18,7 @@ public class UIDragImage {
 	public UIDragImage(int topX, int topY, int scopeMaxX, int scopeMaxY, Image dragImage){
 		this.dragImage = dragImage;
 		rPos = new Rectangle(topX, topY, dragImage.getWidth(null), dragImage.getHeight(null));
-		rScope = new Rectangle(0, 0, scopeMaxX, scopeMaxY);
+		rScope.setBounds(0, 0, scopeMaxX, scopeMaxY);
 	}
 	
 	public void onPressed(int x, int y){

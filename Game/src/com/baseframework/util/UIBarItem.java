@@ -17,10 +17,13 @@ public class UIBarItem {
 	public UIBarItem(UIBar refBar){
 		this.refBar = refBar;		
 		visible = true;
+		frameRect = new Rectangle(refBar.frameRect.x, refBar.frameRect.y,0,0);
+		catchRect =  new Rectangle(refBar.catchRect.x, refBar.catchRect.x,0,0);
 	}
 	
 	public void setInBar(int relX, int relY){
-		frameRect = new Rectangle(relX + refBar.catchRect.x, relY + refBar.catchRect.y, width, height);		
+		frameRect.setBounds(relX + refBar.frameRect.x, relY + refBar.frameRect.y, width, height);
+		catchRect.setBounds(relX + refBar.frameRect.x, relY + refBar.frameRect.y, width, height);
 	}
 
 	public void render(Graphics g){

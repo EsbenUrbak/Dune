@@ -23,7 +23,7 @@ public class PlanetMap {
 	public static ArrayList<String> elevationArray = new ArrayList<String>();	
 	public static ArrayList<String> elevationArrayHighRes = new ArrayList<String>();	
 	public static Map<Integer, Map<Integer, String>> elevationMap = new HashMap<Integer, Map<Integer, String>>();
-	public static Map<Integer, Map<Integer, String>> TerMap = new HashMap<Integer, Map<Integer, String>>();
+	public static Map<Integer, Map<Integer, String>> terMap = new HashMap<Integer, Map<Integer, String>>();
 	public static Map<Integer, Map<Integer, Tile>> tileMap = new HashMap<Integer, Map<Integer, Tile>>();
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
@@ -54,7 +54,7 @@ public class PlanetMap {
 		}
 		
 		//mapArrayHighRes = ArrayHandler.resolutionIncrease(mapArray, Tile.getSizeX()/WIDTHSLOPE);
-		TerMap = ArrayHandler.tMap(mapArray, width, height);
+		terMap = ArrayHandler.tMap(mapArray, width, height);
 		terrainMap =ArrayHandler.HighResMap(mapArray, Tile.getSizeX()/WIDTHSLOPE, width, height);
 		
 		ArrayList elevationParser = parsemap(elevationfile);
@@ -336,58 +336,60 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 			
 				//edge of map problem solving -> "tiles" outside of map => are 0 tiles
 				S0=tilearray.get((x+y*widthArray));
+				S0=terMap.get(y).get(x);
 				
 				if(y>0){
-					S1 =tilearray.get((x+y*widthArray)-widthArray);
+					S1=terMap.get(y-1).get(x);
 					elevationUP = Integer.parseInt(elevationArray.get((x+y*widthArray)-widthArray));
 				}else{
 					S1=S0;
 					elevationUP = 0;
 				}
 				
-				if(y>0){
-					S5=tilearray.get((x+y*widthArray)-widthArray+1);
+				if(y>0&&x<widthArray-1){
+					S5=terMap.get(y-1).get(x+1);
 				}else{
 					S5=S0;
 				}
 
-				if(y>0&&(x+y*widthArray)+1<(widthArray*heightArray)){
-					S2 =tilearray.get((x+y*widthArray)+1);
+				if(x<widthArray-1){
+					S2=terMap.get(y).get(x+1);
 					elevationRight = Integer.parseInt(elevationArray.get((x+y*widthArray)+1));
 				}else{
 					S2=S0;
 					elevationRight = 0;
 				}
 
-				if(y<heightArray-1&&((x+y*widthArray)+widthArray+1)<widthArray*heightArray){
-					S6=tilearray.get((x+y*widthArray)+widthArray+1);
+				if(y<heightArray-1&&x<widthArray-1){
+					S6=terMap.get(y+1).get(x+1);
 				}else{
 					S6=S0;
 				}
 				
 				if((y<heightArray-1)){
-					S3 =tilearray.get((x+y*widthArray)+widthArray);
+					S3=terMap.get(y+1).get(x);
 					elevationDown = Integer.parseInt(elevationArray.get((x+y*widthArray)+widthArray));
 				}else{
 					S3=S0;
 					elevationDown=0;
 				}
 
-				if(y<heightArray-1){
-					S7 =tilearray.get((x+y*widthArray)+widthArray-1);
+				if(y<heightArray-1&&x>0){
+					S7=terMap.get(y+1).get(x-1);
 				}else{
 					S7=S0;
 				}
 				
 				if(x>0){
-					S4 =tilearray.get((x+y*widthArray)-1);
+					S4=terMap.get(y).get(x-1);
 					elevationLeft = Integer.parseInt(elevationArray.get((x+y*widthArray)-1));
 				}else{
 					S4=S0;
 				}
 				
-				if(y>0&&(x+y*widthArray)-widthArray-1>0){
-					S8 =tilearray.get((x+y*widthArray)-widthArray-1);
+				if(y>0&&x>0){
+					S8=terMap.get(y-1).get(x-1);
+
 				}else{
 					S8=S0;
 				}
@@ -460,7 +462,9 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				//Create pictures but first checks whether the picture is already in there. If then it will not create it again
 				value=TileImageMap.get(ID);
 				if(value==null){
-				TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
+				
+					TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
+				
 				}				
 				
 				Tile t = new Tile(x, y, ID, eUp, eDown, eRight, eLeft);

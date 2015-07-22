@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -14,6 +15,13 @@ public class UIBar {
 	private static final int MINTILEX =2, MAXTILEX=10, MINTILEY =2, MAXTILEY=5;
 	private static final int MAXITEMS =5;
 	public static final int EDGESIZEX=20, EDGESIZEY=10, MINGAPX=5, MINGAPY=5;
+	
+    public static Comparator<UIBarItem> priorityOrder = new Comparator<UIBarItem>(){
+		@Override
+		public int compare(UIBarItem item1, UIBarItem item2) {
+			return Integer.compare(item1.getPriority(), item2.getPriority());
+		}
+    };
 	
 	private boolean selected=false, visible=true;
 	public Rectangle frameRect;
@@ -63,21 +71,32 @@ public class UIBar {
 		int itemY; 
 		
 		// update locations of items in level 1
-		itemX = UIBarItem.width * itemCount1 + MINGAPX * Math.max(itemCount1-1, 0);
-		itemX = (frameRect.width - itemX)/2;
-		itemY = frameRect.height -EDGESIZEY -UIBarItem.height;
-		for(int i=0; i<lvl1items.size(); i++){
-			lvl1items.get(i).setInBar(itemX, itemY);
-			itemX += UIBarItem.width + MINGAPX;
+		
+		if(!lvl1items.isEmpty()){
+			itemX = UIBarItem.width * itemCount1 + MINGAPX * Math.max(itemCount1-1, 0);
+			itemX = (frameRect.width - itemX)/2;
+			itemY = frameRect.height -EDGESIZEY -UIBarItem.height;
+			
+			// sort by order of priority for better display
+			lvl1items.sort(priorityOrder);
+			for(int i=0; i<lvl1items.size(); i++){
+				lvl1items.get(i).setInBar(itemX, itemY);
+				itemX += UIBarItem.width + MINGAPX;
+			}
 		}
 		
 		// update locations of items in level 2
-		itemX = UIBarItem.width * itemCount2 + MINGAPX * Math.max(itemCount2-1, 0);
-		itemX = (frameRect.width - itemX)/2;
-		itemY = EDGESIZEY;
-		for(int i=0; i<lvl2items.size(); i++){
-			lvl2items.get(i).setInBar(itemX, itemY);
-			itemX += UIBarItem.width + MINGAPX;
+		if(!lvl2items.isEmpty()){
+			itemX = UIBarItem.width * itemCount2 + MINGAPX * Math.max(itemCount2-1, 0);
+			itemX = (frameRect.width - itemX)/2;
+			itemY = EDGESIZEY;
+			
+			// sort by order of priority for better display
+			lvl2items.sort(priorityOrder);
+			for(int i=0; i<lvl2items.size(); i++){
+				lvl2items.get(i).setInBar(itemX, itemY);
+				itemX += UIBarItem.width + MINGAPX;
+			}
 		}
 	}
 	
@@ -114,7 +133,7 @@ public class UIBar {
 		}
 		
 		g2.drawRoundRect(frameRect.x, frameRect.y, frameRect.width, frameRect.height, 20, 20);
-			
+		
 		// horizontal separation line (if there are items in 2nd level)
 		if(!lvl2items.isEmpty()){
 			g2.drawLine(frameRect.x + EDGESIZEX, frameRect.y  + frameRect.height/2, 
@@ -192,7 +211,8 @@ public class UIBar {
 			catchRect.setRect(catchRect.x, catchRect.y + tileHeight, catchRect.getWidth(), catchRect.getHeight() - tileHeight);
 		}
 	}
-	
+
+	//TO DO: change to boolean	
 	public void addItem(int level, UIBarItem newItem){
 		
 		if(level == 1 && lvl1items.size() <= MAXITEMS ){
@@ -241,6 +261,18 @@ public class UIBar {
 		}
 		this.update();
 	}
+	
+	//TO DO: implement the catch zone check
+	public boolean inCatchZone(){
+		return false;
+	}
+	
+	//TO DO: implement the check on each UIBarItem 
+	public UIBarItem inBarItem(){
+		return null;
+	}
+	
+	//TO DO: implement the check in the dropZone
 	
 	//temporary method to manually add an item
 	public void pushLvl(int level){

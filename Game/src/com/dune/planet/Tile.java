@@ -1,6 +1,5 @@
 package com.dune.planet;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -21,7 +20,6 @@ public class Tile {
 	BufferedImage CombinedTileImage;
 	ArrayList<Integer> elevationActionTile=new ArrayList<Integer>();
 	boolean eUpT, eDownT, eRightT, eLeftT;
-	public static Image tileocean, tiledirt;
 		
 	//Loading the tile imagine from data base of landscapes
 	public Tile(int x, int y, String ID,boolean eUp, boolean eDown,boolean eRight, boolean eLeft) {

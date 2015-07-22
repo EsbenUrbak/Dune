@@ -60,6 +60,25 @@ public class ImageHandler {
         return result;   
 }
 	
+	public static BufferedImage ImageRotationAny(BufferedImage imageBase, int rotationDegrees){
+		double w = imageBase.getWidth();    
+        double h = imageBase.getHeight();
+        double d = Math.sqrt(h*h+w*w);
+        BufferedImage result = new BufferedImage((int)d, (int)d, imageBase.getType());  
+        Graphics2D g2 = result.createGraphics();
+
+        if(rotationDegrees!=0){
+        	g2.rotate(Math.toRadians(rotationDegrees), w/2, h/2);
+        }
+        
+        int diffx = (int)(d-w)-4;
+        //int diffy=(int)(d-h);		
+        int diffy=-2;		//it does not make sense i should be zero...?
+        
+        g2.drawImage(imageBase,null,diffx,diffy);  
+        return result;   
+}
+	
     public static BufferedImage makeColorTransparent(BufferedImage im, final Color color) {
     	ImageFilter filter = new RGBImageFilter() {
 

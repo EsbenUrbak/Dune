@@ -12,34 +12,69 @@ public class Miscellaneous {
 		return h;
 	}
 
-	public static int neighbourX(int x, int i, int j){
+	public static int neighbourX(int x, int y, int i, int j){
+		
+		if(false){
 		
 		if(i==-1&&j==-1){
-			x=x-2;
+			x=x;
 		}
 		if(i==-1&&j==0){
 			x=x-1;
 		}
 		if(i==-1&&j==1){
-			x=x;
+			x=x-1;
 		}
 		if(i==0&&j==-1){
-			x=x-1;
+			x=x;
 		}
 		if(i==0&&j==0){
 			x=x;
 		}
 		if(i==0&&j==1){
-			x=x+1;
+			x=x-1;
 		}
 		if(i==1&&j==-1){
-			x=x;
-		}
-		if(i==1&&j==0){
 			x=x+1;
 		}
+		if(i==1&&j==0){
+			x=x;
+		}
 		if(i==1&&j==1){
-			x=x+2;
+			x=x;
+		}}else{
+			if(i==-1&&j==-1){
+				x=x;
+			}
+			if(i==-1&&j==0){
+				x=x;
+			}
+			if(i==-1&&j==1){
+				x=x-1;
+			}
+			if(i==0&&j==-1){
+				x=x+1;
+			}
+			if(i==0&&j==0){
+				x=x;
+			}
+			if(i==0&&j==1){
+				x=x;
+			}
+			if(i==1&&j==-1){
+				x=x+1;
+			}
+			if(i==1&&j==0){
+				x=x+1;
+			}
+			if(i==1&&j==1){
+				x=x;
+			}
+			
+		}
+		//safety
+		if(x<0){
+			x=0;
 		}
 		
 		return x;
@@ -47,13 +82,13 @@ public class Miscellaneous {
 	public static int neighbourY(int x, int i, int j){
 		
 		if(i==-1&&j==-1){
-			x=x;
+			x=x-2;
 		}
 		if(i==-1&&j==0){
-			x=x+1;
+			x=x-1;
 		}
 		if(i==-1&&j==1){
-			x=x+2;
+			x=x;
 		}
 		if(i==0&&j==-1){
 			x=x-1;
@@ -65,15 +100,17 @@ public class Miscellaneous {
 			x=x+1;
 		}
 		if(i==1&&j==-1){
-			x=x-2;
-		}
-		if(i==1&&j==0){
-			x=x-1;
-		}
-		if(i==1&&j==1){
 			x=x;
 		}
-		
+		if(i==1&&j==0){
+			x=x+1;
+		}
+		if(i==1&&j==1){
+			x=x+2;
+		}
+		if(x<0){
+			x=0;
+		}
 		return x;
 	}
 	

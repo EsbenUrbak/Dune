@@ -24,6 +24,7 @@ public class PlayScreen extends GameScreen{
 	
 	// units
 	public Squad squad;
+	Tile t;
 	
 	// Surface object of the planet
 	public static ViewFrame viewframe;
@@ -100,16 +101,18 @@ public class PlayScreen extends GameScreen{
 		int pX, pY;
 		for (int y = 0; y <PlanetMap.tileMap.size() ; y++) {
 		for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
-	
-			Tile t = PlanetMap.tileMap.get(y).get(x);
 			
+			t = PlanetMap.tileMap.get(y).get(x);
 			pX = t.getTileX();
 			pY= t.getTileY();
 			
-			//Use these to get Isometric positions
-			//pX = Miscellaneous.carToIsoX(t.getTileX(), t.getTileY(), t.getTileImage().getWidth(null));
-			//pY = Miscellaneous.carToIsoY(t.getTileX(), t.getTileY(), t.getTileImage().getHeight(null));
-		
+			if(PlanetMap.ISOMETRIC){
+				//Use these to get Isometric positions
+				pX = Miscellaneous.carToIsoX(pX, t.getTileY(), t.getTileImage().getWidth(null));
+				pY = Miscellaneous.carToIsoY(pY, t.getTileY(), t.getTileImage().getHeight(null));
+			
+			}
+
 			g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
 			
 			//Drawing elevation lines

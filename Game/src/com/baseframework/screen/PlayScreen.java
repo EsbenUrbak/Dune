@@ -31,7 +31,7 @@ public class PlayScreen extends GameScreen{
 
 	// Buttons, bars and user interface items
 	private UIButton buttonMode, buttonCollapse, buttonExtend;
-	private UIDragImage dragSquadFace;
+	private UIDragItem dragSquadFace;
 	private UIBar mainBar;
 	
 	// Graphics objects
@@ -74,10 +74,10 @@ public class PlayScreen extends GameScreen{
 		buttonExtend = new UIButton(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
 				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp);
 
-		dragSquadFace = new UIDragImage(10, 10, Resources.itemSquad);
-		
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 
+		dragSquadFace = new UIDragItem(10, 10, Resources.itemSquad, mainBar);
+		
 	}
 
 	@Override

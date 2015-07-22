@@ -2,6 +2,7 @@ package com.baseframework.util;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 
 import com.baseframework.game.main.Resources;
@@ -10,11 +11,16 @@ public class UIBarItem {
 	
 	public static int width=45, height=45;
 	private int priority=0;
-	private boolean visible, empty = true;
-	private UIBar refBar;
-	private UIDragItem item=null;
+	private boolean visible;
+
 	private Rectangle frameRect;
 	public Rectangle catchRect;
+	
+	private Image image=null;
+	
+	private UIBar refBar;
+	private UIDragItem item=null;
+
 	
 	public UIBarItem(UIBar refBar){
 		this.refBar = refBar;		
@@ -30,6 +36,7 @@ public class UIBarItem {
 	
 	public void setItem(UIDragItem item){
 		this.item = item;
+		this.image = item.dragImage;
 	}
 
 	public void render(Graphics g){
@@ -43,7 +50,7 @@ public class UIBarItem {
 		
 			g2.drawRoundRect(frameRect.x, frameRect.y, width, height, 20, 20);
 		} else {
-			item.render(g);
+			g.drawImage(image, frameRect.x, frameRect.y, null);
 		}
 	}
 	

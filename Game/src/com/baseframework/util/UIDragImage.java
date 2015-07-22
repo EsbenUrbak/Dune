@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 public class UIDragImage {
 	protected boolean visible =true;
-	private Image dragImage;
+	protected Image dragImage;
 	
 	// positions rectangles
 	private Rectangle rPos;

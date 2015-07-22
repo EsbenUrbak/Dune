@@ -185,6 +185,7 @@ public class UIBar {
 			tileCountX++;
 			frameRect.setSize(frameRect.width + tileWidth, frameRect.height);
 			catchRect.setSize(catchRect.width + tileWidth, catchRect.height);
+			//lvl1catchRect.Size
 		}
 	}
 	
@@ -193,6 +194,7 @@ public class UIBar {
 			tileCountX--;
 			frameRect.setSize(frameRect.width - tileWidth, frameRect.height);
 			catchRect.setSize(catchRect.width - tileWidth, catchRect.height);
+			//lvl1catchRect.setSize
 		}
 	}
 	
@@ -212,8 +214,7 @@ public class UIBar {
 		}
 	}
 
-	//TO DO: change to boolean	
-	public void addItem(int level, UIBarItem newItem){
+	public boolean addItem(int level, UIBarItem newItem){
 		
 		if(level == 1 && lvl1items.size() <= MAXITEMS ){
 			lvl1items.add(newItem);
@@ -228,7 +229,7 @@ public class UIBar {
 					this.extendup();
 			}	
 		} else {
-			System.out.println("item level " + level + " is invalid or too many items already");
+			return false;
 		}
 
 		//extends the bar to the right to fit in more items if necessary
@@ -237,9 +238,10 @@ public class UIBar {
 			this.extendright();
 		} 	
 		this.update();
+		return true;
 	}
 	
-	public void removeItem(int level, UIBarItem item){
+	public boolean removeItem(int level, UIBarItem item){
 		if(level == 1 && lvl1items.contains(item)){
 			lvl1items.remove(item);
 			itemCount1--;
@@ -251,7 +253,7 @@ public class UIBar {
 			if(itemCount2==0 && UIBarItem.height + 2*EDGESIZEY < (tileCountY-1) * tileHeight) this.collapsedown();
 			
 		} else {
-			System.out.println("item level " + level + " is invalid or too many items already");
+			return false;
 		}
 
 		//shrinks the bar left if all items do not need the space anymore
@@ -260,19 +262,52 @@ public class UIBar {
 			this.collapseleft();
 		}
 		this.update();
+		return true;
 	}
 	
-	//TO DO: implement the catch zone check
-	public boolean inCatchZone(){
-		return false;
+
+	public UIBarItem inCatchZone(int absX, int absY){
+		boolean added = false;
+		UIBarItem item = null;
+		
+		if(lvl1catchRect.contains(absX, absY)){
+			UIBarItem newItem = new UIBarItem(this);
+			
+			// try adding the item to the bar
+			added = this.addItem(1, newItem);
+			
+			// if item can be added, set item to new value
+			if(added) return item = newItem;
+			
+		} else if (catchRect.contains(absX, absY)){
+			UIBarItem newItem = new UIBarItem(this);	
+			added = this.addItem(2, newItem);
+			if(added) return item = newItem; 			
+		}
+		
+		return item;
 	}
 	
-	//TO DO: implement the check on each UIBarItem 
-	public UIBarItem inBarItem(){
-		return null;
-	}
-	
-	//TO DO: implement the check in the dropZone
+	public UIBarItem inBarItem(int absX, int absY){
+		UIBarItem item=null;
+		
+		for (Iterator<UIBarItem> iterator = lvl1items.iterator(); iterator.hasNext();) {
+			UIBarItem lvl1item = iterator.next();
+			if (lvl1item.catchRect.contains(absX, absY)){
+				return item = lvl1item;
+			}
+		}
+		
+		for (Iterator<UIBarItem> iterator = lvl2items.iterator(); iterator.hasNext();) {
+			UIBarItem lvl2item = iterator.next();
+			if (lvl2item.catchRect.contains(absX, absY)){
+				item = lvl2item;
+				break;
+			}
+		}
+		
+		return item;
+	}	
 	
 	//temporary method to manually add an item
 	public void pushLvl(int level){

@@ -21,21 +21,29 @@ public class UIDragItem extends UIDragImage {
 	
 	@Override
 	public void onReleased(int x, int y){
+		UIBarItem placeHolder;
+		
 		super.onReleased(x,  y);
+		
+		placeHolder = refBar.inBarItem(x, y);
+		if (placeHolder != null){
+			this.barLoc = placeHolder;
+			barLoc.setItem(this);
+			this.visible = false;
+			return;
+		}
 		
 		//refBar.inDropZone()
 			//if in bar, send to where the squad is
 			//otherwise don't move
 		
-		//refBar.inBarItem()
-			//return barItem
-			//update the barItem image
-			//hide the dragItem
-		
-		//refBar.inCatchZone()
-			//check whether can add
-			//if yes, add a barItem and set it in there
-			//if no, send back
+		placeHolder = refBar.inCatchZone(x, y);	
+		if( placeHolder != null){
+			this.barLoc = placeHolder;
+			barLoc.setItem(this);
+			this.visible = false;
+			return;
+		}
 	}
 	
 	public void hide(){

@@ -53,10 +53,11 @@ public class PlayScreen extends GameScreen{
 		int dftBarTileCountY = 2;
 		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 20;
 		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
-		
+				
 		MainHolder.setResizeable(false);
 		
 		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
+		UIDragImage.setScope(screenSizeX, screenSizeY);		
 		
 		viewframe = new ViewFrame((float) SCREEN_X, (float) SCREEN_Y, screenSizeX, screenSizeY);
 		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
@@ -72,10 +73,11 @@ public class PlayScreen extends GameScreen{
 								Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp);
 		buttonExtend = new UIButton(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
 				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp);
+
+		dragSquadFace = new UIDragImage(10, 10, Resources.itemSquad);
 		
-		
-		dragSquadFace = new UIDragImage(10, 10, screenSizeX, screenSizeY, Resources.itemSquad);
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
+
 	}
 
 	@Override

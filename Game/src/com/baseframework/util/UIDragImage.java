@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 public class UIDragImage {
+	protected boolean visible =true;
 	private Image dragImage;
 	
 	// positions rectangles
@@ -15,14 +16,17 @@ public class UIDragImage {
 	private int offsetX=0, offsetY=0;
 	private boolean dragged = false;
 	
-	public UIDragImage(int topX, int topY, int scopeMaxX, int scopeMaxY, Image dragImage){
+	public UIDragImage(int topX, int topY, Image dragImage){
 		this.dragImage = dragImage;
 		rPos = new Rectangle(topX, topY, dragImage.getWidth(null), dragImage.getHeight(null));
+	}
+	
+	public static void setScope(int scopeMaxX, int scopeMaxY){
 		rScope.setBounds(0, 0, scopeMaxX, scopeMaxY);
 	}
 	
 	public void onPressed(int x, int y){
-		if(rPos.contains(x,y)){
+		if(rPos.contains(x,y) && visible){
 			dragged = true;
 			offsetX = x - rPos.x;
 			offsetY = y - rPos.y;
@@ -50,15 +54,14 @@ public class UIDragImage {
 	}
 	
 	public void render(Graphics g){
-		g.drawImage(dragImage, rPos.x, rPos.y, null);
+		if(visible) g.drawImage(dragImage, rPos.x, rPos.y, null);
 	}
 	
 	public void scaleandrender(Graphics g, int width, int height){
-		g.drawImage(dragImage, rPos.x, rPos.y, width, height, null);
+		if(visible) g.drawImage(dragImage, rPos.x, rPos.y, width, height, null);
 	}
 
 	public boolean isDragged() {
 		return dragged;
 	}
-	
 }

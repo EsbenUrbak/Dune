@@ -6,8 +6,6 @@ import java.awt.Image;
 public class UIDragItem extends UIDragImage {
 	
 	private float targetX, targetY;
-	private float speedX=0f, speedY=0f;
-	private boolean moving=false, visible=true;
 	private UIBar refBar;
 	private UIBarItem barLoc = null;
 	
@@ -23,13 +21,13 @@ public class UIDragItem extends UIDragImage {
 	public void onReleased(int x, int y){
 		UIBarItem placeHolder;
 		
-		super.onReleased(x,  y);
+		super.onReleased(x, y);
 		
 		placeHolder = refBar.inBarItem(x, y);
 		if (placeHolder != null){
 			this.barLoc = placeHolder;
 			barLoc.setItem(this);
-			this.visible = false;
+			//this.visible = false;
 			return;
 		}
 		
@@ -37,11 +35,11 @@ public class UIDragItem extends UIDragImage {
 			//if in bar, send to where the squad is
 			//otherwise don't move
 		
-		placeHolder = refBar.inCatchZone(x, y);	
+		placeHolder = refBar.inCatchZone(this.rPos);	
 		if( placeHolder != null){
 			this.barLoc = placeHolder;
 			barLoc.setItem(this);
-			this.visible = false;
+			//this.visible = false;
 			return;
 		}
 	}

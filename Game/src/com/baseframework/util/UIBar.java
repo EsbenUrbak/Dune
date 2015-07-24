@@ -185,7 +185,7 @@ public class UIBar {
 			tileCountX++;
 			frameRect.setSize(frameRect.width + tileWidth, frameRect.height);
 			catchRect.setSize(catchRect.width + tileWidth, catchRect.height);
-			//lvl1catchRect.Size
+			lvl1catchRect.setSize(lvl1catchRect.width + tileWidth, lvl1catchRect.height);
 		}
 	}
 	
@@ -194,15 +194,17 @@ public class UIBar {
 			tileCountX--;
 			frameRect.setSize(frameRect.width - tileWidth, frameRect.height);
 			catchRect.setSize(catchRect.width - tileWidth, catchRect.height);
-			//lvl1catchRect.setSize
+			lvl1catchRect.setSize(lvl1catchRect.width - tileWidth, lvl1catchRect.height);
 		}
 	}
 	
 	public void extendup(){
 		if (tileCountY < MAXTILEY){
 			tileCountY++;
-			frameRect.setRect(frameRect.x, frameRect.y - tileHeight, frameRect.getWidth(), frameRect.getHeight() + tileHeight);
-			catchRect.setRect(catchRect.x, catchRect.y - tileHeight, catchRect.getWidth(), catchRect.getHeight() + tileHeight);
+			frameRect.setRect(frameRect.x, frameRect.y - tileHeight, frameRect.width, frameRect.height + tileHeight);
+			catchRect.setRect(catchRect.x, catchRect.y - tileHeight, catchRect.width, catchRect.height + tileHeight);
+			lvl1catchRect.setRect(lvl1catchRect.x, frameRect.y  + frameRect.height/2, 
+					lvl1catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );
 		}
 	}
 	
@@ -211,6 +213,7 @@ public class UIBar {
 			tileCountY--;
 			frameRect.setRect(frameRect.x, frameRect.y + tileHeight, frameRect.getWidth(), frameRect.getHeight() - tileHeight);
 			catchRect.setRect(catchRect.x, catchRect.y + tileHeight, catchRect.getWidth(), catchRect.getHeight() - tileHeight);
+			lvl1catchRect.setRect(catchRect);
 		}
 	}
 
@@ -266,48 +269,113 @@ public class UIBar {
 	}
 	
 
-	public UIBarItem inCatchZone(int absX, int absY){
+	public UIBarItem inCatchZone(Rectangle itemRect){
 		boolean added = false;
 		UIBarItem item = null;
 		
-		if(lvl1catchRect.contains(absX, absY)){
-			UIBarItem newItem = new UIBarItem(this);
+		if(lvl1catchRect.intersects(itemRect)){
 			
-			// try adding the item to the bar
+			// first checks if there is an empty item on level1
+			item = findEmptyItem(1);
+			if (item != null) return item;
+			
+			// then try adding the item to the bar
+			UIBarItem newItem = new UIBarItem(this);
 			added = this.addItem(1, newItem);
 			
 			// if item can be added, set item to new value
-			if(added) return item = newItem;
+			item = added ? newItem : null;
+			return item;
 			
-		} else if (catchRect.contains(absX, absY)){
-			UIBarItem newItem = new UIBarItem(this);	
+		} else if (catchRect.intersects(itemRect)){
+			
+			// first checks if there is an empty item on level1
+			item = findEmptyItem(2);
+			if (item != null) return item;			
+			
+			// then try adding the item to the bar			
+			UIBarItem newItem = new UIBarItem(this);
 			added = this.addItem(2, newItem);
-			if(added) return item = newItem; 			
+			
+			// if item can be added, set item to new value			
+			item = added ? newItem : null;
+			return item;
 		}
 		
 		return item;
+
 	}
 	
 	public UIBarItem inBarItem(int absX, int absY){
-		UIBarItem item=null;
+		boolean added = false;
+		UIBarItem newItem=null;
 		
+		// first checks if the coordinates correspond to a level 1 item
 		for (Iterator<UIBarItem> iterator = lvl1items.iterator(); iterator.hasNext();) {
 			UIBarItem lvl1item = iterator.next();
+			
 			if (lvl1item.catchRect.contains(absX, absY)){
-				return item = lvl1item;
+				
+				// if the container is empty, returns the container to be filled
+				if (lvl1item.isEmpty()){
+					return lvl1item;				
+				} else {
+					
+					// else, first checks if there is an empty container
+					newItem = findEmptyItem(1);
+					if (newItem != null) return newItem;
+					
+					// if no empty items, creates a new one
+					newItem = new UIBarItem(this);
+					added = this.addItem(1, newItem);
+					newItem = added ? newItem : null;
+					return newItem;
+				}
 			}
 		}
 		
+		// then checks if the coordinates correspond to a level 2 item
 		for (Iterator<UIBarItem> iterator = lvl2items.iterator(); iterator.hasNext();) {
 			UIBarItem lvl2item = iterator.next();
+			
 			if (lvl2item.catchRect.contains(absX, absY)){
-				item = lvl2item;
-				break;
+			
+				// if the container is empty, returns the container to be filled
+				if (lvl2item.isEmpty()){
+					return lvl2item;
+				} else {
+					
+					// else, first checks if there is an empty container
+					newItem = findEmptyItem(2);
+					if (newItem != null) return newItem;					
+					
+					// if no empty items, creates a new one					
+					newItem = new UIBarItem(this);
+					added = this.addItem(2, newItem);
+					newItem = added ? newItem : null;
+					return newItem;
+				}
 			}
 		}
 		
-		return item;
-	}	
+		return newItem;
+	}
+	
+	
+	private UIBarItem findEmptyItem (int level){
+		if (level ==1 && !lvl1items.isEmpty()){
+			for (Iterator<UIBarItem> iterator = lvl1items.iterator(); iterator.hasNext();) {
+				UIBarItem lvl1item = iterator.next();
+				if(lvl1item.isEmpty()) return lvl1item;
+			}
+		} else if( level ==2 && !lvl2items.isEmpty()) {
+			for (Iterator<UIBarItem> iterator = lvl2items.iterator(); iterator.hasNext();) {
+				UIBarItem lvl2item = iterator.next();
+				if(lvl2item.isEmpty()) return lvl2item;
+			}
+		} 				
+		return null;
+	}
 	
 	//temporary method to manually add an item
 	public void pushLvl(int level){

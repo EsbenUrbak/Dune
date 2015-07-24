@@ -9,11 +9,11 @@ public class UIDragImage {
 	protected Image dragImage;
 	
 	// positions rectangles
-	private Rectangle rPos;
+	protected Rectangle rPos;
 	private static Rectangle rScope = new Rectangle(0,0,0,0); 
 	
 	// enable to drag from the selected point in the image (when selected elsewhere than top left)
-	private int offsetX=0, offsetY=0;
+	protected int offsetX=0, offsetY=0;
 	private boolean dragged = false;
 	
 	public UIDragImage(int topX, int topY, Image dragImage){

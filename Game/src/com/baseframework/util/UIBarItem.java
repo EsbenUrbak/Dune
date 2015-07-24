@@ -11,7 +11,7 @@ public class UIBarItem {
 	
 	public static int width=45, height=45;
 	private int priority=0;
-	private boolean visible;
+	private boolean visible, empty=true;
 
 	private Rectangle frameRect;
 	public Rectangle catchRect;
@@ -37,6 +37,11 @@ public class UIBarItem {
 	public void setItem(UIDragItem item){
 		this.item = item;
 		this.image = item.dragImage;
+		this.empty = false;
+	}
+	
+	public UIDragItem getItem(){
+		return this.item;
 	}
 
 	public void render(Graphics g){
@@ -60,6 +65,10 @@ public class UIBarItem {
 	
 	public void setPriority(int priority){
 		this.priority = priority;
+	}
+
+	public boolean isEmpty() {
+		return empty;
 	}
 	
 }

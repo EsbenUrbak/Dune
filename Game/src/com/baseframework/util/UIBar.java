@@ -55,11 +55,32 @@ public class UIBar {
 	}
 	
 	public void onPressed(int x, int y){
+		boolean interrupt=false;
+		
 		if(catchRect.contains(x,y)){
 			selected = true;
+			
+			// first checks if an item was selected
+			for (Iterator<UIBarItem> iterator = lvl1items.iterator(); iterator.hasNext();) {
+				UIBarItem lvl1item = iterator.next();
+				interrupt = lvl1item.onPressed(x, y);
+				if(interrupt) break;
+			}
+			
+			for(Iterator<UIBarItem> iterator = lvl2items.iterator(); iterator.hasNext();){
+				UIBarItem lvl2item = iterator.next();
+				interrupt = lvl2item.onPressed(x, y);
+				if (interrupt) break;
+			}				
+		
 		} else {
 			selected = false;
 		}
+	}
+	
+	public void onReleased(int absX, int absY){
+		if(selected) this.update();
+		if(!catchRect.contains(absX, absY)) selected = false;
 	}
 	
 	public boolean isPressed(int x, int y){
@@ -79,7 +100,9 @@ public class UIBar {
 			
 			// sort by order of priority for better display
 			lvl1items.sort(priorityOrder);
-			for(int i=0; i<lvl1items.size(); i++){
+			
+			// display from the left from higher to lower priority
+			for(int i=lvl1items.size()-1; i>=0; i--){
 				lvl1items.get(i).setInBar(itemX, itemY);
 				itemX += UIBarItem.width + MINGAPX;
 			}
@@ -93,7 +116,9 @@ public class UIBar {
 			
 			// sort by order of priority for better display
 			lvl2items.sort(priorityOrder);
-			for(int i=0; i<lvl2items.size(); i++){
+			
+			// display from the left from higher to lower priority
+			for(int i=lvl2items.size()-1; i>=0; i--){
 				lvl2items.get(i).setInBar(itemX, itemY);
 				itemX += UIBarItem.width + MINGAPX;
 			}

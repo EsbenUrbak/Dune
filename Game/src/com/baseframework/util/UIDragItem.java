@@ -5,17 +5,17 @@ import java.awt.Image;
 
 public class UIDragItem extends UIDragImage {
 	
+	private int priority=1;
 	private float targetX, targetY;
 	private UIBar refBar;
 	private UIBarItem barLoc = null;
-	
+
 	public UIDragItem(int topX, int topY, Image dragImage, UIBar refBar) {
 		super(topX, topY, dragImage);
 		targetX = (float) topX;
 		targetY = (float) topY;
 		this.refBar = refBar;
 	}
-	
 	
 	@Override
 	public void onReleased(int x, int y){
@@ -32,7 +32,7 @@ public class UIDragItem extends UIDragImage {
 		if (placeHolder != null){
 			this.barLoc = placeHolder;
 			barLoc.setItem(this);
-			this.visible = false;
+			this.hide();
 			return;
 		}
 		
@@ -45,7 +45,7 @@ public class UIDragItem extends UIDragImage {
 		if( placeHolder != null){
 			this.barLoc = placeHolder;
 			barLoc.setItem(this);
-			this.visible = false;
+			this.hide();
 			return;
 		}
 	}
@@ -62,6 +62,14 @@ public class UIDragItem extends UIDragImage {
 	}
 	
 	public void sendTo(int targetX, int targetY){
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 	
 	

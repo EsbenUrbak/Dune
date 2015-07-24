@@ -35,13 +35,36 @@ public class UIBarItem {
 	}
 	
 	public void setItem(UIDragItem item){
+		this.priority = item.getPriority();
 		this.item = item;
 		this.image = item.dragImage;
 		this.empty = false;
 	}
 	
+	public void removeItem(){
+		if(!empty){
+			this.item = null;
+			this.empty = true;
+			this.priority = 0;
+		}
+	}
+	
 	public UIDragItem getItem(){
 		return this.item;
+	}
+	
+	public boolean onPressed(int absX, int absY){;
+		boolean selectItem = false;
+	
+		if(this.catchRect.contains(absX, absY) && visible && !empty){
+			selectItem = true;
+			this.item.setLocation(frameRect.x, frameRect.y);
+			this.item.show();
+			this.item.onPressed(absX, absY);
+			this.removeItem();
+		} 
+		
+		return selectItem;
 	}
 
 	public void render(Graphics g){

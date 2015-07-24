@@ -299,7 +299,9 @@ public class PlayScreen extends GameScreen{
 		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
 			UIDragItem dragItem = iterator.next();
 			dragItem.onReleased(e.getX(), e.getY());
-		}	
+		}
+		
+		mainBar.onReleased(e.getX(), e.getY());
 	}
 	
 	@Override

@@ -25,6 +25,20 @@ public class UIDragImage {
 		rScope.setBounds(0, 0, scopeMaxX, scopeMaxY);
 	}
 	
+	public void setLocation(int absX, int absY){
+		if(rScope.contains(absX, absY, rPos.width, rPos.height)){
+			rPos.setLocation(absX, absY);
+		} else {
+			absX = Math.max(absX, (int) rScope.getMinX());
+			absX = Math.min(absX+rPos.width, (int) rScope.getMaxX());
+			
+			absY = Math.max(absY, (int) rScope.getMinY());
+			absY = Math.min(absY+rPos.height, (int) rScope.getMaxY());
+			
+			rPos.setLocation(absX, absY);
+		}
+	}
+	
 	public void onPressed(int x, int y){
 		if(rPos.contains(x,y) && visible){
 			dragged = true;

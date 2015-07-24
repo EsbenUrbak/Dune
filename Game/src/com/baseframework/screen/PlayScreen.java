@@ -7,12 +7,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.baseframework.game.main.MainHolder;
 import com.baseframework.game.main.Resources;
+import com.baseframework.util.UIBar;
+import com.baseframework.util.UIButton;
+import com.baseframework.util.UIDragImage;
+import com.baseframework.util.UIDragItem;
 import com.dune.entities.AStar;
-import com.baseframework.util.*;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
 import com.dune.planet.PlanetMap;
@@ -33,6 +38,7 @@ public class PlayScreen extends GameScreen{
 	private UIButton buttonMode, buttonCollapse, buttonExtend;
 	private UIDragItem dragSquadFace;
 	private UIBar mainBar;
+	private CopyOnWriteArrayList<UIDragItem> dragItems;
 	
 	// Graphics objects
 	public Graphics2D g2;
@@ -76,7 +82,12 @@ public class PlayScreen extends GameScreen{
 
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 
-		dragSquadFace = new UIDragItem(10, 10, Resources.itemSquad, mainBar);
+		dragItems = new CopyOnWriteArrayList<UIDragItem>();
+		dragItems.add(new UIDragItem(10, 10, Resources.teammate1, mainBar));
+		dragItems.add(new UIDragItem(60, 10, Resources.teammate2, mainBar));
+		dragItems.add(new UIDragItem(110, 10, Resources.teammate3, mainBar));
+		dragItems.add(new UIDragItem(160, 10, Resources.teammate4, mainBar));
+		dragItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));
 		
 	}
 
@@ -170,7 +181,11 @@ public class PlayScreen extends GameScreen{
 		buttonCollapse.render(g);
 		buttonExtend.render(g);
 		mainBar.render(g);
-		dragSquadFace.render(g);
+		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
+			UIDragItem dragItem = iterator.next();
+			dragItem.render(g);
+		}	
+
 	}
 	
 	
@@ -183,7 +198,7 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void onMousePressed(MouseEvent e) {
 		int xPos, yPos, xTile, yTile;
-		boolean addNewPath = false;
+		boolean addNewPath = false, pressed = false;
 		String tileInfo;
 		
 		// Getting click coordinates
@@ -195,12 +210,17 @@ public class PlayScreen extends GameScreen{
 		buttonMode.onPressed(xPos, yPos);
 		buttonCollapse.onPressed(xPos, yPos);
 		buttonExtend.onPressed(xPos, yPos);
-		dragSquadFace.onPressed(xPos, yPos);
-		if(!dragSquadFace.isDragged()) mainBar.onPressed(xPos, yPos);
+		
+		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
+			UIDragItem dragItem = iterator.next();
+			dragItem.onPressed(xPos, yPos);
+			if(dragItem.isDragged()) pressed = true;
+		}	
+		if(!pressed) mainBar.onPressed(xPos, yPos);
 		
 		// stop performing actions if a UI element is selected was pressed
 		if(buttonMode.isPressed(xPos, yPos) || buttonCollapse.isPressed(xPos, yPos) || buttonExtend.isPressed(xPos,  yPos) ||
-				dragSquadFace.isDragged() || mainBar.isPressed(xPos, yPos)) return;
+				pressed || mainBar.isPressed(xPos, yPos)) return;
 		
 
 		// Logic to check whether it was within the squad rectangle (in relative coordinate)
@@ -276,12 +296,18 @@ public class PlayScreen extends GameScreen{
 		buttonCollapse.cancel();
 		buttonExtend.cancel();
 		
-		dragSquadFace.onReleased(e.getX(), e.getY());
+		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
+			UIDragItem dragItem = iterator.next();
+			dragItem.onReleased(e.getX(), e.getY());
+		}	
 	}
 	
 	@Override
 	public void onMouseDragged(MouseEvent e) {
-		dragSquadFace.onDragged(e.getX(), e.getY());
+		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
+			UIDragItem dragItem = iterator.next();
+			dragItem.onDragged(e.getX(), e.getY());
+		}	
 	}
 	
 

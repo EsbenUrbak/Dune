@@ -34,7 +34,8 @@ public class Resources {
 	public static BufferedImage W,W_G,W_W_G_W,W_G_G_G;
 	public static BufferedImage G_F,G_G_F_G,G_F_F_F;  
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
-	public static BufferedImage btnModeUp, btnModeDown, itemSquad, btnExtendUp, btnExtendDown, btnCollapseUp, btnCollapseDown;
+	public static BufferedImage btnModeUp, btnModeDown, btnExtendUp, btnExtendDown, btnCollapseUp, btnCollapseDown;
+	public static BufferedImage teammate1, teammate2, teammate3, teammate4, teammate5;
 	public static BufferedImage barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	
 	public static Font titleFont1, subTitleFont1;
@@ -83,7 +84,12 @@ public class Resources {
 		btnExtendUp = loadImage("btn_extend_up.png");
 		btnExtendDown = loadImage("btn_extend_down.png");
 				
-		itemSquad = loadImage("item_squad.png");
+		teammate1 = loadImage("item_squad.png");
+		teammate2 = loadImage("item2_squad.png");
+		teammate3 = loadImage("item3_squad.png");
+		teammate4 = loadImage("item4_squad.png");
+		teammate5 = loadImage("item5_squad.png");
+		
 		barTileN = loadImage("bar_north.png");
 		barTileS = loadImage("bar_south.png");
 		barTileW = loadImage("bar_west.png");

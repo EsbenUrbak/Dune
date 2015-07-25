@@ -1,14 +1,14 @@
-package com.baseframework.util;
+package com.baseframework.UI;
 
 import java.awt.Image;
 
 
 public class UIDragItem extends UIDragImage {
 	
-	private int priority=1;
+	private int priority=9;
 	private float targetX, targetY;
 	private UIBar refBar;
-	private UIBarItem barLoc = null;
+	private UIBarSlot barLoc = null;
 
 	public UIDragItem(int topX, int topY, Image dragImage, UIBar refBar) {
 		super(topX, topY, dragImage);
@@ -18,14 +18,14 @@ public class UIDragItem extends UIDragImage {
 	}
 	
 	@Override
-	public void onReleased(int x, int y){
-		UIBarItem placeHolder;
-		boolean checkBar = isDragged();
+	public boolean onReleased(int x, int y){
+		UIBarSlot placeHolder;
+		boolean check;
 		
 		// release the image in the mother class
 		// if the item isn't being dragged, exits
-		super.onReleased(x, y);
-		if(!checkBar) return;
+		check = super.onReleased(x, y);
+		if(!check) return check;
 		
 		//else start by checking is the item is dropped in a container
 		placeHolder = refBar.inBarItem(x, y);
@@ -33,7 +33,8 @@ public class UIDragItem extends UIDragImage {
 			this.barLoc = placeHolder;
 			barLoc.setItem(this);
 			this.hide();
-			return;
+			refBar.update();
+			return true;
 		}
 		
 		//refBar.inDropZone()
@@ -46,8 +47,15 @@ public class UIDragItem extends UIDragImage {
 			this.barLoc = placeHolder;
 			barLoc.setItem(this);
 			this.hide();
-			return;
+			refBar.update();
+			return true;
 		}
+		
+		// otherwise perform default reset action
+		// sentTo(initial position)
+		
+		refBar.update();
+		return true;
 	}
 	
 	public void hide(){

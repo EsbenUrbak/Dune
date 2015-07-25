@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Comparator;
 
+import com.baseframework.UI.UIObject;
 import com.baseframework.game.main.MainHolder;
 
 public abstract class GameScreen {
@@ -32,5 +34,11 @@ public abstract class GameScreen {
 	public void setCurrentScreen(GameScreen newScreen){
 		MainHolder.thegame.setCurrentScreen(newScreen);
 	}
+	
+    public static Comparator<UIObject> typePriorityOrder = new Comparator<UIObject>(){
+		public int compare(UIObject obj1, UIObject obj2) {
+			return Integer.compare(obj1.getTypePriority(), obj2.getTypePriority());
+		}
+    };
 	
 }

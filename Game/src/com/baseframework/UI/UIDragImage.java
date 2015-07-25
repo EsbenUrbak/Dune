@@ -1,10 +1,12 @@
-package com.baseframework.util;
+package com.baseframework.UI;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-public class UIDragImage {
+public class UIDragImage implements UIObject {
+	private static final int typePriority = 1;
+	
 	protected boolean visible =true;
 	protected Image dragImage;
 	
@@ -19,6 +21,28 @@ public class UIDragImage {
 	public UIDragImage(int topX, int topY, Image dragImage){
 		this.dragImage = dragImage;
 		rPos = new Rectangle(topX, topY, dragImage.getWidth(null), dragImage.getHeight(null));
+	}
+	
+	public void render(Graphics g){
+		if(visible) g.drawImage(dragImage, rPos.x, rPos.y, null);
+	}
+	
+	public void scaleandrender(Graphics g, int width, int height){
+		if(visible) g.drawImage(dragImage, rPos.x, rPos.y, width, height, null);
+	}
+	
+	@Override
+	public void update() {
+	}
+
+	@Override
+	public void show() {
+		this.visible = true;
+	}
+
+	@Override
+	public void hide() {
+		this.visible = true;
 	}
 	
 	public static void setScope(int scopeMaxX, int scopeMaxY){
@@ -39,7 +63,8 @@ public class UIDragImage {
 		}
 	}
 	
-	public void onPressed(int x, int y){
+	@Override
+	public boolean onPressed(int x, int y){
 		if(rPos.contains(x,y) && visible){
 			dragged = true;
 			offsetX = x - rPos.x;
@@ -47,9 +72,31 @@ public class UIDragImage {
 		} else { 
 			dragged = false;
 		}
+		return dragged;
 	}
 	
-	public void onDragged(int x, int y){
+	@Override
+	public boolean onReleased(int x, int y){
+		boolean wasDragged= dragged;
+		
+		dragged = false;
+		offsetX = 0;
+		offsetY = 0;
+		
+		return wasDragged;
+	}
+	
+	@Override
+	public void cancel() {
+	}
+	
+	//@Override
+	public int getTypePriority() {
+		return typePriority;
+	}
+	
+	@Override
+	public boolean onDragged(int x, int y){
 		if(dragged){
 			rPos.setLocation(x - offsetX,y - offsetY);
 		}
@@ -59,23 +106,19 @@ public class UIDragImage {
 			rPos.x = Math.max(rScope.x, (int) Math.min(rScope.getMaxX() - rPos.width, x - offsetX));
 			rPos.y = Math.max(rScope.y, (int) Math.min(rScope.getMaxY() - rPos.height, y - offsetY));
 		}
+		
+		return dragged;
 	}
 	
-	public void onReleased(int x, int y){
-		dragged = false;
-		offsetX = 0;
-		offsetY = 0;
+	@Override
+	public void performAction() {
+		// an image is not a button, no action performed
 	}
 	
-	public void render(Graphics g){
-		if(visible) g.drawImage(dragImage, rPos.x, rPos.y, null);
-	}
-	
-	public void scaleandrender(Graphics g, int width, int height){
-		if(visible) g.drawImage(dragImage, rPos.x, rPos.y, width, height, null);
-	}
-
 	public boolean isDragged() {
 		return dragged;
 	}
+
+
+
 }

@@ -11,12 +11,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.baseframework.UI.*;
 import com.baseframework.game.main.MainHolder;
 import com.baseframework.game.main.Resources;
-import com.baseframework.util.UIBar;
-import com.baseframework.util.UIButton;
-import com.baseframework.util.UIDragImage;
-import com.baseframework.util.UIDragItem;
 import com.dune.entities.AStar;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
@@ -36,9 +33,8 @@ public class PlayScreen extends GameScreen{
 
 	// Buttons, bars and user interface items
 	private UIButton buttonMode, buttonCollapse, buttonExtend;
-	private UIDragItem dragSquadFace;
 	private UIBar mainBar;
-	private CopyOnWriteArrayList<UIDragItem> dragItems;
+	private CopyOnWriteArrayList<UIObject> uiItems;
 	
 	// Graphics objects
 	public Graphics2D g2;
@@ -54,41 +50,52 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void init() {
+		MainHolder.setResizeable(false);
+		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
+		
+		map = new PlanetMap(Resources.map1,Resources.elevationMap);
+		viewframe = new ViewFrame((float) SCREEN_X, (float) SCREEN_Y, screenSizeX, screenSizeY);
+		viewframe.setBoundX(map.getWidth(true));
+		viewframe.setBoundY(map.getHeight(true));
+
+		initUI();
+		
+		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
+		squad.setBounds(map.getWidth(false), map.getHeight(false));
+	}
+	
+	private void initUI(){
 		int btnModeX = 15, btnModeY = screenSizeY - Resources.btnModeUp.getHeight() -10;
 		int dftBarTileCountX = 2;
 		int dftBarTileCountY = 2;
 		int dftBarTopX = btnModeX + Resources.btnModeUp.getWidth() + 20;
 		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
-				
-		MainHolder.setResizeable(false);
 		
-		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
-		UIDragImage.setScope(screenSizeX, screenSizeY);		
-		
-		viewframe = new ViewFrame((float) SCREEN_X, (float) SCREEN_Y, screenSizeX, screenSizeY);
-		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
-		map = new PlanetMap(Resources.map1,Resources.elevationMap);
-		
-		viewframe.setBoundX(map.getWidth(true));
-		viewframe.setBoundY(map.getHeight(true));
-		squad.setBounds(map.getWidth(false), map.getHeight(false));
+		UIDragImage.setScope(screenSizeX, screenSizeY);
+		uiItems = new CopyOnWriteArrayList<UIObject>();
 		
 		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
-								Resources.btnModeDown, Resources.btnModeUp);
+				Resources.btnModeDown, Resources.btnModeUp);
 		buttonCollapse = new UIButton(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
-								Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp);
+				Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp);
 		buttonExtend = new UIButton(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
 				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp);
 
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 
-		dragItems = new CopyOnWriteArrayList<UIDragItem>();
-		dragItems.add(new UIDragItem(10, 10, Resources.teammate1, mainBar));
-		dragItems.add(new UIDragItem(60, 10, Resources.teammate2, mainBar));
-		dragItems.add(new UIDragItem(110, 10, Resources.teammate3, mainBar));
-		dragItems.add(new UIDragItem(160, 10, Resources.teammate4, mainBar));
-		dragItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));
-		
+		// add all items in the list
+		uiItems.add(buttonMode);
+		uiItems.add(buttonCollapse);
+		uiItems.add(buttonExtend);
+		uiItems.add(mainBar);
+		uiItems.add(new UIDragItem(10, 10, Resources.teammate1, mainBar));
+		uiItems.add(new UIDragItem(60, 10, Resources.teammate2, mainBar));
+		uiItems.add(new UIDragItem(110, 10, Resources.teammate3, mainBar));
+		uiItems.add(new UIDragItem(160, 10, Resources.teammate4, mainBar));
+		uiItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));		
+
+		//sort by order of type priority for proper display
+		uiItems.sort(typePriorityOrder);
 	}
 
 	@Override
@@ -110,37 +117,34 @@ public class PlayScreen extends GameScreen{
 	private void renderTiles(Graphics g) {
 		int pX, pY;
 		for (int y = 0; y <PlanetMap.tileMap.size() ; y++) {
-		for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
+			for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
 	
-			Tile t = PlanetMap.tileMap.get(y).get(x);
+				Tile t = PlanetMap.tileMap.get(y).get(x);
 			
-			pX = t.getTileX();
-			pY= t.getTileY();
+				pX = t.getTileX();
+				pY= t.getTileY();
 			
-			//Use these to get Isometric positions
-			//pX = Miscellaneous.carToIsoX(t.getTileX(), t.getTileY(), t.getTileImage().getWidth(null));
-			//pY = Miscellaneous.carToIsoY(t.getTileX(), t.getTileY(), t.getTileImage().getHeight(null));
+				//Use these to get Isometric positions
+				//pX = Miscellaneous.carToIsoX(t.getTileX(), t.getTileY(), t.getTileImage().getWidth(null));
+				//pY = Miscellaneous.carToIsoY(t.getTileX(), t.getTileY(), t.getTileImage().getHeight(null));
 		
-			g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
+				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
 			
-			//Drawing elevation lines
-			if(t.iseUpT()){
-				g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY());			
+				//Drawing elevation lines
+				if(t.iseUpT()){
+					g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY());			
+				}
+				if(t.iseRightT()){
+					g.drawLine(t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
+				}
+				if(t.iseDownT()){
+					g.drawLine(t.getTileX() - (int) viewframe.getFrameX()-t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
+				}
+				if(t.iseLeftT()){
+					g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
+				}
 			}
-			if(t.iseRightT()){
-				g.drawLine(t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
-			}
-			if(t.iseDownT()){
-				g.drawLine(t.getTileX() - (int) viewframe.getFrameX()-t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
-			}
-			if(t.iseLeftT()){
-				g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
-			}
-			
-			
-		}}
-		
-		
+		}	
 	}
 
 	private void renderPaths(Graphics g) {
@@ -177,15 +181,11 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderUI(Graphics g){
-		buttonMode.render(g);
-		buttonCollapse.render(g);
-		buttonExtend.render(g);
-		mainBar.render(g);
-		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
-			UIDragItem dragItem = iterator.next();
-			dragItem.render(g);
-		}	
-
+		
+		//display in inverse order of priority (so that objects with higher priority appear on top)
+		for(int i= uiItems.size() - 1; i>= 0; i--){
+			uiItems.get(i).render(g);
+		}
 	}
 	
 	
@@ -206,30 +206,21 @@ public class PlayScreen extends GameScreen{
 		yPos = e.getY();
 
 		
-		//check if a button was pressed
-		buttonMode.onPressed(xPos, yPos);
-		buttonCollapse.onPressed(xPos, yPos);
-		buttonExtend.onPressed(xPos, yPos);
+		//check if a UI object was pressed by order of priority
+		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
+			UIObject uiObject = iterator.next();
+			pressed = uiObject.onPressed(xPos, yPos);
+			if (pressed) break;
+		}
 		
-		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
-			UIDragItem dragItem = iterator.next();
-			dragItem.onPressed(xPos, yPos);
-			if(dragItem.isDragged()) pressed = true;
-		}	
-		if(!pressed) mainBar.onPressed(xPos, yPos);
-		
-		// stop performing actions if a UI element is selected was pressed
-		if(buttonMode.isPressed(xPos, yPos) || buttonCollapse.isPressed(xPos, yPos) || buttonExtend.isPressed(xPos,  yPos) ||
-				pressed || mainBar.isPressed(xPos, yPos)) return;
-		
+		// stop performing actions if a UI element was pressed
+		if(pressed) return;
 
-		// Logic to check whether it was within the squad rectangle (in relative coordinate)
-		
+		// checks whether the squad rectangle (in relative coordinate)
 		if (squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())) {
 			squad.setSelected(!squad.isSelected());
 		}
 
-		
 		// adding path to the list but only if outside of squad and if the squad is selected
 		if(squad.isSelected()){
 			if (!squad.rect.contains(xPos+ (int) viewframe.getFrameX(), yPos+ (int) viewframe.getFrameY())){
@@ -273,43 +264,41 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void onMouseReleased(MouseEvent e) {
 		
-		//check if 'clicked' on a button: pressed AND released within the button area
-		if(buttonMode.isPressed(e.getX(), e.getY())){
-			//mainBar.switchDisplay();
-			mainBar.pullLvl(1);
-			mainBar.pullLvl(2);
+		
+		
+		// release all other UI items
+		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
+			UIObject uiObject = iterator.next();
+			
+			if(uiObject == buttonMode && uiObject.onReleased(e.getX(), e.getY())){
+				//mainBar.switchDisplay();
+				mainBar.pullLvl(1);
+				mainBar.pullLvl(2);				
+			} else if (uiObject == buttonCollapse  && uiObject.onReleased(e.getX(), e.getY()) ) {
+				//mainBar.collapsedown();
+				//mainBar.collapseleft();
+				mainBar.pushLvl(2);				
+			} else if(uiObject == buttonExtend  && uiObject.onReleased(e.getX(), e.getY())) {
+				//mainBar.extendup();
+				//mainBar.extendright();
+				mainBar.pushLvl(1);				
+			} else {
+				uiObject.onReleased(e.getX(), e.getY());
+			}
+			
 		}
-		if(buttonCollapse.isPressed(e.getX(), e.getY())){
-			//mainBar.collapsedown();
-			//mainBar.collapseleft();
-			mainBar.pushLvl(2);
-		}
-		if(buttonExtend.isPressed(e.getX(), e.getY())){
-			//mainBar.extendup();
-			//mainBar.extendright();
-			mainBar.pushLvl(1);
-		}		
-		
-		
-		// in any case cancel the button activation
-		buttonMode.cancel();
-		buttonCollapse.cancel();
-		buttonExtend.cancel();
-		
-		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
-			UIDragItem dragItem = iterator.next();
-			dragItem.onReleased(e.getX(), e.getY());
-		}
-		
-		mainBar.onReleased(e.getX(), e.getY());
 	}
 	
 	@Override
 	public void onMouseDragged(MouseEvent e) {
-		for (Iterator<UIDragItem> iterator = dragItems.iterator(); iterator.hasNext();) {
-			UIDragItem dragItem = iterator.next();
-			dragItem.onDragged(e.getX(), e.getY());
-		}	
+		boolean dragged=false;
+		
+		//check if an UI item was dragged by order of priority
+		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
+			UIObject uiObject = iterator.next();
+			dragged = uiObject.onDragged(e.getX(), e.getY());
+			if (dragged) break;
+		}
 	}
 	
 

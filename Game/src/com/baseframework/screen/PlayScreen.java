@@ -2,6 +2,7 @@ package com.baseframework.screen;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -32,9 +33,46 @@ public class PlayScreen extends GameScreen{
 	public static PlanetMap map;
 
 	// Buttons, bars and user interface items
-	private UIButton buttonMode, buttonCollapse, buttonExtend;
 	private UIBar mainBar;
 	private CopyOnWriteArrayList<UIObject> uiItems;
+	
+	//start of nested button classes ---------------------------------------------------------------------------------------
+	private class UIButtonMode extends UIButton{
+		public UIButtonMode(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
+			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
+		}
+		
+		@Override
+		public void performAction(){
+			//mainBar.switchDisplay();
+			mainBar.pullLvl(1);
+			mainBar.pullLvl(2);	
+		}
+	}
+	
+	private class UIButtonCollapse extends UIButton{
+		public UIButtonCollapse(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
+			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
+		}
+		
+		@Override
+		public void performAction(){
+			mainBar.pushLvl(1);	
+		}
+	}
+	
+	private class UIButtonExtend extends UIButton{
+		public UIButtonExtend(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
+			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
+		}
+		
+		@Override
+		public void performAction(){
+			mainBar.pushLvl(2);	
+		}
+	}
+	//end of button classes ---------------------------------------------------------------------------------------
+	
 	
 	// Graphics objects
 	public Graphics2D g2;
@@ -73,21 +111,20 @@ public class PlayScreen extends GameScreen{
 		
 		UIDragImage.setScope(screenSizeX, screenSizeY);
 		uiItems = new CopyOnWriteArrayList<UIObject>();
-		
-		buttonMode = new UIButton(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
-				Resources.btnModeDown, Resources.btnModeUp);
-		buttonCollapse = new UIButton(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
-				Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp);
-		buttonExtend = new UIButton(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
-				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp);
-
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
-
-		// add all items in the list
-		uiItems.add(buttonMode);
-		uiItems.add(buttonCollapse);
-		uiItems.add(buttonExtend);
+		
+		// add all UI items to the list
 		uiItems.add(mainBar);
+		
+		uiItems.add(new UIButtonMode(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
+				Resources.btnModeDown, Resources.btnModeUp));
+		
+		uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
+				Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp));
+		
+		uiItems.add(new UIButtonExtend(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
+				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp));
+		
 		uiItems.add(new UIDragItem(10, 10, Resources.teammate1, mainBar));
 		uiItems.add(new UIDragItem(60, 10, Resources.teammate2, mainBar));
 		uiItems.add(new UIDragItem(110, 10, Resources.teammate3, mainBar));
@@ -181,7 +218,6 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderUI(Graphics g){
-		
 		//display in inverse order of priority (so that objects with higher priority appear on top)
 		for(int i= uiItems.size() - 1; i>= 0; i--){
 			uiItems.get(i).render(g);
@@ -264,28 +300,10 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void onMouseReleased(MouseEvent e) {
 		
-		
-		
 		// release all other UI items
 		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
-			UIObject uiObject = iterator.next();
-			
-			if(uiObject == buttonMode && uiObject.onReleased(e.getX(), e.getY())){
-				//mainBar.switchDisplay();
-				mainBar.pullLvl(1);
-				mainBar.pullLvl(2);				
-			} else if (uiObject == buttonCollapse  && uiObject.onReleased(e.getX(), e.getY()) ) {
-				//mainBar.collapsedown();
-				//mainBar.collapseleft();
-				mainBar.pushLvl(2);				
-			} else if(uiObject == buttonExtend  && uiObject.onReleased(e.getX(), e.getY())) {
-				//mainBar.extendup();
-				//mainBar.extendright();
-				mainBar.pushLvl(1);				
-			} else {
-				uiObject.onReleased(e.getX(), e.getY());
-			}
-			
+			UIObject uiObject = iterator.next();	
+			if (uiObject.onReleased(e.getX(), e.getY())) uiObject.performAction();
 		}
 	}
 	

@@ -32,6 +32,21 @@ public class PlayScreen extends GameScreen{
 	public static ViewFrame viewframe;
 	public static PlanetMap map;
 
+	// Graphics objects
+	public Graphics2D g2;
+	
+	// numerical variables
+	public static int screenSizeX = 800;
+	public static int screenSizeY = 480;
+	
+	private final float SQUAD_TOPX = 300f; 
+	private final float SQUAD_TOPY = 200f;
+	public static final int SCREEN_X = 0;
+	public static final int SCREEN_Y = 0;
+	
+	// boolean variables
+	boolean spaceKeyPressed = false;
+	
 	// Buttons, bars and user interface items
 	private UIBar mainBar;
 	private CopyOnWriteArrayList<UIObject> uiItems;
@@ -72,19 +87,6 @@ public class PlayScreen extends GameScreen{
 		}
 	}
 	//end of button classes ---------------------------------------------------------------------------------------
-	
-	
-	// Graphics objects
-	public Graphics2D g2;
-	
-	// numerical variables
-	public static int screenSizeX = 800;
-	public static int screenSizeY = 480;
-	
-	private final float SQUAD_TOPX = 300f; 
-	private final float SQUAD_TOPY = 200f;
-	public static final int SCREEN_X = 0;
-	public static final int SCREEN_Y = 0;
 
 	@Override
 	public void init() {
@@ -346,6 +348,12 @@ public class PlayScreen extends GameScreen{
 		case KeyEvent.VK_X:
 			//ZOOMout
 			break;
+
+		case KeyEvent.VK_SPACE:
+			if(!spaceKeyPressed){
+				spaceKeyPressed = true;
+				mainBar.pushLvl(2);
+			}
 		}
 	}
 
@@ -367,7 +375,11 @@ public class PlayScreen extends GameScreen{
 		case KeyEvent.VK_RIGHT:
 			if(viewframe.getSpeedX() > 0f) viewframe.setSpeedX(0f);
 			break;
-		}
+			
+		case KeyEvent.VK_SPACE:
+			spaceKeyPressed = false;
+			mainBar.pullLvl(2);
+		}	
 	}
 
 	@Override

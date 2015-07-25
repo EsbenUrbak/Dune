@@ -440,11 +440,20 @@ public class UIBar implements UIObject {
 		this.update();
 	}
 	
-	//temporary method to manually remove an item
+	//temporary method to manually remove an item (only when the item is empty)
 	public void pullLvl(int level){
+		UIBarSlot emptySlot = null;
+		
 		if (level !=1 && level !=2) return;
-		if(level == 1 && !lvl1slots.isEmpty()) this.removeSlot(1, lvl1slots.get(lvl1slots.size()-1));
-		if(level == 2 && !lvl2slots.isEmpty()) this.removeSlot(2, lvl2slots.get(lvl2slots.size()-1));
+		
+		if(level == 1 && !lvl1slots.isEmpty()) {
+			emptySlot = findEmptySlot(1);
+			if (emptySlot != null) this.removeSlot(1, emptySlot);
+		}
+		if(level == 2 && !lvl2slots.isEmpty()) {
+			emptySlot = findEmptySlot(2);
+			if (emptySlot != null) this.removeSlot(2, emptySlot);
+		}
 		this.update();
 	}
 

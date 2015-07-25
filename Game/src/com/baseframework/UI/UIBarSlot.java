@@ -8,10 +8,10 @@ import java.awt.Rectangle;
 import com.baseframework.game.main.Resources;
 
 public class UIBarSlot implements UIObject{
-	
+
+	public static final int typePriority = 15;
 	public static int width=45, height=45;
-	public static final int typePriority = 2;
-	
+
 	private int priority=10;
 	private boolean visible, empty=true;
 
@@ -66,14 +66,15 @@ public class UIBarSlot implements UIObject{
 	@Override
 	public boolean onPressed(int absX, int absY){;
 		boolean selectItem = false;
-
+	
 		if(this.catchRect.contains(absX, absY) && visible && !empty){
 			selectItem = true;
 			this.item.setLocation(frameRect.x, frameRect.y);
 			this.item.show();
 			this.item.onPressed(absX, absY);
 			this.removeItem();
-		} 
+		}
+		 
 		return selectItem;
 	}
 	

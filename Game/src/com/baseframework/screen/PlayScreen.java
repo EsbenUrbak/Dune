@@ -48,23 +48,12 @@ public class PlayScreen extends GameScreen{
 	boolean spaceKeyPressed = false;
 	
 	// Buttons, bars and user interface items
+	private UIDragButton buttonMode;
 	private UIBar mainBar;
 	private CopyOnWriteArrayList<UIObject> uiItems;
 	
 	//start of nested button classes ---------------------------------------------------------------------------------------
-	private class UIButtonMode extends UIButton{
-		public UIButtonMode(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
-			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
-		}
-		
-		@Override
-		public void performAction(){
-			//mainBar.switchDisplay();
-			mainBar.pullLvl(1);
-			mainBar.pullLvl(2);	
-		}
-	}
-	
+
 	private class UIButtonCollapse extends UIButton{
 		public UIButtonCollapse(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
 			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
@@ -112,15 +101,19 @@ public class PlayScreen extends GameScreen{
 		int dftBarTopY = screenSizeY - dftBarTileCountY * Resources.barTileN.getHeight() - 10;
 		
 		UIDragImage.setScope(screenSizeX, screenSizeY);
-		uiItems = new CopyOnWriteArrayList<UIObject>();
-		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 		
-		// add all UI items to the list
+		// define the specific UI items and add them to the list
+		uiItems = new CopyOnWriteArrayList<UIObject>();
+		
+		buttonMode = new UIDragButton(btnModeX, btnModeY, Resources.btnModeDown, Resources.btnModeUp);
+		uiItems.add(buttonMode);
+		
+		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
 		uiItems.add(mainBar);
 		
-		uiItems.add(new UIButtonMode(btnModeX, btnModeY, Resources.btnModeUp.getWidth(), Resources.btnModeDown.getHeight(),
-				Resources.btnModeDown, Resources.btnModeUp));
+		buttonMode.setBar(mainBar);
 		
+		// create the generic UI items in the list
 		uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
 				Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp));
 		
@@ -302,7 +295,7 @@ public class PlayScreen extends GameScreen{
 	@Override
 	public void onMouseReleased(MouseEvent e) {
 		
-		// release all other UI items
+		// release all UI items
 		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
 			UIObject uiObject = iterator.next();	
 			if (uiObject.onReleased(e.getX(), e.getY())) uiObject.performAction();

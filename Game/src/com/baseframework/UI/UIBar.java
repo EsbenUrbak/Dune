@@ -13,9 +13,10 @@ import com.baseframework.screen.PlayScreen;
 
 public class UIBar implements UIObject {
 	
+	public static final int typePriority = 16;
+	
 	private static final int MINTILEX =2, MAXTILEX=10, MINTILEY =2, MAXTILEY=5;
 	private static final int MAXITEMS =5;
-	public static final int typePriority = 2;
 	public static final int EDGESIZEX=20, EDGESIZEY=10, MINGAPX=5, MINGAPY=5;
 	
 	

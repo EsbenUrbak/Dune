@@ -58,15 +58,9 @@ public class UIDragItem extends UIDragImage {
 		return true;
 	}
 	
+	// do not delete: redundant with super class but stop working otherwise
 	public void hide(){
 		this.visible = false;
-	}
-	
-	public void show(){
-		this.visible = true;
-	}
-	
-	public void update(){
 	}
 	
 	public void sendTo(int targetX, int targetY){

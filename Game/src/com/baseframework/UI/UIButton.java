@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 
 public class UIButton implements UIObject{
-	private static final int typePriority = 3;
+	private static final int typePriority = 17;
 	
 	protected Rectangle buttonRect;
 	protected Boolean buttonDown = false, visible = true;

@@ -5,18 +5,18 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 public class UIDragImage implements UIObject {
-	private static final int typePriority = 1;
+	private static final int typePriority = 10;
 	
 	protected boolean visible =true;
 	protected Image dragImage;
 	
 	// positions rectangles
 	protected Rectangle rPos;
-	private static Rectangle rScope = new Rectangle(0,0,0,0); 
+	protected static Rectangle rScope = new Rectangle(0,0,0,0); 
 	
 	// enable to drag from the selected point in the image (when selected elsewhere than top left)
 	protected int offsetX=0, offsetY=0;
-	private boolean dragged = false;
+	protected boolean dragged = false;
 	
 	public UIDragImage(int topX, int topY, Image dragImage){
 		this.dragImage = dragImage;
@@ -115,10 +115,5 @@ public class UIDragImage implements UIObject {
 		// an image is not a button, no action performed
 	}
 	
-	public boolean isDragged() {
-		return dragged;
-	}
-
-
 
 }

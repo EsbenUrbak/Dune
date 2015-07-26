@@ -8,7 +8,7 @@ public class UIDragItem extends UIDragImage {
 	private int priority=9;
 	private float targetX, targetY;
 	private UIBar refBar;
-	private UIBarSlot barLoc = null;
+	private UIBarSlot barSlot = null;
 
 	public UIDragItem(int topX, int topY, Image dragImage, UIBar refBar) {
 		super(topX, topY, dragImage);
@@ -20,47 +20,49 @@ public class UIDragItem extends UIDragImage {
 	@Override
 	public boolean onReleased(int x, int y){
 		UIBarSlot placeHolder;
-		boolean check;
 		
 		// release the image in the mother class
 		// if the item isn't being dragged, exits
-		check = super.onReleased(x, y);
-		if(!check) return check;
+		if(!super.onReleased(x, y)) return false;
 		
-		//else start by checking is the item is dropped in a container
+		//then checks if the item is dropped in a bar slot
 		placeHolder = refBar.inBarItem(x, y);
 		if (placeHolder != null){
-			this.barLoc = placeHolder;
-			barLoc.setItem(this);
+			this.barSlot = placeHolder;
+			barSlot.setItem(this);
 			this.hide();
 			refBar.update();
 			return true;
 		}
 		
-		//refBar.inDropZone()
-			//if in bar, send to where the squad is
-			//otherwise don't move
+		// then, only if the item was in the bar, checks if it was dropped in the collapse zone
+		if (refBar.inBarCollapseZone(rPos) && barSlot != null) {
+			// if so, send it back to its bar slot, and hide it
+			barSlot.setItem(this);
+			this.hide();
+			return true;
+		}
 		
 		// then checks if the item was dropped into the bar
 		placeHolder = refBar.inCatchZone(this.rPos);	
 		if( placeHolder != null){
-			this.barLoc = placeHolder;
-			barLoc.setItem(this);
+			this.barSlot = placeHolder;
+			barSlot.setItem(this);
 			this.hide();
 			refBar.update();
 			return true;
 		}
 		
-		// otherwise perform default reset action
-		// sentTo(initial position)
+		//if dropped outside of the bar catch and collapse zone, reset bar slot to null
+		//refBar.inDropZone()
+		//if in bar, send to where the squad is
+		if(barSlot != null) barSlot = null;		
 		
+		//otherwise don't move
 		refBar.update();
 		return true;
 	}
 	
-	public void sendTo(int targetX, int targetY){
-	}
-
 	public int getPriority() {
 		return priority;
 	}

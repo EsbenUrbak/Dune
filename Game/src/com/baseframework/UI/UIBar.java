@@ -461,6 +461,16 @@ public class UIBar implements UIObject {
 		return newItem;
 	}
 	
+	public boolean inBarCollapseZone(Rectangle itemRect){
+		if(refButton != null){
+			if(refButton.hideBarRect.intersects(itemRect)){
+				this.hide();
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	private UIBarSlot findEmptySlot (int level){
 		if (level ==1 && !lvl1slots.isEmpty()){

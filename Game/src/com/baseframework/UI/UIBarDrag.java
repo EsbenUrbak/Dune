@@ -16,9 +16,10 @@ public class UIBarDrag extends UIDragImage {
 
 	@Override
 	public boolean onPressed(int x, int y){
-		this.visible = true;
-		super.setLocation(x - rPos.width / 2, y - rPos.height/2);
-		toUpdate = super.onPressed(x, y);
+		if(visible){
+			super.setLocation(x - rPos.width / 2, y - rPos.height/2);
+			toUpdate = super.onPressed(x, y);
+		}
 		return toUpdate;
 	}
 	

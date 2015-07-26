@@ -34,8 +34,9 @@ public class UIBar implements UIObject {
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	private int tileCountX, tileCountY, slotCount1=0, slotCount2=0, tileHeight, tileWidth;
 	private CopyOnWriteArrayList<UIBarSlot> lvl1slots, lvl2slots;
+	private CopyOnWriteArrayList<UIBarSlot> addedSlots, removedSlots;
 	
-	protected UIDragButton refButton = null;
+	protected UIAdvButton refButton = null;
 	private UIBarDrag collapseItem = null;
 	
 	public UIBar(int topX, int topY, int tileCountX, int tileCountY) {
@@ -60,9 +61,11 @@ public class UIBar implements UIObject {
 		
 		lvl1slots = new CopyOnWriteArrayList<UIBarSlot>();
 		lvl2slots = new CopyOnWriteArrayList<UIBarSlot>();
+		addedSlots = new CopyOnWriteArrayList<UIBarSlot>();
+		removedSlots = new CopyOnWriteArrayList<UIBarSlot>();
 	}
 	
-	public void setButton(UIDragButton refButton){
+	public void setButton(UIAdvButton refButton){
 		this.refButton = refButton;
 		collapseItem = new UIBarDrag(catchRect.x, catchRect.y, Resources.barCollapse, this);
 		collapseItem.hide();
@@ -109,22 +112,8 @@ public class UIBar implements UIObject {
 			g2.drawLine(frameRect.x + EDGESIZEX, frameRect.y  + frameRect.height/2, 
 					(int) frameRect.getMaxX() - EDGESIZEX, frameRect.y  + frameRect.height/2);
 		}
-			
-		// display items within the bar
-		this.renderBarItems(g);
 	}
 	
-	private void renderBarItems(Graphics g){
-		for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
-			UIBarSlot lvl1item = iterator.next();
-			lvl1item.render(g);
-		}
-		
-		for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
-			UIBarSlot lvl2item = iterator.next();
-			lvl2item.render(g);
-		}
-	}
 	
 	@Override
 	public void update(){
@@ -166,22 +155,47 @@ public class UIBar implements UIObject {
 	
 	@Override
 	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+		boolean hasUpdated = false;
+		
+		// checks if new bar slots were added to the bar, and if so, add them
+		if(!addedSlots.isEmpty()){
+			hasUpdated = true;
+			for (Iterator<UIBarSlot> iterator = addedSlots.iterator(); iterator.hasNext();) {
+				UIBarSlot newSlot = iterator.next();
+				list.add(newSlot);
+				addedSlots.remove(newSlot);
+			}	
+		}
+		
+		// checks if bar slots were removed from the bar
+		if(!removedSlots.isEmpty()){
+			for (Iterator<UIBarSlot> iterator = removedSlots.iterator(); iterator.hasNext();) {
+				UIBarSlot prevSlot = iterator.next();
+				if(list.contains(prevSlot)) {
+					list.remove(prevSlot);
+					hasUpdated = true;
+				}
+				removedSlots.remove(prevSlot);
+			}	
+		}		
+		
+		// checks if the bar itself was dragged into its collapse zone
 		if(collapseItem != null){
 			if(collapseItem.toUpdate){
 				if(list.contains(collapseItem)){
 					list.remove(collapseItem);
 					collapseItem.toUpdate = false;
-					return true;
+					hasUpdated = true;
 				}
 				
 				if(!list.contains(collapseItem)){
 					list.add(collapseItem);
 					collapseItem.toUpdate = false;
-					return true;
+					hasUpdated = true;
 				}
 			}
 		}
-		return false;
+		return hasUpdated;
 	}
 	
 	@Override
@@ -189,10 +203,21 @@ public class UIBar implements UIObject {
 		visible = true;
 		catchRect.setSize(tileCountX * tileWidth, tileCountY * tileHeight);
 		if(lvl2slots.isEmpty()){
-			lvl1catchRect.setBounds(catchRect);;
+			lvl1catchRect.setBounds(catchRect);
 		} else {
 			lvl1catchRect.setRect(lvl1catchRect.x, frameRect.y  + frameRect.height/2, 
 					lvl1catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );		
+		}
+		
+		//show all bar slots
+		for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
+			UIBarSlot lvl1item = iterator.next();
+			lvl1item.show();
+		}
+		
+		for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
+			UIBarSlot lvl2item = iterator.next();
+			lvl2item.show();
 		}
 	}
 	
@@ -201,6 +226,17 @@ public class UIBar implements UIObject {
 		visible = false;
 		catchRect.setSize(0,0);
 		lvl1catchRect.setBounds(catchRect);
+		
+		//hide all bar slots
+		for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
+			UIBarSlot lvl1item = iterator.next();
+			lvl1item.hide();
+		}
+		
+		for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
+			UIBarSlot lvl2item = iterator.next();
+			lvl2item.hide();
+		}
 	}
 	
 	@Override
@@ -245,13 +281,12 @@ public class UIBar implements UIObject {
 		return selected && visible;
 	}
 	
+
 	@Override
 	public boolean onDragged(int absX, int absY) {
-		if(collapseItem != null){
-			if (collapseItem.visible) return collapseItem.onDragged(absX, absY);  
-		}
 		return false;
 	}
+
 	
 	@Override
 	public void performAction() {
@@ -323,10 +358,12 @@ public class UIBar implements UIObject {
 		
 		if(level == 1 && lvl1slots.size() <= MAXITEMS ){
 			lvl1slots.add(newItem);
+			addedSlots.add(newItem);
 			slotCount1++;
 			
 		} else if(level == 2 && lvl2slots.size() <= MAXITEMS ){
 			lvl2slots.add(newItem);
+			addedSlots.add(newItem);
 			slotCount2++;
 			
 			//if just added a second level, check if the bar needs to be extended upward
@@ -348,9 +385,11 @@ public class UIBar implements UIObject {
 	public boolean removeSlot(int level, UIBarSlot item){
 		if(level == 1 && lvl1slots.contains(item)){
 			lvl1slots.remove(item);
+			removedSlots.add(item);
 			slotCount1--;
 		} else if(level == 2 && lvl2slots.contains(item)){
 			lvl2slots.remove(item);
+			removedSlots.add(item);
 			slotCount2--;
 			
 			//shrinks the bar downward if just removed the last item from the second level

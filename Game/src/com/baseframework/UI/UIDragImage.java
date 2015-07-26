@@ -96,7 +96,7 @@ public class UIDragImage implements UIObject {
 	public void cancel() {
 	}
 	
-	//@Override
+	@Override
 	public int getTypePriority() {
 		return typePriority;
 	}

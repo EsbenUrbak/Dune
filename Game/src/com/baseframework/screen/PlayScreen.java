@@ -48,15 +48,15 @@ public class PlayScreen extends GameScreen{
 	boolean spaceKeyPressed = false;
 	
 	// Buttons, bars and user interface items
-	private UIDragButton buttonMode;
+	private UIAdvButton buttonMode;
 	private UIBar mainBar;
 	private CopyOnWriteArrayList<UIObject> uiItems;
 	
 	//start of nested button classes ---------------------------------------------------------------------------------------
 
 	private class UIButtonCollapse extends UIButton{
-		public UIButtonCollapse(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
-			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
+		public UIButtonCollapse(int topX, int topY, Image buttonImageDown, Image buttonImageUp) {
+			super(topX, topY, buttonImageDown, buttonImageUp);
 		}
 		
 		@Override
@@ -66,8 +66,8 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private class UIButtonExtend extends UIButton{
-		public UIButtonExtend(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp) {
-			super(topX, topY, sizeX, sizeY, buttonImageDown, buttonImageUp);
+		public UIButtonExtend(int topX, int topY, Image buttonImageDown, Image buttonImageUp) {
+			super(topX, topY, buttonImageDown, buttonImageUp);
 		}
 		
 		@Override
@@ -105,7 +105,7 @@ public class PlayScreen extends GameScreen{
 		// define the specific UI items and add them to the list
 		uiItems = new CopyOnWriteArrayList<UIObject>();
 		
-		buttonMode = new UIDragButton(btnModeX, btnModeY, Resources.btnModeDown, Resources.btnModeUp);
+		buttonMode = new UIAdvButton(btnModeX, btnModeY, Resources.btnModeDown, Resources.btnModeUp, Resources.barShow);
 		uiItems.add(buttonMode);
 		
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
@@ -115,11 +115,9 @@ public class PlayScreen extends GameScreen{
 		mainBar.setButton(buttonMode);
 		
 		// create the generic UI items in the list
-		uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
-				Resources.btnCollapseUp.getHeight(), Resources.btnCollapseDown, Resources.btnCollapseUp));
+		//uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseDown, Resources.btnCollapseUp));
 		
-		uiItems.add(new UIButtonExtend(btnModeX + 40, btnModeY - 50, Resources.btnExtendUp.getWidth(), 
-				Resources.btnExtendUp.getHeight(), Resources.btnExtendDown, Resources.btnExtendUp));
+		//uiItems.add(new UIButtonExtend(btnModeX + 40, btnModeY - 50, Resources.btnExtendDown, Resources.btnExtendUp));
 		
 		uiItems.add(new UIDragItem(10, 10, Resources.teammate1, mainBar));
 		uiItems.add(new UIDragItem(60, 10, Resources.teammate2, mainBar));

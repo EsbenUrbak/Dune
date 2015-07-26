@@ -13,12 +13,13 @@ public class UIButton implements UIObject{
 	protected Boolean buttonDown = false, visible = true;
 	protected Image buttonImageDown, buttonImageUp;
 	
-	public UIButton(int topX, int topY, int sizeX, int sizeY, Image buttonImageDown, Image buttonImageUp){
-		buttonRect = new Rectangle(topX, topY, sizeX, sizeY);
+	public UIButton(int topX, int topY, Image buttonImageDown, Image buttonImageUp){
+		buttonRect = new Rectangle(topX, topY, buttonImageUp.getWidth(null), buttonImageUp.getHeight(null));
 		this.buttonImageDown = buttonImageDown;
 		this.buttonImageUp = buttonImageUp;
 	}
 	
+	@Override
 	public void render(Graphics g){
 		if (visible){
 			Image currentButtonImage = buttonDown ? buttonImageDown : buttonImageUp;

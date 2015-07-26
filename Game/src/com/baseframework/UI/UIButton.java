@@ -3,6 +3,7 @@ package com.baseframework.UI;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class UIButton implements UIObject{
@@ -27,6 +28,11 @@ public class UIButton implements UIObject{
 	
 	@Override
 	public void update() {
+	}
+	
+	@Override
+	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+		return false;
 	}
 	
 	@Override

@@ -36,7 +36,7 @@ public class Resources {
 	public static BufferedImage F,F_G,F_F_G_F,F_G_G_G;
 	public static BufferedImage btnModeUp, btnModeDown, btnExtendUp, btnExtendDown, btnCollapseUp, btnCollapseDown;
 	public static BufferedImage teammate1, teammate2, teammate3, teammate4, teammate5;
-	public static BufferedImage barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
+	public static BufferedImage barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn, barCollapse;
 	
 	public static Font titleFont1, subTitleFont1;
 	public static Color titleColor1, subTitleColor1, frameColor, selectColor;
@@ -99,6 +99,7 @@ public class Resources {
 		barTileNE = loadImage("bar_northeast.png");
 		barTileSE = loadImage("bar_southeast.png");
 		barTileIn = loadImage("bar_inner.png");
+		barCollapse = loadImage("bar_collapse.png");
 		
 		//loading all pictures for the tiles generation
 		//Main Tiles

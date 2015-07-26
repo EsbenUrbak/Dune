@@ -27,12 +27,16 @@ public class UIBar implements UIObject {
 		}
     };
 	
-	private boolean selected=false, visible=true;
-	public Rectangle frameRect;
-	public Rectangle catchRect, lvl1catchRect; // if not in lvl1catchRect, then assumes it will be on lvl2
+	protected boolean selected=false, visible=true;
+	protected Rectangle frameRect;
+	protected Rectangle catchRect, lvl1catchRect; // if not in lvl1catchRect, then assumes it will be on lvl2
+	
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	private int tileCountX, tileCountY, slotCount1=0, slotCount2=0, tileHeight, tileWidth;
 	private CopyOnWriteArrayList<UIBarSlot> lvl1slots, lvl2slots;
+	
+	protected UIDragButton refButton = null;
+	private UIBarDrag collapseItem = null;
 	
 	public UIBar(int topX, int topY, int tileCountX, int tileCountY) {
 		barTileN = Resources.barTileN;
@@ -56,6 +60,12 @@ public class UIBar implements UIObject {
 		
 		lvl1slots = new CopyOnWriteArrayList<UIBarSlot>();
 		lvl2slots = new CopyOnWriteArrayList<UIBarSlot>();
+	}
+	
+	public void setButton(UIDragButton refButton){
+		this.refButton = refButton;
+		collapseItem = new UIBarDrag(catchRect.x, catchRect.y, Resources.barCollapse, this);
+		collapseItem.hide();
 	}
 	
 	
@@ -113,7 +123,7 @@ public class UIBar implements UIObject {
 		for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
 			UIBarSlot lvl2item = iterator.next();
 			lvl2item.render(g);
-		}		
+		}
 	}
 	
 	@Override
@@ -155,6 +165,26 @@ public class UIBar implements UIObject {
 	}
 	
 	@Override
+	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+		if(collapseItem != null){
+			if(collapseItem.toUpdate){
+				if(list.contains(collapseItem)){
+					list.remove(collapseItem);
+					collapseItem.toUpdate = false;
+					return true;
+				}
+				
+				if(!list.contains(collapseItem)){
+					list.add(collapseItem);
+					collapseItem.toUpdate = false;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override
 	public void show(){
 		visible = true;
 		catchRect.setSize(tileCountX * tileWidth, tileCountY * tileHeight);
@@ -180,19 +210,28 @@ public class UIBar implements UIObject {
 		if(visible && catchRect.contains(x,y)){
 			selected = true;
 			
-			// first checks if an item was selected
+			// first checks if an item was selected (level 1)
 			for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
 				UIBarSlot lvl1item = iterator.next();
 				interrupt = lvl1item.onPressed(x, y);
 				if(interrupt) return selected;
 			}
 			
+			// in level 2
 			for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
 				UIBarSlot lvl2item = iterator.next();
 				interrupt = lvl2item.onPressed(x, y);
 				if (interrupt) return selected;
 			}
 			
+			// else display the collapse item
+			if(collapseItem != null){
+				if(collapseItem.visible == false){
+					collapseItem.show();
+					interrupt = collapseItem.onPressed(x, y);
+					if(interrupt) return selected;
+				}
+			}
 		} else {
 			selected = false;
 		}
@@ -201,12 +240,16 @@ public class UIBar implements UIObject {
 	
 	@Override
 	public boolean onReleased(int absX, int absY){
+		if(collapseItem != null) collapseItem.onReleased(absX, absY);
 		if(!catchRect.contains(absX, absY)) selected = false;
 		return selected && visible;
 	}
 	
 	@Override
 	public boolean onDragged(int absX, int absY) {
+		if(collapseItem != null){
+			if (collapseItem.visible) return collapseItem.onDragged(absX, absY);  
+		}
 		return false;
 	}
 	

@@ -112,6 +112,7 @@ public class PlayScreen extends GameScreen{
 		uiItems.add(mainBar);
 		
 		buttonMode.setBar(mainBar);
+		mainBar.setButton(buttonMode);
 		
 		// create the generic UI items in the list
 		uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseUp.getWidth(), 
@@ -132,10 +133,19 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void update(float delta) {
+		boolean reSort = false;
+		
 		viewframe.update(delta);
 		squad.update(delta);
 		map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
 		//updateTiles();
+		
+		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
+			UIObject uiObject = iterator.next();	
+			reSort = reSort || uiObject.updateList(uiItems) ;
+		}
+		if(reSort) uiItems.sort(typePriorityOrder);
+		
 	}
 
 	@Override

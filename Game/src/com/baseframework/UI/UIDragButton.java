@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 public class UIDragButton extends UIDragImage {
 
 	private static final int subTypePriority = 13;
+	
 	private Image buttonUpImage, buttonDownImage;
 	protected Rectangle defaultRect, showBarRect, hideBarRect;	
 	private UIBar refBar = null;

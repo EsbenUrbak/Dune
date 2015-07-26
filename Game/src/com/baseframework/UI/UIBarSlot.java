@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.baseframework.game.main.Resources;
 
@@ -50,7 +51,12 @@ public class UIBarSlot implements UIObject{
 	@Override
 	public void update() {	
 	}
-
+	
+	@Override
+	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+		return false;
+	}
+	
 	@Override
 	public void show() {
 		this.visible = true;

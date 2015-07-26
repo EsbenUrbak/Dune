@@ -3,6 +3,7 @@ package com.baseframework.UI;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UIDragImage implements UIObject {
 	private static final int typePriority = 10;
@@ -34,6 +35,11 @@ public class UIDragImage implements UIObject {
 	@Override
 	public void update() {
 	}
+	
+	@Override
+	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+		return false;
+	}
 
 	@Override
 	public void show() {
@@ -42,7 +48,7 @@ public class UIDragImage implements UIObject {
 
 	@Override
 	public void hide() {
-		this.visible = true;
+		this.visible = false;
 	}
 	
 	public static void setScope(int scopeMaxX, int scopeMaxY){

@@ -79,8 +79,6 @@ public static Map<Integer, Map<Integer, Tile>> tileMap(ArrayList<Tile> original,
 		
 		Map<Integer, Map<Integer, String>> TerrainMap = new HashMap<Integer, Map<Integer, String>>();
 
-		int k=0;
-		int a=0;
 		
 		for(int y=0;y<height;y++){
 		Map<Integer, String> TerrainMapX = new HashMap<Integer, String>();

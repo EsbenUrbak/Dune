@@ -346,7 +346,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 					if(ISOMETRIC){
 					xX = Miscellaneous.neighbourX(x,y, 0, -1);
 					yY= Miscellaneous.neighbourY(y, 0, -1);
-					if(yY>heightArray||xX>widthArray||xX<0||yY<0){
+					if(yY>heightArray-1||xX>widthArray-1||xX<0||yY<0){
 						xX=x;
 						yY=y;
 						}
@@ -545,7 +545,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				value=TileImageMap.get(ID);
 				if(value==null){
 					if(ISOMETRIC){
-						System.out.println("x ="+x+" y ="+y+" E8 ="+E8);
+						System.out.println("x ="+x+" y ="+y+" E8 ="+E8+" S8 = "+S8);
 						CombinedTileImage = ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8);
 						CombinedTileImage = ImageHandler.resize(CombinedTileImage, 46, 46);
 						CombinedTileImage = ImageHandler.ImageRotationAny(CombinedTileImage, 45);

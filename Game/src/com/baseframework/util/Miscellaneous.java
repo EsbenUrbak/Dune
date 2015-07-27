@@ -14,7 +14,7 @@ public class Miscellaneous {
 
 	public static int neighbourX(int x, int y, int i, int j){
 		
-		if(false){
+		if(y%2==0){
 		
 		if(i==-1&&j==-1){
 			x=x;
@@ -112,6 +112,25 @@ public class Miscellaneous {
 			x=0;
 		}
 		return x;
+	}
+	
+	public static int carToIsoIndexX(int xNumber, int yNumber, int tileWidth){
+		int x;
+		if(yNumber%2==0){
+		x = xNumber*tileWidth;
+		}else{
+		x = xNumber*tileWidth+tileWidth/2;
+		}
+				
+		return x;
+	}
+	
+	public static int carToIsoIndexY(int xNumber, int yNumber, int tileHeight){
+		int y;
+		
+		y=yNumber*tileHeight/2;
+		
+		return y;
 	}
 	
 	public static int carToIsoX(int xNumber, int yNumber, int tileWidth){

@@ -180,8 +180,8 @@ public class PlayScreen extends GameScreen{
 
 			if(PlanetMap.ISOMETRIC){
 				//Use these to get Isometric positions
-				pX = Miscellaneous.carToIsoX(pX, t.getTileY(), t.getTileImage().getWidth(null));
-				pY = Miscellaneous.carToIsoY(pY, t.getTileY(), t.getTileImage().getHeight(null));
+				pX = Miscellaneous.carToIsoIndexX(pX, t.getTileY(), t.getTileImage().getWidth(null));
+				pY = Miscellaneous.carToIsoIndexY(pY, t.getTileY(), t.getTileImage().getHeight(null));
 			
 			}
 

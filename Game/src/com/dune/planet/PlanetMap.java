@@ -25,6 +25,7 @@ public class PlanetMap {
 	public static ArrayList<String> elevationArray = new ArrayList<String>();	
 	public static ArrayList<String> elevationArrayHighRes = new ArrayList<String>();	
 	public static Map<Integer, Map<Integer, String>> elevationMap = new HashMap<Integer, Map<Integer, String>>();
+	public static Map<Integer, Map<Integer, String>> elevationMapLowRes = new HashMap<Integer, Map<Integer, String>>();
 	public static Map<Integer, Map<Integer, String>> terMap = new HashMap<Integer, Map<Integer, String>>();
 	public static Map<Integer, Map<Integer, Tile>> tileMap = new HashMap<Integer, Map<Integer, Tile>>();
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
@@ -73,8 +74,9 @@ public class PlanetMap {
 			}
 		}
 		
-		//elevationArrayHighRes = ArrayHandler.resolutionIncrease(elevationArray, Tile.getSizeX()/WIDTHSLOPE);
+		elevationArrayHighRes = ArrayHandler.resolutionIncrease(elevationArray, 1);
 		elevationMap =ArrayHandler.HighResMap(elevationArray, Tile.getSizeX()/WIDTHSLOPE, width, height);
+		elevationMapLowRes = ArrayHandler.HighResMap(elevationArray, 1, width, height);
 		
 		tilearray=transitionAlgo( mapArray,elevationArray, height, width);
 		
@@ -325,7 +327,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 		BufferedImage value;
 		
 		int elevation =0,elevationUP, elevationDown, elevationRight, elevationLeft = 0;
-		boolean eUp, eDown, eRight, eLeft;
+		boolean eUp = false, eDown=false, eRight=false, eLeft=false;
 
 		
 		
@@ -333,9 +335,9 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 		for(int y = 0; y<heightArray;y++){
 		for (int x = 0; x < widthArray; x++) {
 
-			
-				elevation = Integer.parseInt(elevationArray.get(x+y*widthArray));
-			
+				elevation =0;
+				elevation = Integer.parseInt(elevationMapLowRes.get(y).get(x));
+				
 				//edge of map problem solving -> "tiles" outside of map => are 0 tiles
 				S0=tilearray.get((x+y*widthArray));
 				S0=terMap.get(y).get(x);
@@ -352,7 +354,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 						}
 					}
 					S1=terMap.get(yY).get(xX);
-					elevationUP = Integer.parseInt(elevationArray.get((x+y*widthArray)-widthArray));
+					elevationUP =Integer.parseInt(elevationMapLowRes.get(yY).get(xX));
 				}else{
 					S1=S0;
 					elevationUP = 0;
@@ -386,7 +388,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 						}
 					}
 					S2=terMap.get(yY).get(xX);
-					elevationRight = Integer.parseInt(elevationArray.get((x+y*widthArray)+1));
+					elevationRight = Integer.parseInt(elevationMapLowRes.get(yY).get(xX));
 				}else{
 					S2=S0;
 					elevationRight = 0;
@@ -398,7 +400,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 					if(ISOMETRIC){
 					xX = Miscellaneous.neighbourX(x,y, 1, 1);
 					yY= Miscellaneous.neighbourY(y, 1, 1);
-					if(yY>heightArray-2||xX>widthArray||xX<0||yY<0){
+					if(yY>heightArray-2||xX>widthArray-1||xX<0||yY<0){
 						xX=x;
 						yY=y;
 						}
@@ -420,7 +422,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 						}
 					}
 					S3=terMap.get(yY).get(xX);
-					elevationDown = Integer.parseInt(elevationArray.get((x+y*widthArray)+widthArray));
+					elevationDown = Integer.parseInt(elevationMapLowRes.get(yY).get(xX));
 				}else{
 					S3=S0;
 					elevationDown=0;
@@ -454,7 +456,7 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 						}
 					}
 					S4=terMap.get(yY).get(xX);
-					elevationLeft = Integer.parseInt(elevationArray.get((x+y*widthArray)-1));
+					elevationLeft = Integer.parseInt(elevationMapLowRes.get(yY).get(xX));
 				}else{
 					S4=S0;
 				}
@@ -545,11 +547,12 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				value=TileImageMap.get(ID);
 				if(value==null){
 					if(ISOMETRIC){
-						System.out.println("x ="+x+" y ="+y+" E8 ="+E8+" S8 = "+S8);
+						//System.out.println("x ="+x+" y ="+y+" elevation ="+elevation);
 						CombinedTileImage = ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8);
 						CombinedTileImage = ImageHandler.resize(CombinedTileImage, 46, 46);
 						CombinedTileImage = ImageHandler.ImageRotationAny(CombinedTileImage, 45);
 						CombinedTileImage= ImageHandler.makeColorTransparent(CombinedTileImage, Color.BLACK);
+						CombinedTileImage= ImageHandler.resize(CombinedTileImage,CombinedTileImage.getWidth(),CombinedTileImage.getHeight()/2);
 						TileImageMap.put(ID,CombinedTileImage);
 					}else{
 					
@@ -557,8 +560,17 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 					}
 				}				
 				
-				Tile t = new Tile(x, y, ID, eUp, eDown, eRight, eLeft);
+				if(elevation==2){
+					System.out.println("elevation = "+elevation);
+					}
+				
+				
+				Tile t = new Tile(x, y, ID, eUp, eDown, eRight, eLeft,elevation);
 								
+				if(t.getElevationTile()==1){
+					System.out.println("elevation = "+t.getElevationTile());
+					}
+				
 				tilearrayNew.add(t);
 		}	
 		}

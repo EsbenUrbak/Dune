@@ -1,8 +1,10 @@
 package com.baseframework.screen;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Polygon;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -44,7 +46,7 @@ public class PlayScreen extends GameScreen{
 	private final float SQUAD_TOPX = 300f; 
 	private final float SQUAD_TOPY = 200f;
 	public static final int SCREEN_X = 0;
-	public static final int SCREEN_Y = 0;
+	public static final int SCREEN_Y = 0, ELEVATIONHEIGHT=15;
 	
 	// boolean variables
 	boolean spaceKeyPressed = false;
@@ -157,7 +159,7 @@ public class PlayScreen extends GameScreen{
 	}
 	
 	private void renderTiles(Graphics g) {
-		int pX, pY;
+		int pX, pY,elevation;
 		for (int y = 0; y <PlanetMap.tileMap.size() ; y++) {
 
 			for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
@@ -170,13 +172,7 @@ public class PlayScreen extends GameScreen{
 			t = PlanetMap.tileMap.get(y).get(x);
 			pX = t.getTileX();
 			pY= t.getTileY();
-			
-
-				//Use these to get Isometric positions
-				//pX = Miscellaneous.carToIsoX(t.getTileX(), t.getTileY(), t.getTileImage().getWidth(null));
-				//pY = Miscellaneous.carToIsoY(t.getTileX(), t.getTileY(), t.getTileImage().getHeight(null));
-		
-				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
+			elevation=PlanetMap.getElev(x*3,y*3);  //i tried t.getElevation() but that didnt work for some bizar reason
 
 			if(PlanetMap.ISOMETRIC){
 				//Use these to get Isometric positions
@@ -185,22 +181,51 @@ public class PlayScreen extends GameScreen{
 			
 			}
 
-			g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
+			
 
 			
+			if(elevation>0&&PlanetMap.ISOMETRIC){
+				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - elevation*ELEVATIONHEIGHT-(int) viewframe.getFrameY(), null);
+				Color brown = new Color(128,128,0); 
+				g.setColor (brown);
+				Polygon p = new Polygon();
+				p.addPoint(pX- (int) viewframe.getFrameX(),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT-2);
+				p.addPoint(pX- (int) viewframe.getFrameX(),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2+2);
+				p.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)+2);
+				p.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT-2);
+				g.fillPolygon(p);  
+				
+				Polygon p2 = new Polygon();
+				p2.addPoint((pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT-2);
+				p2.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2+2);
+				p2.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)+2);
+				p2.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT-2);
+				g.fillPolygon(p2);  
+			
 				//Drawing elevation lines
-				if(t.iseUpT()){
-					g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY());			
-				}
+				g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getWidth(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);	
+				g.drawLine(pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT);
+				
+				/*if(t.iseUpT()){
+					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);					}
 				if(t.iseRightT()){
-					g.drawLine(t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX()+t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
+					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT);	
 				}
 				if(t.iseDownT()){
-					g.drawLine(t.getTileX() - (int) viewframe.getFrameX()-t.getSizeX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
+					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);
 				}
 				if(t.iseLeftT()){
-					g.drawLine(t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY(), t.getTileX() - (int) viewframe.getFrameX(), t.getTileY() - (int) viewframe.getFrameY()+t.getSizeY());
-				}
+					g.drawLine(pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT);
+				}*/
+			
+			
+			}else{
+				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY -(int) viewframe.getFrameY(), null);
+			}
+
+
+			
+
 			}
 		}	
 	}

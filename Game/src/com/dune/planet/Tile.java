@@ -14,7 +14,7 @@ public class Tile {
 	private int tileX, tileY;
 	int type;
 	String S0,S1,S2,S3,S4,S5,S6,S7,S8,S9;
-	private static int sizeX=45, sizeY=45;
+	private static int sizeX=45, sizeY=45, elevationTile=0;
 	public Image tileImage;
 	private Rectangle r;
 	BufferedImage CombinedTileImage;
@@ -22,7 +22,7 @@ public class Tile {
 	boolean eUpT, eDownT, eRightT, eLeftT;
 		
 	//Loading the tile imagine from data base of landscapes
-	public Tile(int x, int y, String ID,boolean eUp, boolean eDown,boolean eRight, boolean eLeft) {
+	public Tile(int x, int y, String ID,boolean eUp, boolean eDown,boolean eRight, boolean eLeft, int elevationOfTile) {
 		
 		if(PlanetMap.ISOMETRIC){
 			tileX = x;
@@ -32,6 +32,7 @@ public class Tile {
 		tileY = y * sizeY;
 		}
 		
+		elevationTile=elevationOfTile*1;
 		
 		
 		type = Resources.W.getType();
@@ -53,6 +54,24 @@ public class Tile {
 	
 	
 	
+	public static void setSizeX(int sizeX) {
+		Tile.sizeX = sizeX;
+	}
+
+
+
+	public static int getElevationTile() {
+		return elevationTile;
+	}
+
+
+
+	public static void setElevationTile(int elevationTile) {
+		Tile.elevationTile = elevationTile;
+	}
+
+
+
 	public void update(float delta) {
 		// absolute coordinates - no need to update the tile movement anymore
 	}
@@ -154,6 +173,7 @@ public class Tile {
 	public void seteLeftT(boolean eLeftT) {
 		this.eLeftT = eLeftT;
 	}
+
 
 
 

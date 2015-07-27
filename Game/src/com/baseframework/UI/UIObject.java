@@ -1,6 +1,7 @@
 package com.baseframework.UI;
 
 import java.awt.Graphics;
+import java.util.Comparator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface UIObject {
@@ -26,4 +27,10 @@ public interface UIObject {
 	public void cancel();
 	
 	public int getTypePriority();
+	
+    public static Comparator<UIObject> typePriorityOrder = new Comparator<UIObject>(){
+		public int compare(UIObject obj1, UIObject obj2) {
+			return Integer.compare(obj1.getTypePriority(), obj2.getTypePriority());
+		}
+    };
 }

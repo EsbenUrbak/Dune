@@ -127,7 +127,7 @@ public class UIBar implements UIObject {
 			itemY = frameRect.height -EDGESIZEY -UIBarSlot.height;
 			
 			// sort by order of priority for better display
-			//lvl1slots.sort(priorityOrder);
+			lvl1slots.sort(priorityOrder);
 			
 			// display from the left in priority order
 			for(int i=0; i< lvl1slots.size(); i++){

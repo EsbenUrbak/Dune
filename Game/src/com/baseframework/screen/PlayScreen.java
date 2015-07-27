@@ -117,7 +117,7 @@ public class PlayScreen extends GameScreen{
 		mainBar.setButton(buttonMode);
 		
 		// create the generic UI items in the list
-		//uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseDown, Resources.btnCollapseUp));
+		uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseDown, Resources.btnCollapseUp));
 		
 		//uiItems.add(new UIButtonExtend(btnModeX + 40, btnModeY - 50, Resources.btnExtendDown, Resources.btnExtendUp));
 		
@@ -128,7 +128,7 @@ public class PlayScreen extends GameScreen{
 		uiItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));		
 
 		//sort by order of type priority for proper display
-		//uiItems.sort(typePriorityOrder);
+		uiItems.sort(UIObject.typePriorityOrder);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class PlayScreen extends GameScreen{
 			UIObject uiObject = iterator.next();	
 			reSort = reSort || uiObject.updateList(uiItems) ;
 		}
-		//if(reSort) uiItems.sort(typePriorityOrder);
+		if(reSort) uiItems.sort(UIObject.typePriorityOrder);
 		
 	}
 

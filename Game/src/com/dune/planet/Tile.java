@@ -24,14 +24,22 @@ public class Tile {
 	//Loading the tile imagine from data base of landscapes
 	public Tile(int x, int y, String ID,boolean eUp, boolean eDown,boolean eRight, boolean eLeft) {
 		
-		
+		if(PlanetMap.ISOMETRIC){
+			tileX = x;
+			tileY = y;	
+		}else{
 		tileX = x * sizeX;
 		tileY = y * sizeY;
-
+		}
+		
+		
+		
 		type = Resources.W.getType();
 
 		r = new Rectangle();
-		r.setBounds(tileX, tileY, sizeX, sizeY);
+		//rect start point
+
+		r.setBounds(x*sizeX, y*sizeX, sizeX, sizeY);
 		tileImage = PlanetMap.getImage(ID);
 
 		eUpT= eUp;

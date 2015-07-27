@@ -1,5 +1,6 @@
 package com.dune.planet;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -12,9 +13,10 @@ import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
 import com.baseframework.util.ArrayHandler;
 import com.baseframework.util.ImageHandler;
+import com.baseframework.util.Miscellaneous;
 
 public class PlanetMap {
-	
+	public static boolean ISOMETRIC =false;
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
 	public static ArrayList<String> mapArray = new ArrayList<String>();	
 	public static ArrayList<String> mapArrayHighRes = new ArrayList<String>();
@@ -312,14 +314,14 @@ public class PlanetMap {
 
 public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<String> elevationArray, int heightArray, int widthArray){
 
-	
+		
 		
 		ArrayList<Tile> tilearrayNew=new ArrayList<Tile>();
 
 		String S0,  S1, S2, S3, S4, S5, S6, S7, S8, S9;
 		String E0,  E1, E2, E3, E4, E5, E6, E7, E8, E9;
 		String ID;
-		
+		int xX,yY;
 		BufferedImage value;
 		
 		int elevation =0,elevationUP, elevationDown, elevationRight, elevationLeft = 0;
@@ -339,7 +341,17 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				S0=terMap.get(y).get(x);
 				
 				if(y>0){
-					S1=terMap.get(y-1).get(x);
+					xX=x;
+					yY=y-1;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, 0, -1);
+					yY= Miscellaneous.neighbourY(y, 0, -1);
+					if(yY>heightArray||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S1=terMap.get(yY).get(xX);
 					elevationUP = Integer.parseInt(elevationArray.get((x+y*widthArray)-widthArray));
 				}else{
 					S1=S0;
@@ -347,13 +359,33 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				}
 				
 				if(y>0&&x<widthArray-1){
-					S5=terMap.get(y-1).get(x+1);
+					xX=x+1;
+					yY=y-1;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, +1, -1);
+					yY= Miscellaneous.neighbourY(y, +1, -1);
+					if(yY>heightArray||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S5=terMap.get(yY).get(xX);
 				}else{
 					S5=S0;
 				}
 
 				if(x<widthArray-1){
-					S2=terMap.get(y).get(x+1);
+					xX=x+1;
+					yY=y;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, 1, 0);
+					yY= Miscellaneous.neighbourY(y, 1, 0);
+					if(yY>heightArray-1||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S2=terMap.get(yY).get(xX);
 					elevationRight = Integer.parseInt(elevationArray.get((x+y*widthArray)+1));
 				}else{
 					S2=S0;
@@ -361,13 +393,33 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				}
 
 				if(y<heightArray-1&&x<widthArray-1){
-					S6=terMap.get(y+1).get(x+1);
+					xX=x+1;
+					yY=y+1;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, 1, 1);
+					yY= Miscellaneous.neighbourY(y, 1, 1);
+					if(yY>heightArray-2||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S6=terMap.get(yY).get(xX);
 				}else{
 					S6=S0;
 				}
 				
 				if((y<heightArray-1)){
-					S3=terMap.get(y+1).get(x);
+					xX=x;
+					yY=y+1;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, 0, 1);
+					yY= Miscellaneous.neighbourY(y, 0, 1);
+					if(yY>heightArray||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S3=terMap.get(yY).get(xX);
 					elevationDown = Integer.parseInt(elevationArray.get((x+y*widthArray)+widthArray));
 				}else{
 					S3=S0;
@@ -375,20 +427,50 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				}
 
 				if(y<heightArray-1&&x>0){
-					S7=terMap.get(y+1).get(x-1);
+					xX=x-1;
+					yY=y+1;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, -1, 1);
+					yY= Miscellaneous.neighbourY(y, -1, 1);
+					if(yY>heightArray||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S7=terMap.get(yY).get(xX);
 				}else{
 					S7=S0;
 				}
 				
 				if(x>0){
-					S4=terMap.get(y).get(x-1);
+					xX=x-1;
+					yY=y;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, -1, 0);
+					yY= Miscellaneous.neighbourY(y, -1, 0);
+					if(yY>heightArray-1||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S4=terMap.get(yY).get(xX);
 					elevationLeft = Integer.parseInt(elevationArray.get((x+y*widthArray)-1));
 				}else{
 					S4=S0;
 				}
 				
 				if(y>0&&x>0){
-					S8=terMap.get(y-1).get(x-1);
+					xX=x-1;
+					yY=y-1;
+					if(ISOMETRIC){
+					xX = Miscellaneous.neighbourX(x,y, -1, -1);
+					yY= Miscellaneous.neighbourY(y, -1, -1);
+					if(yY>heightArray||xX>widthArray||xX<0||yY<0){
+						xX=x;
+						yY=y;
+						}
+					}
+					S8=terMap.get(yY).get(xX);
 
 				}else{
 					S8=S0;
@@ -462,9 +544,17 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 				//Create pictures but first checks whether the picture is already in there. If then it will not create it again
 				value=TileImageMap.get(ID);
 				if(value==null){
-				
+					if(ISOMETRIC){
+						System.out.println("x ="+x+" y ="+y+" E8 ="+E8);
+						CombinedTileImage = ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8);
+						CombinedTileImage = ImageHandler.resize(CombinedTileImage, 46, 46);
+						CombinedTileImage = ImageHandler.ImageRotationAny(CombinedTileImage, 45);
+						CombinedTileImage= ImageHandler.makeColorTransparent(CombinedTileImage, Color.BLACK);
+						TileImageMap.put(ID,CombinedTileImage);
+					}else{
+					
 					TileImageMap.put(ID, ImageHandler.ImageMerge(Resources.G.getType(), Tile.getSizeX(),Tile.getSizeY(),E0,  E1, E2, E3, E4, E5, E6, E7, E8));
-				
+					}
 				}				
 				
 				Tile t = new Tile(x, y, ID, eUp, eDown, eRight, eLeft);

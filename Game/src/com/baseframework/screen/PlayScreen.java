@@ -15,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.baseframework.UI.*;
 import com.baseframework.game.main.MainHolder;
 import com.baseframework.game.main.Resources;
+import com.baseframework.util.Miscellaneous;
 import com.dune.entities.AStar;
 import com.dune.entities.Path;
 import com.dune.entities.Squad;
@@ -27,6 +28,7 @@ public class PlayScreen extends GameScreen{
 	
 	// units
 	public Squad squad;
+	Tile t;
 	
 	// Surface object of the planet
 	public static ViewFrame viewframe;
@@ -157,18 +159,34 @@ public class PlayScreen extends GameScreen{
 	private void renderTiles(Graphics g) {
 		int pX, pY;
 		for (int y = 0; y <PlanetMap.tileMap.size() ; y++) {
+
 			for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
 	
 				Tile t = PlanetMap.tileMap.get(y).get(x);
-			
+
 				pX = t.getTileX();
 				pY= t.getTileY();
+
+			t = PlanetMap.tileMap.get(y).get(x);
+			pX = t.getTileX();
+			pY= t.getTileY();
 			
+
 				//Use these to get Isometric positions
 				//pX = Miscellaneous.carToIsoX(t.getTileX(), t.getTileY(), t.getTileImage().getWidth(null));
 				//pY = Miscellaneous.carToIsoY(t.getTileX(), t.getTileY(), t.getTileImage().getHeight(null));
 		
 				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
+
+			if(PlanetMap.ISOMETRIC){
+				//Use these to get Isometric positions
+				pX = Miscellaneous.carToIsoX(pX, t.getTileY(), t.getTileImage().getWidth(null));
+				pY = Miscellaneous.carToIsoY(pY, t.getTileY(), t.getTileImage().getHeight(null));
+			
+			}
+
+			g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY(), null);
+
 			
 				//Drawing elevation lines
 				if(t.iseUpT()){

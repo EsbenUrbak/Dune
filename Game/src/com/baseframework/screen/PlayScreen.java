@@ -126,7 +126,7 @@ public class PlayScreen extends GameScreen{
 		uiItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));		
 
 		//sort by order of type priority for proper display
-		uiItems.sort(typePriorityOrder);
+		//uiItems.sort(typePriorityOrder);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class PlayScreen extends GameScreen{
 			UIObject uiObject = iterator.next();	
 			reSort = reSort || uiObject.updateList(uiItems) ;
 		}
-		if(reSort) uiItems.sort(typePriorityOrder);
+		//if(reSort) uiItems.sort(typePriorityOrder);
 		
 	}
 

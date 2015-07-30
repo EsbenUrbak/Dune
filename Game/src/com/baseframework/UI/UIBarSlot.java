@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 import com.baseframework.game.main.Resources;
 
@@ -53,7 +53,7 @@ public class UIBarSlot implements UIObject{
 	}
 	
 	@Override
-	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+	public boolean updateList(ArrayList<UIObject> list){
 		return false;
 	}
 	

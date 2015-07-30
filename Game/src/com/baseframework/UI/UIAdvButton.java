@@ -2,7 +2,7 @@ package com.baseframework.UI;
 
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 
 public class UIAdvButton extends UIButton {
@@ -28,7 +28,7 @@ public class UIAdvButton extends UIButton {
 	}
 	
 	@Override
-	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+	public boolean updateList(ArrayList<UIObject> list){
 		if(showItem.toUpdate){
 			showItem.toUpdate = false;
 			if(list.contains(showItem)) {

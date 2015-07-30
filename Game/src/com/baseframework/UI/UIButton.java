@@ -3,7 +3,7 @@ package com.baseframework.UI;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 
 public class UIButton implements UIObject{
@@ -32,7 +32,7 @@ public class UIButton implements UIObject{
 	}
 	
 	@Override
-	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+	public boolean updateList(ArrayList<UIObject> list){
 		return false;
 	}
 	

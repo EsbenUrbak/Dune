@@ -10,9 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.baseframework.UI.*;
 import com.baseframework.game.main.MainHolder;
@@ -54,7 +52,7 @@ public class PlayScreen extends GameScreen{
 	// Buttons, bars and user interface items
 	private UIAdvButton buttonMode;
 	private UIBar mainBar;
-	private CopyOnWriteArrayList<UIObject> uiItems;
+	private ArrayList<UIObject> uiItems;
 	
 	//start of nested button classes ---------------------------------------------------------------------------------------
 
@@ -107,7 +105,7 @@ public class PlayScreen extends GameScreen{
 		UIDragImage.setScope(screenSizeX, screenSizeY);
 		
 		// define the specific UI items and add them to the list
-		uiItems = new CopyOnWriteArrayList<UIObject>();
+		uiItems = new ArrayList<UIObject>();
 		
 		buttonMode = new UIAdvButton(btnModeX, btnModeY, Resources.btnModeDown, Resources.btnModeUp, Resources.barShow);
 		uiItems.add(buttonMode);
@@ -130,7 +128,7 @@ public class PlayScreen extends GameScreen{
 		uiItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));		
 
 		//sort by order of type priority for proper display
-		//uiItems.sort(typePriorityOrder);
+		uiItems.sort(typePriorityOrder);
 	}
 
 	@Override
@@ -142,12 +140,10 @@ public class PlayScreen extends GameScreen{
 		map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
 		//updateTiles();
 		
-		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
-			UIObject uiObject = iterator.next();	
-			reSort = reSort || uiObject.updateList(uiItems) ;
+		for (int i = 0; i < uiItems.size(); i++) {	
+			reSort = reSort || uiItems.get(i).updateList(uiItems);
 		}
-		//if(reSort) uiItems.sort(typePriorityOrder);
-		
+		if(reSort) uiItems.sort(typePriorityOrder);
 	}
 
 	@Override
@@ -172,7 +168,7 @@ public class PlayScreen extends GameScreen{
 			t = PlanetMap.tileMap.get(y).get(x);
 			pX = t.getTileX();
 			pY= t.getTileY();
-			elevation=PlanetMap.getElev(x*3,y*3);  //i tried t.getElevation() but that didnt work for some bizar reason
+			elevation=PlanetMap.getElev(x*3,y*3);  //i tried t.getElevation() but that didnt work for some bizarre reason
 
 			if(PlanetMap.ISOMETRIC){
 				//Use these to get Isometric positions
@@ -289,9 +285,8 @@ public class PlayScreen extends GameScreen{
 
 		
 		//check if a UI object was pressed by order of priority
-		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
-			UIObject uiObject = iterator.next();
-			pressed = uiObject.onPressed(xPos, yPos);
+		for (int i = 0; i < uiItems.size(); i++) {
+			pressed = uiItems.get(i).onPressed(xPos, yPos);
 			if (pressed) break;
 		}
 		
@@ -347,9 +342,8 @@ public class PlayScreen extends GameScreen{
 	public void onMouseReleased(MouseEvent e) {
 		
 		// release all UI items
-		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
-			UIObject uiObject = iterator.next();	
-			if (uiObject.onReleased(e.getX(), e.getY())) uiObject.performAction();
+		for (int i = 0; i < uiItems.size(); i++){	
+			if (uiItems.get(i).onReleased(e.getX(), e.getY())) uiItems.get(i).performAction();
 		}
 	}
 	
@@ -358,9 +352,8 @@ public class PlayScreen extends GameScreen{
 		boolean dragged=false;
 		
 		//check if an UI item was dragged by order of priority
-		for (Iterator<UIObject> iterator = uiItems.iterator(); iterator.hasNext();) {
-			UIObject uiObject = iterator.next();
-			dragged = uiObject.onDragged(e.getX(), e.getY());
+		for (int i = 0; i < uiItems.size(); i++) {
+			dragged = uiItems.get(i).onDragged(e.getX(), e.getY());
 			if (dragged) break;
 		}
 	}

@@ -4,9 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
@@ -33,8 +32,8 @@ public class UIBar implements UIObject {
 	
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
 	private int tileCountX, tileCountY, slotCount1=0, slotCount2=0, tileHeight, tileWidth;
-	private CopyOnWriteArrayList<UIBarSlot> lvl1slots, lvl2slots;
-	private CopyOnWriteArrayList<UIBarSlot> addedSlots, removedSlots;
+	private ArrayList<UIBarSlot> lvl1slots, lvl2slots;
+	private ArrayList<UIBarSlot> addedSlots, removedSlots;
 	
 	protected UIAdvButton refButton = null;
 	private UIBarDrag collapseItem = null;
@@ -59,10 +58,10 @@ public class UIBar implements UIObject {
 		catchRect = new Rectangle (topX, topY, tileCountX * tileWidth,PlayScreen.screenSizeY - topY);
 		lvl1catchRect = new Rectangle(catchRect);
 		
-		lvl1slots = new CopyOnWriteArrayList<UIBarSlot>();
-		lvl2slots = new CopyOnWriteArrayList<UIBarSlot>();
-		addedSlots = new CopyOnWriteArrayList<UIBarSlot>();
-		removedSlots = new CopyOnWriteArrayList<UIBarSlot>();
+		lvl1slots = new ArrayList<UIBarSlot>();
+		lvl2slots = new ArrayList<UIBarSlot>();
+		addedSlots = new ArrayList<UIBarSlot>();
+		removedSlots = new ArrayList<UIBarSlot>();
 	}
 	
 	public void setButton(UIAdvButton refButton){
@@ -127,7 +126,7 @@ public class UIBar implements UIObject {
 			itemY = frameRect.height -EDGESIZEY -UIBarSlot.height;
 			
 			// sort by order of priority for better display
-			//lvl1slots.sort(priorityOrder);
+			lvl1slots.sort(priorityOrder);
 			
 			// display from the left in priority order
 			for(int i=0; i< lvl1slots.size(); i++){
@@ -143,7 +142,7 @@ public class UIBar implements UIObject {
 			itemY = EDGESIZEY;
 			
 			// sort by order of priority for better display
-			//lvl2slots.sort(priorityOrder);
+			lvl2slots.sort(priorityOrder);
 			
 			// display from the left in priority order
 			for(int i=0; i< lvl2slots.size(); i++){
@@ -154,28 +153,29 @@ public class UIBar implements UIObject {
 	}
 	
 	@Override
-	public boolean updateList(CopyOnWriteArrayList<UIObject> list){
+	public boolean updateList(ArrayList<UIObject> list){
 		boolean hasUpdated = false;
+		UIBarSlot slot;
 		
 		// checks if new bar slots were added to the bar, and if so, add them
 		if(!addedSlots.isEmpty()){
 			hasUpdated = true;
-			for (Iterator<UIBarSlot> iterator = addedSlots.iterator(); iterator.hasNext();) {
-				UIBarSlot newSlot = iterator.next();
-				list.add(newSlot);
-				addedSlots.remove(newSlot);
+			for (int i = addedSlots.size()-1; i >= 0; i--) {
+				slot = addedSlots.get(i);
+				list.add(slot);
+				addedSlots.remove(slot);
 			}	
 		}
 		
 		// checks if bar slots were removed from the bar
 		if(!removedSlots.isEmpty()){
-			for (Iterator<UIBarSlot> iterator = removedSlots.iterator(); iterator.hasNext();) {
-				UIBarSlot prevSlot = iterator.next();
-				if(list.contains(prevSlot)) {
-					list.remove(prevSlot);
+			for (int i = removedSlots.size()-1; i >= 0; i--)  {
+				slot = removedSlots.get(i);
+				if(list.contains(slot)) {
+					list.remove(slot);
 					hasUpdated = true;
 				}
-				removedSlots.remove(prevSlot);
+				removedSlots.remove(slot);
 			}	
 		}		
 		
@@ -210,14 +210,12 @@ public class UIBar implements UIObject {
 		}
 		
 		//show all bar slots
-		for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
-			UIBarSlot lvl1item = iterator.next();
-			lvl1item.show();
+		for (int i = 0; i< lvl1slots.size(); i++) {
+			lvl1slots.get(i).show();
 		}
 		
-		for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
-			UIBarSlot lvl2item = iterator.next();
-			lvl2item.show();
+		for (int i = 0; i< lvl2slots.size(); i++) {
+			lvl2slots.get(i).show();
 		}
 	}
 	
@@ -228,14 +226,12 @@ public class UIBar implements UIObject {
 		lvl1catchRect.setBounds(catchRect);
 		
 		//hide all bar slots
-		for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
-			UIBarSlot lvl1item = iterator.next();
-			lvl1item.hide();
+		for (int i = 0; i< lvl1slots.size(); i++) {
+			lvl1slots.get(i).hide();
 		}
 		
-		for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
-			UIBarSlot lvl2item = iterator.next();
-			lvl2item.hide();
+		for (int i = 0; i< lvl2slots.size(); i++) {
+			lvl2slots.get(i).hide();
 		}
 	}
 	
@@ -247,16 +243,14 @@ public class UIBar implements UIObject {
 			selected = true;
 			
 			// first checks if an item was selected (level 1)
-			for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
-				UIBarSlot lvl1item = iterator.next();
-				interrupt = lvl1item.onPressed(x, y);
+			for (int i = 0; i< lvl1slots.size(); i++) {
+				interrupt = lvl1slots.get(i).onPressed(x, y);
 				if(interrupt) return selected;
 			}
 			
 			// in level 2
-			for(Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();){
-				UIBarSlot lvl2item = iterator.next();
-				interrupt = lvl2item.onPressed(x, y);
+			for (int i = 0; i< lvl2slots.size(); i++) {
+				interrupt = lvl2slots.get(i).onPressed(x, y);
 				if (interrupt) return selected;
 			}
 			
@@ -355,15 +349,12 @@ public class UIBar implements UIObject {
 	}
 
 	public boolean addSlot(int level, UIBarSlot newItem){
-		
 		if(level == 1 && lvl1slots.size() <= MAXITEMS ){
-			lvl1slots.add(newItem);
-			addedSlots.add(newItem);
+			lvl1slots.add(newItem);				
 			slotCount1++;
-			
+		
 		} else if(level == 2 && lvl2slots.size() <= MAXITEMS ){
 			lvl2slots.add(newItem);
-			addedSlots.add(newItem);
 			slotCount2++;
 			
 			//if just added a second level, check if the bar needs to be extended upward
@@ -378,18 +369,18 @@ public class UIBar implements UIObject {
 		if (Math.max(slotCount1, slotCount2) * UIBarSlot.width + 2 * EDGESIZEX + 
 				Math.max(Math.max(slotCount1, slotCount2)-1,0) * MINGAPX > tileCountX * tileWidth){
 			this.extendright();
-		} 	
+		}
+		
+        addedSlots.add(newItem);
 		return true;
 	}
 	
 	public boolean removeSlot(int level, UIBarSlot item){
 		if(level == 1 && lvl1slots.contains(item)){
 			lvl1slots.remove(item);
-			removedSlots.add(item);
 			slotCount1--;
 		} else if(level == 2 && lvl2slots.contains(item)){
 			lvl2slots.remove(item);
-			removedSlots.add(item);
 			slotCount2--;
 			
 			//shrinks the bar downward if just removed the last item from the second level
@@ -404,6 +395,7 @@ public class UIBar implements UIObject {
 				Math.max(Math.max(slotCount1, slotCount2)-1,0) * MINGAPX < (tileCountX-1) * tileWidth){
 			this.collapseleft();
 		}
+        removedSlots.add(item);
 		return true;
 	}
 	
@@ -447,57 +439,56 @@ public class UIBar implements UIObject {
 	
 	public UIBarSlot inBarItem(int absX, int absY){
 		boolean added = false;
-		UIBarSlot newItem=null;
+		UIBarSlot slot=null;
 		
 		// first checks if the coordinates correspond to a level 1 item
-		for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
-			UIBarSlot lvl1item = iterator.next();
+		for (int i = 0; i< lvl1slots.size(); i++) {
+			slot = lvl1slots.get(i);
 			
-			if (lvl1item.catchRect.contains(absX, absY)){
+			if (slot.catchRect.contains(absX, absY)){
 				
 				// if the container is empty, returns the container to be filled
-				if (lvl1item.isEmpty()){
-					return lvl1item;				
+				if (slot.isEmpty()){
+					return slot;				
 				} else {
 					
 					// else, first checks if there is an empty container
-					newItem = findEmptySlot(1);
-					if (newItem != null) return newItem;
+					slot = findEmptySlot(1);
+					if (slot != null) return slot;
 					
 					// if no empty items, creates a new one
-					newItem = new UIBarSlot(this);
-					added = this.addSlot(1, newItem);
-					newItem = added ? newItem : null;
-					return newItem;
+					slot = new UIBarSlot(this);
+					added = this.addSlot(1, slot);
+					slot = added ? slot : null;
+					return slot;
 				}
 			}
 		}
 		
 		// then checks if the coordinates correspond to a level 2 item
-		for (Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();) {
-			UIBarSlot lvl2item = iterator.next();
+		for (int i = 0; i< lvl2slots.size(); i++) {
 			
-			if (lvl2item.catchRect.contains(absX, absY)){
-			
+			if (lvl2slots.get(i).catchRect.contains(absX, absY)){
+				slot = lvl2slots.get(i);			
 				// if the container is empty, returns the container to be filled
-				if (lvl2item.isEmpty()){
-					return lvl2item;
+				if (slot.isEmpty()){
+					return slot;
 				} else {
 					
 					// else, first checks if there is an empty container
-					newItem = findEmptySlot(2);
-					if (newItem != null) return newItem;					
+					slot = findEmptySlot(2);
+					if (slot != null) return slot;					
 					
 					// if no empty items, creates a new one					
-					newItem = new UIBarSlot(this);
-					added = this.addSlot(2, newItem);
-					newItem = added ? newItem : null;
-					return newItem;
+					slot = new UIBarSlot(this);
+					added = this.addSlot(2, slot);
+					slot = added ? slot : null;
+					return slot;
 				}
 			}
 		}
 		
-		return newItem;
+		return null;
 	}
 	
 	public boolean inBarCollapseZone(Rectangle itemRect){
@@ -513,14 +504,12 @@ public class UIBar implements UIObject {
 	
 	private UIBarSlot findEmptySlot (int level){
 		if (level ==1 && !lvl1slots.isEmpty()){
-			for (Iterator<UIBarSlot> iterator = lvl1slots.iterator(); iterator.hasNext();) {
-				UIBarSlot lvl1item = iterator.next();
-				if(lvl1item.isEmpty()) return lvl1item;
+			for (int i = 0; i< lvl1slots.size(); i++) {
+				if(lvl1slots.get(i).isEmpty()) return lvl1slots.get(i);
 			}
 		} else if( level ==2 && !lvl2slots.isEmpty()) {
-			for (Iterator<UIBarSlot> iterator = lvl2slots.iterator(); iterator.hasNext();) {
-				UIBarSlot lvl2item = iterator.next();
-				if(lvl2item.isEmpty()) return lvl2item;
+			for (int i = 0; i< lvl2slots.size(); i++) {
+				if(lvl2slots.get(i).isEmpty()) return lvl2slots.get(i);
 			}
 		} 				
 		return null;

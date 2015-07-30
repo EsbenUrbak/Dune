@@ -56,7 +56,8 @@ public class UIAdvButton extends UIButton {
 	public void performAction(){
 		// switch back and forth to shuttle mode
 		if(refBar != null){
-			refBar.switchDisplay();
+			System.out.println("switch between squad or shuttle view");
+			//refBar.switchDisplay();
 		}
 	}
 

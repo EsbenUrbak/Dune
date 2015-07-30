@@ -244,13 +244,13 @@ public class UIBar implements UIObject {
 			
 			// first checks if an item was selected (level 1)
 			for (int i = 0; i< lvl1slots.size(); i++) {
-				interrupt = lvl1slots.get(i).onPressed(x, y);
+				interrupt = lvl1slots.get(i).catchRect.contains(x,y);
 				if(interrupt) return selected;
 			}
 			
 			// in level 2
 			for (int i = 0; i< lvl2slots.size(); i++) {
-				interrupt = lvl2slots.get(i).onPressed(x, y);
+				interrupt = lvl2slots.get(i).catchRect.contains(x,y);
 				if (interrupt) return selected;
 			}
 			

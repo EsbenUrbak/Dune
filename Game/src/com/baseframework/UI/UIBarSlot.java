@@ -34,7 +34,7 @@ public class UIBarSlot implements UIObject{
 	
 	@Override
 	public void render(Graphics g){
-		if(!visible) return;
+		if(!visible || !refBar.visible) return;
 		
 		if(item == null){
 			Graphics2D g2;

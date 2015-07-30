@@ -16,7 +16,7 @@ import com.baseframework.util.ImageHandler;
 import com.baseframework.util.Miscellaneous;
 
 public class PlanetMap {
-	public static boolean ISOMETRIC =false;
+	public static boolean ISOMETRIC =true;
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
 	public static ArrayList<String> mapArray = new ArrayList<String>();	
 	public static ArrayList<String> mapArrayHighRes = new ArrayList<String>();

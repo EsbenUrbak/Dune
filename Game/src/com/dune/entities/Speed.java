@@ -6,9 +6,12 @@ import com.dune.planet.PlanetMap;
 
 
 public class Speed {
+	static Point p = new Point(0,0,0);;
 
 	public static int speed(int x, int y, int xNext, int yNext) {
-		
+		//p.setX(x);
+		//p.setY(y);
+		//p=Miscellaneous.CoordinateToTile(p, width, height)
 		
 		
 		double speed, speedTerrain, speedSlope=100;

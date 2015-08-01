@@ -71,17 +71,17 @@ public class UIBarSlot extends UIObject{
 	
 	@Override
 	public boolean onPressed(int absX, int absY){;
-		boolean selectItem = false;
 	
 		if(this.catchRect.contains(absX, absY) && visible && !empty){
-			selectItem = true;
 			this.item.setLocation(frameRect.x, frameRect.y);
 			this.item.show();
 			this.item.onPressed(absX, absY);
 			this.removeItem();
+			refBar.reOrganize(this);
+			return true;
 		}
 		 
-		return selectItem;
+		return false;
 	}
 	
 	@Override
@@ -125,7 +125,6 @@ public class UIBarSlot extends UIObject{
 			this.item = null;
 			this.empty = true;
 			this.priority = 10;
-			refBar.reOrganize(this);
 		}
 	}
 	

@@ -31,9 +31,11 @@ public class UIBar extends UIObject {
 	protected Rectangle catchRect, lvl1catchRect; // if not in lvl1catchRect, then assumes it will be on lvl2
 	
 	private Image barTileN, barTileS, barTileW, barTileE, barTileNW, barTileSW, barTileNE, barTileSE, barTileIn;
+	private enum tileName {tileN, tileS, tileW, tileE, tileNW, tileSW, tileNE, tileSE, tileIN};
 	private int tileCountX, tileCountY, slotCount1=0, slotCount2=0, tileHeight, tileWidth;
 	private ArrayList<UIBarSlot> lvl1slots, lvl2slots;
 	private ArrayList<UIBarSlot> addedSlots, removedSlots;
+	private ArrayList<tileName> tileNames;
 	
 	protected UIAdvButton refButton = null;
 	private UIBarDrag collapseItem = null;
@@ -62,12 +64,36 @@ public class UIBar extends UIObject {
 		lvl2slots = new ArrayList<UIBarSlot>();
 		addedSlots = new ArrayList<UIBarSlot>();
 		removedSlots = new ArrayList<UIBarSlot>();
+		tileNames = new ArrayList<tileName>();
+		
+		updateTiles();
 	}
 	
 	public void setButton(UIAdvButton refButton){
 		this.refButton = refButton;
 		collapseItem = new UIBarDrag(catchRect.x, catchRect.y, Resources.barCollapse, this);
 		collapseItem.hide();
+	}
+	
+	public void updateTiles(){
+		tileNames.clear();
+		tileName name;
+		
+		for (int j=0; j<tileCountY; j++){
+			for (int i=0; i<tileCountX; i++){
+				if(i == 0 && j == 0) {name = tileName.tileNW;}
+				else if(i == 0 && j == tileCountY-1) {name = tileName.tileSW;}
+				else if(i == tileCountX-1 && j == 0) {name = tileName.tileNE;}
+				else if(i == tileCountX-1 && j == tileCountY-1) {name = tileName.tileSE;}
+				else if(i != 0 && j == 0) {name = tileName.tileN;}
+				else if(i == tileCountX-1 && j != tileCountY-1) {name = tileName.tileE;}
+				else if(i != 0 && j == tileCountY-1) {name = tileName.tileS;}				
+				else if(i == 0 && j != 0) {name = tileName.tileW;}
+				else {name = tileName.tileIN;}
+				
+				tileNames.add(i + j*tileCountX, name); 
+			}
+		}			
 	}
 	
 	
@@ -81,16 +107,20 @@ public class UIBar extends UIObject {
 		// fancy bar display
 		for (int j=0; j<tileCountY; j++){
 			for (int i=0; i<tileCountX; i++){
-				if(i == 0 && j == 0) {displayImage = barTileNW;}
-				else if(i == 0 && j == tileCountY-1) {displayImage = barTileSW;}
-				else if(i == tileCountX-1 && j == 0) {displayImage = barTileNE;}
-				else if(i == tileCountX-1 && j == tileCountY-1) {displayImage = barTileSE;}
-				else if(i != 0 && j == 0) {displayImage = barTileN;}
-				else if(i == tileCountX-1 && j != tileCountY-1) {displayImage = barTileE;}
-				else if(i != 0 && j == tileCountY-1) {displayImage = barTileS;}				
-				else if(i == 0 && j != 0) {displayImage = barTileW;}
-				else {displayImage = barTileIn;}
+				if(j*tileCountX + i > tileNames.size()) break;
 				
+				switch(tileNames.get(i+j*tileCountX)){
+					case tileN: displayImage = barTileN; break;
+					case tileS: displayImage = barTileS; break;
+					case tileW: displayImage = barTileW; break;
+					case tileE: displayImage = barTileE; break;
+					case tileNW: displayImage = barTileNW; break;
+					case tileSW: displayImage = barTileSW; break;
+					case tileNE: displayImage = barTileNE; break;
+					case tileSE: displayImage = barTileSE; break;
+					case tileIN: displayImage = barTileIn; break;
+					default: displayImage = barTileIn;
+				}	
 				g.drawImage(displayImage, frameRect.x + i * tileWidth, frameRect.y + j * tileHeight, null);
 			}
 		}	
@@ -199,8 +229,8 @@ public class UIBar extends UIObject {
 		if(lvl2slots.isEmpty()){
 			lvl1catchRect.setBounds(catchRect);
 		} else {
-			lvl1catchRect.setRect(lvl1catchRect.x, frameRect.y  + frameRect.height/2, 
-					lvl1catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );		
+			lvl1catchRect.setRect(catchRect.x, frameRect.y  + frameRect.height/2, 
+					catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );		
 		}
 		
 		//show all bar slots
@@ -212,6 +242,8 @@ public class UIBar extends UIObject {
 			lvl2slots.get(i).show();
 		}
 	}
+	
+
 	
 	@Override
 	public void hide(){
@@ -269,7 +301,6 @@ public class UIBar extends UIObject {
 	
 	@Override
 	public boolean onReleased(int absX, int absY){
-		if(collapseItem != null) collapseItem.onReleased(absX, absY);
 		if(!catchRect.contains(absX, absY)) selected = false;
 		return selected && visible;
 	}
@@ -316,6 +347,7 @@ public class UIBar extends UIObject {
 			frameRect.setSize(frameRect.width + tileWidth, frameRect.height);
 			catchRect.setSize(catchRect.width + tileWidth, catchRect.height);
 			lvl1catchRect.setSize(lvl1catchRect.width + tileWidth, lvl1catchRect.height);
+			updateTiles();
 		}
 	}
 	
@@ -325,6 +357,7 @@ public class UIBar extends UIObject {
 			frameRect.setSize(frameRect.width - tileWidth, frameRect.height);
 			catchRect.setSize(catchRect.width - tileWidth, catchRect.height);
 			lvl1catchRect.setSize(lvl1catchRect.width - tileWidth, lvl1catchRect.height);
+			updateTiles();
 		}
 	}
 	
@@ -335,6 +368,7 @@ public class UIBar extends UIObject {
 			catchRect.setRect(catchRect.x, catchRect.y - tileHeight, catchRect.width, catchRect.height + tileHeight);
 			lvl1catchRect.setRect(catchRect.x, frameRect.y  + frameRect.height/2, 
 					catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );
+			updateTiles();
 		}
 	}
 	
@@ -344,6 +378,7 @@ public class UIBar extends UIObject {
 			frameRect.setRect(frameRect.x, frameRect.y + tileHeight, frameRect.getWidth(), frameRect.getHeight() - tileHeight);
 			catchRect.setRect(catchRect.x, catchRect.y + tileHeight, catchRect.getWidth(), catchRect.getHeight() - tileHeight);
 			lvl1catchRect.setRect(catchRect);
+			updateTiles();
 		}
 	}
 
@@ -516,10 +551,7 @@ public class UIBar extends UIObject {
 	
 	public boolean inBarCollapseZone(Rectangle itemRect){
 		if(refButton != null){
-			if(refButton.hideBarRect.intersects(itemRect)){
-				this.hide();
-				return true;
-			}
+			if(refButton.hideBarRect.intersects(itemRect)) return true;
 		}
 		return false;
 	}

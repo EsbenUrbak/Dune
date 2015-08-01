@@ -383,12 +383,12 @@ public class UIBar extends UIObject {
 	}
 
 	public boolean addSlot(int level, UIBarSlot newItem){
-		if(level == 1 && lvl1slots.size() <= MAXITEMS ){
-			insertSlot(newItem,lvl1slots);				
+		if(level == 1 && lvl1slots.size() <= MAXITEMS ){			
+			lvl1slots.add(newItem);
 			slotCount1++;
 		
 		} else if(level == 2 && lvl2slots.size() <= MAXITEMS ){
-			insertSlot(newItem,lvl2slots);	
+			lvl2slots.add(newItem);
 			slotCount2++;
 			
 			//if just added a second level, check if the bar needs to be extended upward
@@ -442,15 +442,10 @@ public class UIBar extends UIObject {
 			
 			// first checks if there is an empty item on level1
 			slot = findEmptySlot(1);
-			if (slot != null) {
-				slot.setItem(item);
-				reOrganize(slot);
-				return slot;
-			}
+			if (slot != null) return slot;
 			
 			// then try adding the item to the bar
 			slot = new UIBarSlot(this);
-			slot.setItem(item);
 			added = this.addSlot(1, slot);
 			
 			// if item can be added, set item to new value
@@ -461,15 +456,10 @@ public class UIBar extends UIObject {
 			
 			// first checks if there is an empty item on level1
 			slot = findEmptySlot(2);
-			if (slot != null) {
-				slot.setItem(item);
-				reOrganize(slot);
-				return slot;			
-			}
+			if (slot != null) return slot;			
 			
 			// then try adding the item to the bar			
 			slot = new UIBarSlot(this);
-			slot.setItem(item);
 			added = this.addSlot(2, slot);
 			
 			// if item can be added, set item to new value			
@@ -492,23 +482,15 @@ public class UIBar extends UIObject {
 			if (slot.catchRect.contains(absX, absY)){
 				
 				// if the container is empty, returns the container to be filled
-				if (slot.isEmpty()){
-					slot.setItem(item);
-					reOrganize(slot);
-					return slot;				
-				} else {
+				if (slot.isEmpty()) return slot;				
+				else {
 					
 					// else, first checks if there is an empty container
 					slot = findEmptySlot(1);
-					if (slot != null) {
-						slot.setItem(item);
-						reOrganize(slot);
-						return slot;
-					}
+					if (slot != null) return slot;
 					
 					// if no empty items, creates a new one
 					slot = new UIBarSlot(this);
-					slot.setItem(item);
 					added = this.addSlot(1, slot);
 					slot = added ? slot : null;
 					return slot;
@@ -522,23 +504,15 @@ public class UIBar extends UIObject {
 			if (lvl2slots.get(i).catchRect.contains(absX, absY)){
 				slot = lvl2slots.get(i);			
 				// if the container is empty, returns the container to be filled
-				if (slot.isEmpty()){
-					slot.setItem(item);
-					reOrganize(slot);
-					return slot;
-				} else {
+				if (slot.isEmpty())	return slot;
+				else {
 					
 					// else, first checks if there is an empty container
 					slot = findEmptySlot(2);
-					if (slot != null) {
-						slot.setItem(item);
-						reOrganize(slot);
-						return slot;					
-					}
+					if (slot != null) return slot;					
 					
 					// if no empty items, creates a new one					
 					slot = new UIBarSlot(this);
-					slot.setItem(item);
 					added = this.addSlot(2, slot);
 					slot = added ? slot : null;
 					return slot;

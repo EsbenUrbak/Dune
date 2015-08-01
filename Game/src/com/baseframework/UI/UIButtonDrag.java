@@ -18,7 +18,7 @@ public class UIButtonDrag extends UIDragImage {
 	public boolean updateList(ArrayList<UIObject> list){
 		if(!toRemove) return false;
 		
-		if(toRemove && list.contains(this)){
+		if(list.contains(this)){
 			list.remove(this);
 			toRemove = false;
 			return true;

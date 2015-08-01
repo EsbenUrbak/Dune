@@ -14,7 +14,7 @@ public class UIBarSlot extends UIObject{
 	public static int width=45, height=45;
 
 	private int priority=10;
-	private boolean visible, empty=true;
+	private boolean visible, empty=true, toAdd=false;
 
 	private Rectangle frameRect;
 	public Rectangle catchRect;
@@ -54,6 +54,14 @@ public class UIBarSlot extends UIObject{
 	
 	@Override
 	public boolean updateList(ArrayList<UIObject> list){
+
+		// add the item to the playScreen list, then remove it from the slot and reset the slot to a lower priority in the bar
+		if(toAdd){
+			toAdd = false;
+			pushItem(item, list);
+			this.removeItem();
+			return true;
+		}
 		return false;
 	}
 	
@@ -71,13 +79,12 @@ public class UIBarSlot extends UIObject{
 	
 	@Override
 	public boolean onPressed(int absX, int absY){;
-	
+		// if clicked inside a full slot, show, active and add the dragItem to the list	
 		if(this.catchRect.contains(absX, absY) && visible && !empty){
-			this.item.setLocation(frameRect.x, frameRect.y);
-			this.item.show();
-			this.item.onPressed(absX, absY);
-			this.removeItem();
-			refBar.reOrganize(this);
+			item.setLocation(frameRect.x, frameRect.y);
+			item.show();
+			item.onPressed(absX, absY);
+			toAdd = true;
 			return true;
 		}
 		 

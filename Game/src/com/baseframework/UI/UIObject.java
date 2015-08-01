@@ -2,6 +2,7 @@ package com.baseframework.UI;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 
 public abstract class UIObject {
@@ -44,4 +45,10 @@ public abstract class UIObject {
 		
 		list.add(index, item);
 	}
+	
+    public static Comparator<UIObject> typePriorityOrder = new Comparator<UIObject>(){
+		public int compare(UIObject obj1, UIObject obj2) {
+			return Integer.compare(obj1.getTypePriority(), obj2.getTypePriority());
+		}
+    };
 }

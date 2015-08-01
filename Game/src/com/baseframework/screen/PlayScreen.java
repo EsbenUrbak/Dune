@@ -128,7 +128,7 @@ public class PlayScreen extends GameScreen{
 		UIObject.pushItem(new UIDragItem(210, 10, Resources.teammate5, mainBar), uiItems);		
 
 		//sort by order of type priority for proper display (unused for compatibility reason with Java 7)
-		//uiItems.sort(typePriorityOrder);
+		//uiItems.sort(UIObject.typePriorityOrder);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class PlayScreen extends GameScreen{
 			uiItems.get(i).updateList(uiItems);
 			//reSort = reSort || uiItems.get(i).updateList(uiItems);
 		}
-		// if(reSort) uiItems.sort(typePriorityOrder);
+		// if(reSort) uiItems.sort(UIObject.typePriorityOrder);
 	}
 
 	@Override

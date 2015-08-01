@@ -35,10 +35,4 @@ public abstract class GameScreen {
 		MainHolder.thegame.setCurrentScreen(newScreen);
 	}
 	
-    public static Comparator<UIObject> typePriorityOrder = new Comparator<UIObject>(){
-		public int compare(UIObject obj1, UIObject obj2) {
-			return Integer.compare(obj1.getTypePriority(), obj2.getTypePriority());
-		}
-    };
-	
 }

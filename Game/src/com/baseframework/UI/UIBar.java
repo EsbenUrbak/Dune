@@ -154,8 +154,10 @@ public class UIBar extends UIObject {
 	
 	@Override
 	public boolean updateList(ArrayList<UIObject> list){
-		boolean hasUpdated = false;
-		UIBarSlot slot;
+		if(!visible) return false;
+
+		boolean hasUpdated = false;		
+		UIBarSlot slot;		
 		
 		// checks if new bar slots were added to the bar, and if so, add them
 		if(!addedSlots.isEmpty()){
@@ -181,18 +183,10 @@ public class UIBar extends UIObject {
 		
 		// checks if the bar itself was dragged into its collapse zone
 		if(collapseItem != null){
-			if(collapseItem.toUpdate){
-				if(list.contains(collapseItem)){
-					list.remove(collapseItem);
-					collapseItem.toUpdate = false;
-					hasUpdated = true;
-				}
-				
-				if(!list.contains(collapseItem)){
-					pushItem(collapseItem, list);
-					collapseItem.toUpdate = false;
-					hasUpdated = true;
-				}
+			if(collapseItem.toAdd && !list.contains(collapseItem)){
+				collapseItem.toAdd = false;
+				pushItem(collapseItem, list);
+				hasUpdated = true;
 			}
 		}
 		return hasUpdated;
@@ -233,6 +227,7 @@ public class UIBar extends UIObject {
 		for (int i = 0; i< lvl2slots.size(); i++) {
 			lvl2slots.get(i).hide();
 		}
+		
 	}
 	
 	@Override
@@ -245,22 +240,26 @@ public class UIBar extends UIObject {
 			// first checks if an item was selected (level 1)
 			for (int i = 0; i< lvl1slots.size(); i++) {
 				interrupt = lvl1slots.get(i).catchRect.contains(x,y);
+				interrupt = interrupt && !lvl1slots.get(i).isEmpty();
 				if(interrupt) return selected;
 			}
 			
 			// in level 2
 			for (int i = 0; i< lvl2slots.size(); i++) {
 				interrupt = lvl2slots.get(i).catchRect.contains(x,y);
+				interrupt = interrupt && !lvl2slots.get(i).isEmpty();
 				if (interrupt) return selected;
 			}
 			
 			// else display the collapse item
 			if(collapseItem != null){
-				if(collapseItem.visible == false){
-					collapseItem.show();
-					interrupt = collapseItem.onPressed(x, y);
-					if(interrupt) return selected;
+				
+				if(!collapseItem.dragged){
+					collapseItem.setLocation(x - (int) collapseItem.rPos.getWidth() / 2, y - (int) collapseItem.rPos.getHeight()/2);
+					collapseItem.onPressed(x,y);
+					collapseItem.toAdd = true;
 				}
+				
 			}
 		} else {
 			selected = false;

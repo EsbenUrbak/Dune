@@ -29,14 +29,10 @@ public class UIAdvButton extends UIButton {
 	
 	@Override
 	public boolean updateList(ArrayList<UIObject> list){
-		if(showItem.toUpdate){
-			showItem.toUpdate = false;
-			if(list.contains(showItem)) {
-				list.remove(showItem);
-			}
-			else {
-				pushItem(showItem, list);
-				return true;}
+		if(showItem.toAdd){
+			showItem.toAdd = false;
+			pushItem(showItem, list);
+			return true;
 		}
 		return false;
 	}
@@ -47,7 +43,7 @@ public class UIAdvButton extends UIButton {
 		if (pressed && !showItem.dragged){
 			showItem.setLocation(x - (int) showItem.rPos.getWidth()/2, y - (int) showItem.rPos.getHeight()/2);
 			showItem.onPressed(x,y);
-			showItem.toUpdate = true;
+			showItem.toAdd = true;
 		}
 		return pressed;
 	}

@@ -77,7 +77,7 @@ public class PlayScreen extends GameScreen{
 			mainBar.pushLvl(2);	
 		}
 	}
-	//end of button classes ---------------------------------------------------------------------------------------
+	//end of nested button classes ---------------------------------------------------------------------------------------
 
 	@Override
 	public void init() {

@@ -333,8 +333,8 @@ public class UIBar extends UIObject {
 			tileCountY++;
 			frameRect.setRect(frameRect.x, frameRect.y - tileHeight, frameRect.width, frameRect.height + tileHeight);
 			catchRect.setRect(catchRect.x, catchRect.y - tileHeight, catchRect.width, catchRect.height + tileHeight);
-			lvl1catchRect.setRect(lvl1catchRect.x, frameRect.y  + frameRect.height/2, 
-					lvl1catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );
+			lvl1catchRect.setRect(catchRect.x, frameRect.y  + frameRect.height/2, 
+					catchRect.width, catchRect.getMaxY() - frameRect.y - frameRect.height/2 );
 		}
 	}
 	

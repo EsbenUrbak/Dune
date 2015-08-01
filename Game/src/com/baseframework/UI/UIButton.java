@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 
-public class UIButton implements UIObject{
+public class UIButton extends UIObject{
 	private static final int typePriority = 17;
 	
 	protected Rectangle buttonRect;

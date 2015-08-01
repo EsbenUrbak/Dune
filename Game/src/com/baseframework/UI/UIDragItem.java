@@ -26,17 +26,17 @@ public class UIDragItem extends UIDragImage {
 		if(!super.onReleased(x, y)) return false;
 		
 		//then checks if the item is dropped in a bar slot
-		placeHolder = refBar.inBarItem(x, y);
+		placeHolder = refBar.inBarItem(x, y, this);
 		if (placeHolder != null){
 			this.barSlot = placeHolder;
-			barSlot.setItem(this);
+			//barSlot.setItem(this);
 			this.hide();
 			refBar.update();
 			return true;
 		}
 		
 		// then, only if the item was in the bar, checks if it was dropped in the collapse zone
-		if (refBar.inBarCollapseZone(rPos) && barSlot != null) {
+		if (refBar.inBarCollapseZone(this.rPos) && barSlot != null) {
 			// if so, send it back to its bar slot, and hide it
 			barSlot.setItem(this);
 			this.hide();
@@ -44,7 +44,7 @@ public class UIDragItem extends UIDragImage {
 		}
 		
 		// then checks if the item was dropped into the bar
-		placeHolder = refBar.inCatchZone(this.rPos);	
+		placeHolder = refBar.inCatchZone(this);	
 		if( placeHolder != null){
 			this.barSlot = placeHolder;
 			barSlot.setItem(this);

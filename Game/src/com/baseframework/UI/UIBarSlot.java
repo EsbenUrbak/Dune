@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.baseframework.game.main.Resources;
 
-public class UIBarSlot implements UIObject{
+public class UIBarSlot extends UIObject{
 
 	public static final int typePriority = 15;
 	public static int width=45, height=45;
@@ -125,6 +125,7 @@ public class UIBarSlot implements UIObject{
 			this.item = null;
 			this.empty = true;
 			this.priority = 10;
+			refBar.reOrganize(this);
 		}
 	}
 	
@@ -136,10 +137,16 @@ public class UIBarSlot implements UIObject{
 	public int getPriority(){
 		return priority;
 	}
+	
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	
 
 	public boolean isEmpty() {
 		return empty;
 	}
-	
+
+
 }
 

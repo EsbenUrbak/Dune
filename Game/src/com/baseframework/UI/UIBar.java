@@ -10,7 +10,7 @@ import java.util.Comparator;
 import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
 
-public class UIBar implements UIObject {
+public class UIBar extends UIObject {
 	
 	public static final int typePriority = 16;
 	
@@ -18,7 +18,7 @@ public class UIBar implements UIObject {
 	private static final int MAXITEMS =5;
 	public static final int EDGESIZEX=20, EDGESIZEY=10, MINGAPX=5, MINGAPY=5;
 	
-	
+	//unused now because of compatibility issue with Java 7
     public static Comparator<UIBarSlot> priorityOrder = new Comparator<UIBarSlot>(){
 		@Override
 		public int compare(UIBarSlot item1, UIBarSlot item2) {
@@ -125,8 +125,8 @@ public class UIBar implements UIObject {
 			itemX = (frameRect.width - itemX)/2;
 			itemY = frameRect.height -EDGESIZEY -UIBarSlot.height;
 			
-			// sort by order of priority for better display
-			lvl1slots.sort(priorityOrder);
+			// sort by order of priority for better display (unused because of compatibility issue)
+			//lvl1slots.sort(priorityOrder);
 			
 			// display from the left in priority order
 			for(int i=0; i< lvl1slots.size(); i++){
@@ -141,8 +141,8 @@ public class UIBar implements UIObject {
 			itemX = (frameRect.width - itemX)/2;
 			itemY = EDGESIZEY;
 			
-			// sort by order of priority for better display
-			lvl2slots.sort(priorityOrder);
+			// sort by order of priority for better display (unused because of compatibility issue)
+			//lvl2slots.sort(priorityOrder);
 			
 			// display from the left in priority order
 			for(int i=0; i< lvl2slots.size(); i++){
@@ -162,7 +162,7 @@ public class UIBar implements UIObject {
 			hasUpdated = true;
 			for (int i = addedSlots.size()-1; i >= 0; i--) {
 				slot = addedSlots.get(i);
-				list.add(slot);
+				pushItem(slot, list);
 				addedSlots.remove(slot);
 			}	
 		}
@@ -189,7 +189,7 @@ public class UIBar implements UIObject {
 				}
 				
 				if(!list.contains(collapseItem)){
-					list.add(collapseItem);
+					pushItem(collapseItem, list);
 					collapseItem.toUpdate = false;
 					hasUpdated = true;
 				}
@@ -350,11 +350,11 @@ public class UIBar implements UIObject {
 
 	public boolean addSlot(int level, UIBarSlot newItem){
 		if(level == 1 && lvl1slots.size() <= MAXITEMS ){
-			lvl1slots.add(newItem);				
+			insertSlot(newItem,lvl1slots);				
 			slotCount1++;
 		
 		} else if(level == 2 && lvl2slots.size() <= MAXITEMS ){
-			lvl2slots.add(newItem);
+			insertSlot(newItem,lvl2slots);	
 			slotCount2++;
 			
 			//if just added a second level, check if the bar needs to be extended upward
@@ -400,44 +400,54 @@ public class UIBar implements UIObject {
 	}
 	
 
-	public UIBarSlot inCatchZone(Rectangle itemRect){
+	public UIBarSlot inCatchZone(UIDragItem item){
 		boolean added = false;
-		UIBarSlot item = null;
+		UIBarSlot slot = null;
 		
-		if(lvl1catchRect.intersects(itemRect)){
+		if(lvl1catchRect.intersects(item.rPos)){
 			
 			// first checks if there is an empty item on level1
-			item = findEmptySlot(1);
-			if (item != null) return item;
+			slot = findEmptySlot(1);
+			if (slot != null) {
+				slot.setItem(item);
+				reOrganize(slot);
+				return slot;
+			}
 			
 			// then try adding the item to the bar
-			UIBarSlot newItem = new UIBarSlot(this);
-			added = this.addSlot(1, newItem);
+			slot = new UIBarSlot(this);
+			slot.setItem(item);
+			added = this.addSlot(1, slot);
 			
 			// if item can be added, set item to new value
-			item = added ? newItem : null;
-			return item;
+			slot = added ? slot : null;
+			return slot;
 			
-		} else if (catchRect.intersects(itemRect)){
+		} else if (catchRect.intersects(item.rPos)){
 			
 			// first checks if there is an empty item on level1
-			item = findEmptySlot(2);
-			if (item != null) return item;			
+			slot = findEmptySlot(2);
+			if (slot != null) {
+				slot.setItem(item);
+				reOrganize(slot);
+				return slot;			
+			}
 			
 			// then try adding the item to the bar			
-			UIBarSlot newItem = new UIBarSlot(this);
-			added = this.addSlot(2, newItem);
+			slot = new UIBarSlot(this);
+			slot.setItem(item);
+			added = this.addSlot(2, slot);
 			
 			// if item can be added, set item to new value			
-			item = added ? newItem : null;
-			return item;
+			slot = added ? slot : null;
+			return slot;
 		}
 		
-		return item;
+		return slot;
 
 	}
 	
-	public UIBarSlot inBarItem(int absX, int absY){
+	public UIBarSlot inBarItem(int absX, int absY, UIDragItem item){
 		boolean added = false;
 		UIBarSlot slot=null;
 		
@@ -449,15 +459,22 @@ public class UIBar implements UIObject {
 				
 				// if the container is empty, returns the container to be filled
 				if (slot.isEmpty()){
+					slot.setItem(item);
+					reOrganize(slot);
 					return slot;				
 				} else {
 					
 					// else, first checks if there is an empty container
 					slot = findEmptySlot(1);
-					if (slot != null) return slot;
+					if (slot != null) {
+						slot.setItem(item);
+						reOrganize(slot);
+						return slot;
+					}
 					
 					// if no empty items, creates a new one
 					slot = new UIBarSlot(this);
+					slot.setItem(item);
 					added = this.addSlot(1, slot);
 					slot = added ? slot : null;
 					return slot;
@@ -472,15 +489,22 @@ public class UIBar implements UIObject {
 				slot = lvl2slots.get(i);			
 				// if the container is empty, returns the container to be filled
 				if (slot.isEmpty()){
+					slot.setItem(item);
+					reOrganize(slot);
 					return slot;
 				} else {
 					
 					// else, first checks if there is an empty container
 					slot = findEmptySlot(2);
-					if (slot != null) return slot;					
+					if (slot != null) {
+						slot.setItem(item);
+						reOrganize(slot);
+						return slot;					
+					}
 					
 					// if no empty items, creates a new one					
 					slot = new UIBarSlot(this);
+					slot.setItem(item);
 					added = this.addSlot(2, slot);
 					slot = added ? slot : null;
 					return slot;
@@ -513,6 +537,34 @@ public class UIBar implements UIObject {
 			}
 		} 				
 		return null;
+	}
+	
+	private void insertSlot(UIBarSlot slot,  ArrayList<UIBarSlot> refArray){
+		if(refArray.isEmpty()) {
+			refArray.add(slot);
+			return;
+		}
+		
+		int index=0; 
+		int priority = slot.getPriority();
+		
+		while (index<refArray.size()){
+			if(refArray.get(index).getPriority()<= priority) {index++;} 
+			else {break;}
+		}
+		
+		refArray.add(index, slot);
+	}
+	
+	protected void reOrganize(UIBarSlot slot){
+		if(lvl1slots.contains(slot)){
+			lvl1slots.remove(slot);
+			insertSlot(slot, lvl1slots);
+		} else if (lvl2slots.contains(slot)){
+			lvl2slots.remove(slot);
+			insertSlot(slot, lvl2slots);			
+		}
+		
 	}
 	
 	//temporary method to manually add an item

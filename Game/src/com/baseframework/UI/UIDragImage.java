@@ -5,7 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class UIDragImage implements UIObject {
+public class UIDragImage extends UIObject {
 	private static final int typePriority = 10;
 	
 	protected boolean visible =true;

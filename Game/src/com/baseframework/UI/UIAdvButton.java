@@ -35,7 +35,7 @@ public class UIAdvButton extends UIButton {
 				list.remove(showItem);
 			}
 			else {
-				list.add(showItem);
+				pushItem(showItem, list);
 				return true;}
 		}
 		return false;

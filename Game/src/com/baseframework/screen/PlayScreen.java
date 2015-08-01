@@ -108,32 +108,32 @@ public class PlayScreen extends GameScreen{
 		uiItems = new ArrayList<UIObject>();
 		
 		buttonMode = new UIAdvButton(btnModeX, btnModeY, Resources.btnModeDown, Resources.btnModeUp, Resources.barShow);
-		uiItems.add(buttonMode);
+		UIObject.pushItem(buttonMode, uiItems);
 		
 		mainBar = new UIBar(dftBarTopX, dftBarTopY, dftBarTileCountX, dftBarTileCountY);
-		uiItems.add(mainBar);
+		UIObject.pushItem(mainBar, uiItems);
 		
 		buttonMode.setBar(mainBar);
 		mainBar.setButton(buttonMode);
 		
 		// create the generic UI items in the list
-		//uiItems.add(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseDown, Resources.btnCollapseUp));
+		//UIObject.pushItem(new UIButtonCollapse(btnModeX-10, btnModeY - 50, Resources.btnCollapseDown, Resources.btnCollapseUp), uiItems);
 		
-		//uiItems.add(new UIButtonExtend(btnModeX + 40, btnModeY - 50, Resources.btnExtendDown, Resources.btnExtendUp));
+		//UIObject.pushItem(new UIButtonExtend(btnModeX + 40, btnModeY - 50, Resources.btnExtendDown, Resources.btnExtendUp), uiItems);
 		
-		uiItems.add(new UIDragItem(10, 10, Resources.teammate1, mainBar));
-		uiItems.add(new UIDragItem(60, 10, Resources.teammate2, mainBar));
-		uiItems.add(new UIDragItem(110, 10, Resources.teammate3, mainBar));
-		uiItems.add(new UIDragItem(160, 10, Resources.teammate4, mainBar));
-		uiItems.add(new UIDragItem(210, 10, Resources.teammate5, mainBar));		
+		UIObject.pushItem(new UIDragItem(10, 10, Resources.teammate1, mainBar), uiItems);
+		UIObject.pushItem(new UIDragItem(60, 10, Resources.teammate2, mainBar), uiItems);
+		UIObject.pushItem(new UIDragItem(110, 10, Resources.teammate3, mainBar), uiItems);
+		UIObject.pushItem(new UIDragItem(160, 10, Resources.teammate4, mainBar), uiItems);
+		UIObject.pushItem(new UIDragItem(210, 10, Resources.teammate5, mainBar), uiItems);		
 
-		//sort by order of type priority for proper display
-		uiItems.sort(typePriorityOrder);
+		//sort by order of type priority for proper display (unused for compatibility reason with Java 7)
+		//uiItems.sort(typePriorityOrder);
 	}
 
 	@Override
 	public void update(float delta) {
-		boolean reSort = false;
+		//boolean reSort = false;
 		
 		viewframe.update(delta);
 		squad.update(delta);
@@ -141,9 +141,10 @@ public class PlayScreen extends GameScreen{
 		//updateTiles();
 		
 		for (int i = 0; i < uiItems.size(); i++) {	
-			reSort = reSort || uiItems.get(i).updateList(uiItems);
+			uiItems.get(i).updateList(uiItems);
+			//reSort = reSort || uiItems.get(i).updateList(uiItems);
 		}
-		if(reSort) uiItems.sort(typePriorityOrder);
+		// if(reSort) uiItems.sort(typePriorityOrder);
 	}
 
 	@Override

@@ -1,13 +1,15 @@
 package com.dune.entities;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import com.baseframework.animation.Animation;
 import com.baseframework.game.main.Resources;
 import com.baseframework.screen.PlayScreen;
-import com.dune.planet.PlanetMap;
 import com.dune.planet.Tile;
+import com.dune.planet.ViewFrame;
 
 public class Squad {
 
@@ -40,9 +42,13 @@ public class Squad {
 	public Rectangle rect; 
 	public ArrayList<Path> paths = new ArrayList<Path>();
 	
-	public Squad(float topX, float topY, boolean selected){
+	//game reference
+	private ViewFrame viewframe;
+	
+	public Squad(float topX, float topY, ViewFrame viewframe, boolean selected){
 		this.topX = topX;
 		this.topY = topY;
+		this.viewframe = viewframe;
 		this.selected = selected;
 		rect = new Rectangle((int) topX, (int) topY, xImagine, yImagine);	
 	}
@@ -54,9 +60,6 @@ public class Squad {
 	
 	public void update(float delta) {
 		
-
-
-		
 		if(paths.size()>0){
 			//Logic to check what the underlying tile is
 			xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX()));
@@ -64,14 +67,13 @@ public class Squad {
 			xTileNext=(int) (paths.get(0).getX());
 			yTileNext=(int) (paths.get(0).getY());
 
-			if(xTile==xTileNext&&yTile==yTileNext)		{
-				
+			if(xTile==xTileNext&&yTile==yTileNext){	
 				SQUADSPEED=SQUADSPEED;
 			}else{
 				SQUADSPEED = Speed.speed(xTile, yTile, xTileNext, yTileNext);				
 			}
 
-			System.out.println(" speed ="+ SQUADSPEED);
+			//System.out.println(" speed ="+ SQUADSPEED);
 			
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;
@@ -145,6 +147,45 @@ public class Squad {
 		if(selected) selectAnim.update(delta);
 		
 	}
+	
+	
+	public void render(Graphics g) {	
+		if(selected){
+			Resources.selectAnim.render(g, 
+					(int) (topX - viewframe.getFrameX() + (xImagine - Resources.selectAnim.getCurrentWidth())/2), 
+					(int) (topY - viewframe.getFrameY()) + yImagine - Resources.selectAnim.getCurrentHeight()/2 - 5);			
+		}	
+		getCurrentAnim().render(g, (int) (topX - viewframe.getFrameX()), (int) (topY-viewframe.getFrameY()));			
+	}
+	
+	public void renderPaths(Graphics g) {
+		if(!selected) return;
+		
+		Graphics2D g2;
+		
+		g2 = (Graphics2D) g;
+	    g2.setStroke(Resources.strokeSize);	
+
+		if(!paths.isEmpty()){
+			for ( int i = 0; i < paths.size(); ++i ) {
+				if(i==0){
+					g2.drawLine((int) (topX+ (float) xImagine/2f - viewframe.getFrameX()), 
+								(int) (topY+ (float) yImagine - viewframe.getFrameY()), 
+								paths.get(0).getX()- (int) viewframe.getFrameX(), 
+								paths.get(0).getY()- (int) viewframe.getFrameY());
+				
+					g.drawOval(paths.get(0).getX()-1 - (int) viewframe.getFrameX(), paths.get(0).getY()-1- (int) viewframe.getFrameY(),3,3);
+					g.drawOval(paths.get(0).getX()-7- (int) viewframe.getFrameX(), paths.get(0).getY()-7- (int) viewframe.getFrameY(),15,15);
+				}else{
+					g2.drawLine(paths.get(i-1).getX()- (int) viewframe.getFrameX(), paths.get(i-1).getY()- (int) viewframe.getFrameY(),
+							paths.get(i).getX()- (int) viewframe.getFrameX(), paths.get(i).getY()- (int) viewframe.getFrameY());	
+					g.drawOval(paths.get(i-1).getX()-1- (int) viewframe.getFrameX(),paths.get(i-1).getY()-1- (int) viewframe.getFrameY(),3,3);
+					g.drawOval(paths.get(i).getX()-5- (int) viewframe.getFrameX(),paths.get(i).getY()-5- (int) viewframe.getFrameY(),11,11);
+				}	
+			}
+		}
+	}
+	
 	
 	private float inBoundX(float x){
 		if(Float.isNaN(x)){

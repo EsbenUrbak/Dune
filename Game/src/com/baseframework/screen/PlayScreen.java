@@ -63,7 +63,7 @@ public class PlayScreen extends GameScreen{
 		
 		@Override
 		public void performAction(){
-			mainBar.pushLvl(1);	
+			mainBar.pullLvl(1);	
 		}
 	}
 	
@@ -74,7 +74,7 @@ public class PlayScreen extends GameScreen{
 		
 		@Override
 		public void performAction(){
-			mainBar.pushLvl(2);	
+			mainBar.pullLvl(2);	
 		}
 	}
 	//end of nested button classes ---------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ public class PlayScreen extends GameScreen{
 
 		initUI();
 		
-		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
+		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, viewframe, false);	
 		squad.setBounds(map.getWidth(false), map.getHeight(false));
 	}
 	
@@ -149,9 +149,8 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void render(Graphics g) {
-		renderTiles(g);
-		renderPaths(g);	
-		renderSquad(g);
+		renderTiles(g);	
+		renderEntities(g);
 		renderUI(g);
 	}
 	
@@ -177,9 +176,6 @@ public class PlayScreen extends GameScreen{
 				pY = Miscellaneous.carToIsoIndexY(pY, t.getTileY(), t.getTileImage().getHeight(null));
 			
 			}
-
-			
-
 			
 			if(elevation>0&&PlanetMap.ISOMETRIC){
 				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - elevation*ELEVATIONHEIGHT-(int) viewframe.getFrameY(), null);
@@ -226,39 +222,12 @@ public class PlayScreen extends GameScreen{
 			}
 		}	
 	}
-
-	private void renderPaths(Graphics g) {
-		g2 = (Graphics2D) g;
-	    g2.setStroke(Resources.strokeSize);	
-
-		if(!squad.paths.isEmpty()){
-			for ( int i = 0; i < squad.paths.size(); ++i ) {
-				if(i==0){
-					g2.drawLine((int) (squad.getTopX()+ (float)squad.getxImagine()/2f - viewframe.getFrameX()), 
-								(int) (squad.getTopY()+ (float)squad.getyImagine() - viewframe.getFrameY()), 
-								squad.paths.get(0).getX()- (int) viewframe.getFrameX(), 
-								squad.paths.get(0).getY()- (int) viewframe.getFrameY());
-				
-					g.drawOval(squad.paths.get(0).getX()-1 - (int) viewframe.getFrameX(),squad.paths.get(0).getY()-1- (int) viewframe.getFrameY(),3,3);
-					g.drawOval(squad.paths.get(0).getX()-7- (int) viewframe.getFrameX(),squad.paths.get(0).getY()-7- (int) viewframe.getFrameY(),15,15);
-				}else{
-					g2.drawLine(squad.paths.get(i-1).getX()- (int) viewframe.getFrameX(), squad.paths.get(i-1).getY()- (int) viewframe.getFrameY(),
-							squad.paths.get(i).getX()- (int) viewframe.getFrameX(), squad.paths.get(i).getY()- (int) viewframe.getFrameY());	
-					g.drawOval(squad.paths.get(i-1).getX()-1- (int) viewframe.getFrameX(),squad.paths.get(i-1).getY()-1- (int) viewframe.getFrameY(),3,3);
-					g.drawOval(squad.paths.get(i).getX()-5- (int) viewframe.getFrameX(),squad.paths.get(i).getY()-5- (int) viewframe.getFrameY(),11,11);
-				}	
-			}
-		}
+	
+	private void renderEntities(Graphics g) {	
+		squad.renderPaths(g);
+		squad.render(g);		
 	}
 	
-	private void renderSquad(Graphics g) {	
-		if(squad.isSelected()){
-			Resources.selectAnim.render(g, 
-					(int) (squad.getTopX() - viewframe.getFrameX() + (squad.xImagine - Resources.selectAnim.getCurrentWidth())/2), 
-					(int) (squad.getTopY() - viewframe.getFrameY()) + squad.yImagine - Resources.selectAnim.getCurrentHeight()/2 - 5);			
-		}	
-		squad.getCurrentAnim().render(g, (int) (squad.getTopX() - viewframe.getFrameX()), (int) (squad.getTopY()-viewframe.getFrameY()));			
-	}
 	
 	private void renderUI(Graphics g){
 		//display in inverse order of priority (so that objects with higher priority appear on top)

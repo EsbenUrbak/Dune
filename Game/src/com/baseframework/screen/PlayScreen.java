@@ -31,8 +31,8 @@ public class PlayScreen extends GameScreen{
 	Tile t;
 	
 	// Surface object of the planet
-	public static ViewFrame viewframe;
-	public static PlanetMap map;
+	private static ViewFrame viewframe;
+	private static PlanetMap map;
 
 	// Graphics objects
 	public Graphics2D g2;
@@ -44,7 +44,9 @@ public class PlayScreen extends GameScreen{
 	private final float SQUAD_TOPX = 300f; 
 	private final float SQUAD_TOPY = 200f;
 	public static final int SCREEN_X = 0;
-	public static final int SCREEN_Y = 0, ELEVATIONHEIGHT=15;
+	public static final int SCREEN_Y = 0;
+	
+	public static final int ELEVATIONHEIGHT=15;	
 	
 	// boolean variables
 	boolean spaceKeyPressed = false;
@@ -58,24 +60,16 @@ public class PlayScreen extends GameScreen{
 
 	private class UIButtonCollapse extends UIButton{
 		public UIButtonCollapse(int topX, int topY, Image buttonImageDown, Image buttonImageUp) {
-			super(topX, topY, buttonImageDown, buttonImageUp);
-		}
-		
+			super(topX, topY, buttonImageDown, buttonImageUp);}
 		@Override
-		public void performAction(){
-			mainBar.pullLvl(1);	
-		}
+		public void performAction(){ mainBar.pullLvl(1);	}
 	}
 	
 	private class UIButtonExtend extends UIButton{
 		public UIButtonExtend(int topX, int topY, Image buttonImageDown, Image buttonImageUp) {
-			super(topX, topY, buttonImageDown, buttonImageUp);
-		}
-		
+			super(topX, topY, buttonImageDown, buttonImageUp);}
 		@Override
-		public void performAction(){
-			mainBar.pullLvl(2);	
-		}
+		public void performAction(){mainBar.pullLvl(2);}
 	}
 	//end of nested button classes ---------------------------------------------------------------------------------------
 
@@ -84,14 +78,20 @@ public class PlayScreen extends GameScreen{
 		MainHolder.setResizeable(false);
 		MainHolder.thegame.setDimensions(screenSizeX, screenSizeY);
 		
+		// creation of basic level object
 		map = new PlanetMap(Resources.map1,Resources.elevationMap);
 		viewframe = new ViewFrame((float) SCREEN_X, (float) SCREEN_Y, screenSizeX, screenSizeY);
+		
+		// cross-initialization of viewframe and map
 		viewframe.setBoundX(map.getWidth(true));
 		viewframe.setBoundY(map.getHeight(true));
-
+		map.setViewframe(viewframe);
+		
+		// initialization of user interface
 		initUI();
 		
-		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, viewframe, false);	
+		// initialization of entities
+		squad = new Squad(SQUAD_TOPX, SQUAD_TOPY, false);	
 		squad.setBounds(map.getWidth(false), map.getHeight(false));
 	}
 	
@@ -137,8 +137,7 @@ public class PlayScreen extends GameScreen{
 		
 		viewframe.update(delta);
 		squad.update(delta);
-		map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
-		//updateTiles();
+		//map.update((int) viewframe.getFrameX(), (int) viewframe.getFrameY());
 		
 		for (int i = 0; i < uiItems.size(); i++) {	
 			uiItems.get(i).updateList(uiItems);
@@ -149,79 +148,11 @@ public class PlayScreen extends GameScreen{
 
 	@Override
 	public void render(Graphics g) {
-		renderTiles(g);	
+		map.render(g);	
 		renderEntities(g);
 		renderUI(g);
 	}
 	
-	private void renderTiles(Graphics g) {
-		int pX, pY,elevation;
-		for (int y = 0; y <PlanetMap.tileMap.size() ; y++) {
-
-			for (int x = 0; x < PlanetMap.tileMap.get(y).size(); x++) {
-	
-				Tile t = PlanetMap.tileMap.get(y).get(x);
-
-				pX = t.getTileX();
-				pY= t.getTileY();
-
-			t = PlanetMap.tileMap.get(y).get(x);
-			pX = t.getTileX();
-			pY= t.getTileY();
-			elevation=PlanetMap.getElev(x*3,y*3);  //i tried t.getElevation() but that didnt work for some bizarre reason
-
-			if(PlanetMap.ISOMETRIC){
-				//Use these to get Isometric positions
-				pX = Miscellaneous.carToIsoIndexX(pX, t.getTileY(), t.getTileImage().getWidth(null));
-				pY = Miscellaneous.carToIsoIndexY(pY, t.getTileY(), t.getTileImage().getHeight(null));
-			
-			}
-			
-			if(elevation>0&&PlanetMap.ISOMETRIC){
-				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - elevation*ELEVATIONHEIGHT-(int) viewframe.getFrameY(), null);
-				Color brown = new Color(128,128,0); 
-				g.setColor (brown);
-				Polygon p = new Polygon();
-				p.addPoint(pX- (int) viewframe.getFrameX(),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT-2);
-				p.addPoint(pX- (int) viewframe.getFrameX(),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2+2);
-				p.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)+2);
-				p.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT-2);
-				g.fillPolygon(p);  
-				
-				Polygon p2 = new Polygon();
-				p2.addPoint((pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT-2);
-				p2.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null),pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2+2);
-				p2.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)+2);
-				p2.addPoint(pX- (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2,pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT-2);
-				g.fillPolygon(p2);  
-			
-				//Drawing elevation lines
-				g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getWidth(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);	
-				g.drawLine(pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getWidth(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT);
-				
-				/*if(t.iseUpT()){
-					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);					}
-				if(t.iseRightT()){
-					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT);	
-				}
-				if(t.iseDownT()){
-					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);
-				}
-				if(t.iseLeftT()){
-					g.drawLine(pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT);
-				}*/
-			
-			
-			}else{
-				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY -(int) viewframe.getFrameY(), null);
-			}
-
-
-			
-
-			}
-		}	
-	}
 	
 	private void renderEntities(Graphics g) {	
 		squad.renderPaths(g);
@@ -275,8 +206,7 @@ public class PlayScreen extends GameScreen{
 				//Logic to check what the underlying tile is
 				xTile=(xPos+ (int) viewframe.getFrameX())/Tile.getSizeX();
 				yTile=(yPos+ (int) viewframe.getFrameY())/Tile.getSizeY();
-				tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);
-				//System.out.println(tileInfo);					
+				tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);				
 				
 				// exit if on forbidden terrain type
 				if(tileInfo.equals("W")) return;
@@ -410,11 +340,6 @@ public class PlayScreen extends GameScreen{
 		MainHolder.thegame.resetGameImage();
 	}
 	
-
-	public static void setViewFrame(ViewFrame viewFrame) {
-		PlayScreen.viewframe = viewFrame;
-	}
-
 	public static ViewFrame getViewFrame() {
 		return viewframe;
 	}

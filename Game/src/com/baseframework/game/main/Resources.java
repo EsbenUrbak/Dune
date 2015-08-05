@@ -40,7 +40,7 @@ public class Resources {
 	public static BufferedImage barShow, barCollapse;
 	
 	public static Font titleFont1, subTitleFont1;
-	public static Color titleColor1, subTitleColor1, frameColor, selectColor;
+	public static Color titleColor1, subTitleColor1, frameColor, selectColor, elevationColor;
 	public static BasicStroke strokeSize;
 	
 	public static BufferedReader map1, subTileMapping, speedMapping, elevationMap;
@@ -73,6 +73,7 @@ public class Resources {
 		subTitleColor1 = Color.LIGHT_GRAY;
 		frameColor = Color.DARK_GRAY;
 		selectColor = Color.YELLOW;
+		elevationColor = new Color(128,128,0); 
 		strokeSize = new BasicStroke(2f);
 		
 		background = loadImage("background.png");

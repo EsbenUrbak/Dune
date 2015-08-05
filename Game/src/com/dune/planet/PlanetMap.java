@@ -1,7 +1,8 @@
 package com.dune.planet;
 
 import java.awt.Color;
-import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -18,32 +19,45 @@ import com.baseframework.util.Miscellaneous;
 public class PlanetMap {
 	public static boolean ISOMETRIC =true;
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();	
+	
 	public static ArrayList<String> mapArray = new ArrayList<String>();	
 	public static ArrayList<String> mapArrayHighRes = new ArrayList<String>();
-	public static Map<Integer, Map<Integer, String>> terrainMap = new HashMap<Integer, Map<Integer, String>>();
-	
 	public static ArrayList<String> elevationArray = new ArrayList<String>();	
 	public static ArrayList<String> elevationArrayHighRes = new ArrayList<String>();	
+	
+	public static Map<Integer, Map<Integer, String>> terrainMap = new HashMap<Integer, Map<Integer, String>>();	
 	public static Map<Integer, Map<Integer, String>> elevationMap = new HashMap<Integer, Map<Integer, String>>();
 	public static Map<Integer, Map<Integer, String>> elevationMapLowRes = new HashMap<Integer, Map<Integer, String>>();
 	public static Map<Integer, Map<Integer, String>> terMap = new HashMap<Integer, Map<Integer, String>>();
 	public static Map<Integer, Map<Integer, Tile>> tileMap = new HashMap<Integer, Map<Integer, Tile>>();
+	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
-	private ArrayList<Image> tileImage = new ArrayList<Image>(); 
+	
 	public static int width=0; 
 	public static int WIDTHSLOPE=15;
-	private int height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
+	private static final int DEFAULTTILESIZE = 45;
+	public static final int ELEVATIONHEIGHT=15;	
 	
-	private Rectangle rCatch; 
-	private final int DEFAULTTILESIZE = 45;
+	private Rectangle rCatch;
+	private int height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
+ 
 	BufferedImage CombinedTileImage;
+	
 	public static Map<String, BufferedImage> TileImageMap=new HashMap<String, BufferedImage>();
 
+	private ViewFrame viewframe;
 	
-	public PlanetMap(BufferedReader mapfile,BufferedReader elevationfile ) {
+	private Polygon p, p2;
+	
+	public PlanetMap(BufferedReader mapfile, BufferedReader elevationfile) {
 		// master array that contains ALL the tiles in the map
 		ArrayList mapParser = parsemap(mapfile);
-
+		
+		if(ISOMETRIC){
+			p = new Polygon();
+			p2 = new Polygon();
+		}
+		
 		// creates each tile and puts it in tilearray
 		for (int j = 0; j < height; j++) {
 			String line = (String) mapParser.get(j);
@@ -268,6 +282,102 @@ public class PlanetMap {
 		scopeTileArray.trimToSize();
 		
 	}
+	
+	public void render(Graphics g){
+		if(ISOMETRIC) {
+			renderIsometric(g);
+		} else {
+			renderBirdView(g);
+		}
+	}
+	
+	private void renderIsometric(Graphics g) {
+		int pX, pY, elevation;
+		
+		for (int y = 0; y <tileMap.size(); y++) {
+			for (int x = 0; x < tileMap.get(y).size(); x++) {
+	
+				Tile t = tileMap.get(y).get(x);
+
+				pX = t.getTileX();
+				pY= t.getTileY();
+				elevation = getElev(x*3,y*3);  //i tried t.getElevation() but that didnt work for some bizarre reason
+
+				//get Isometric positions
+				pX = Miscellaneous.carToIsoIndexX(pX, t.getTileY(), t.getTileImage().getWidth(null));
+				pY = Miscellaneous.carToIsoIndexY(pY, t.getTileY(), t.getTileImage().getHeight(null));
+			
+				if(elevation>0){
+					
+					p.reset();
+					p2.reset();
+					
+					g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY - elevation*ELEVATIONHEIGHT - (int) viewframe.getFrameY(), null);
+					
+					g.setColor (Resources.elevationColor);
+					
+					p.addPoint(pX- (int) viewframe.getFrameX(),
+						pY- (int) viewframe.getFrameY() + t.getTileImage().getHeight(null)/2 - elevation*ELEVATIONHEIGHT - 2);
+					p.addPoint(pX- (int) viewframe.getFrameX(),
+						pY- (int) viewframe.getFrameY() + t.getTileImage().getHeight(null)/2 + 2);
+					p.addPoint(pX- (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)/2,
+						pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)+2);
+					p.addPoint(pX- (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)/2,
+						pY- (int) viewframe.getFrameY() + t.getTileImage().getHeight(null) - elevation*ELEVATIONHEIGHT - 2);
+					g.fillPolygon(p);  
+				
+					p2.addPoint((pX- (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)),
+						pY- (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2 - elevation*ELEVATIONHEIGHT - 2);
+					p2.addPoint(pX- (int) viewframe.getFrameX() + t.getTileImage().getWidth(null),
+						pY- (int) viewframe.getFrameY() + t.getTileImage().getHeight(null)/2 + 2);
+					p2.addPoint(pX- (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)/2,
+						pY- (int) viewframe.getFrameY() + t.getTileImage().getHeight(null) + 2);
+					p2.addPoint(pX- (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)/2,
+						pY- (int) viewframe.getFrameY() + t.getTileImage().getHeight(null) - elevation*ELEVATIONHEIGHT - 2);
+					g.fillPolygon(p2);  
+			
+					//Drawing elevation lines
+					g.drawLine(pX - (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)/2, 
+						pY - (int) viewframe.getFrameY() - elevation*ELEVATIONHEIGHT, 
+						pX - (int) viewframe.getFrameX() + t.getTileImage().getWidth(null), 
+						pY - (int) viewframe.getFrameY() + t.getTileImage().getHeight(null)/2 - elevation*ELEVATIONHEIGHT);	
+					g.drawLine(pX - (int) viewframe.getFrameX(), 
+						pY - (int) viewframe.getFrameY() + t.getTileImage().getHeight(null)/2 - elevation*ELEVATIONHEIGHT, 
+						pX - (int) viewframe.getFrameX() + t.getTileImage().getWidth(null)/2, 
+						pY - (int) viewframe.getFrameY() - elevation*ELEVATIONHEIGHT);
+				
+				} else {
+					g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY -(int) viewframe.getFrameY(), null);
+				}
+			
+				/*if(t.iseUpT()){
+					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);					}
+				if(t.iseRightT()){
+					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT);	
+				}
+				if(t.iseDownT()){
+					g.drawLine(pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT);
+				}
+				if(t.iseLeftT()){
+					g.drawLine(pX - (int) viewframe.getFrameX(), pY - (int) viewframe.getFrameY()+t.getTileImage().getHeight(null)/2-elevation*ELEVATIONHEIGHT, pX - (int) viewframe.getFrameX()+t.getTileImage().getHeight(null)/2, pY - (int) viewframe.getFrameY()-elevation*ELEVATIONHEIGHT);
+				}*/
+			}
+		}	
+	}
+	
+	private void renderBirdView(Graphics g){
+		int pX, pY;
+		for (int y = 0; y <tileMap.size() ; y++) {
+
+			for (int x = 0; x < tileMap.get(y).size(); x++) {
+				Tile t = tileMap.get(y).get(x);
+				pX = t.getTileX();
+				pY= t.getTileY();
+				g.drawImage(t.getTileImage(), pX - (int) viewframe.getFrameX(), pY -(int) viewframe.getFrameY(), null);
+			}
+		}
+	}
+	
 	
 
 	public ArrayList<Tile> getTilearray() {
@@ -609,5 +719,9 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 		return elevation;
 	
 		}
+
+	public void setViewframe(ViewFrame viewframe) {
+		this.viewframe = viewframe;
+	}
 	
 }

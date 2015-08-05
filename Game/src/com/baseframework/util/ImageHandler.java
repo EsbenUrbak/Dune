@@ -25,7 +25,7 @@ public class ImageHandler {
         return dimg;  
     }
 	
-    private static BufferedImage verticalflip(BufferedImage img) {  
+    public static BufferedImage verticalflip(BufferedImage img) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
         BufferedImage dimg = new BufferedImage(w, h, img.getColorModel().getTransparency());  

@@ -45,10 +45,10 @@ public class Squad {
 	//game reference
 	private ViewFrame viewframe;
 	
-	public Squad(float topX, float topY, ViewFrame viewframe, boolean selected){
+	public Squad(float topX, float topY, boolean selected){
 		this.topX = topX;
 		this.topY = topY;
-		this.viewframe = viewframe;
+		this.viewframe = PlayScreen.getViewFrame();
 		this.selected = selected;
 		rect = new Rectangle((int) topX, (int) topY, xImagine, yImagine);	
 	}
@@ -62,8 +62,8 @@ public class Squad {
 		
 		if(paths.size()>0){
 			//Logic to check what the underlying tile is
-			xTile=(int) ((topX+xImagine/2f+ (int) PlayScreen.viewframe.getFrameX()));
-			yTile=(int) ((topY+yImagine+ (int) PlayScreen.viewframe.getFrameY()));
+			xTile=(int) ((topX+xImagine/2f+ (int) viewframe.getFrameX()));
+			yTile=(int) ((topY+yImagine+ (int) viewframe.getFrameY()));
 			xTileNext=(int) (paths.get(0).getX());
 			yTileNext=(int) (paths.get(0).getY());
 

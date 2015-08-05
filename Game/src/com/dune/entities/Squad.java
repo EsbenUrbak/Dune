@@ -26,7 +26,6 @@ public class Squad {
 	private int maxX = 100;
 	private int maxY = 100;
 	private int xTile, yTile, xTileNext, yTileNext;
-	private String tileInfo;
 	
 	private int SQUADSPEED = 150;
 			
@@ -72,8 +71,6 @@ public class Squad {
 			}else{
 				SQUADSPEED = Speed.speed(xTile, yTile, xTileNext, yTileNext);				
 			}
-
-			//System.out.println(" speed ="+ SQUADSPEED);
 			
 			// local variables to ensure that the squad does not get out of the map
 			float pathX, pathY, distX, distY, diagonalDist;

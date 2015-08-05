@@ -5,7 +5,6 @@ import java.applet.AudioClip;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,7 +17,6 @@ import javax.imageio.ImageIO;
 
 import com.baseframework.animation.Animation;
 import com.baseframework.animation.Frame;
-import com.baseframework.screen.PlayScreen;
 import com.baseframework.util.ImageHandler;
 import com.dune.planet.Wrapper;
 

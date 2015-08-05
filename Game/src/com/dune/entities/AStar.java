@@ -12,8 +12,8 @@ import com.dune.planet.PlanetMap;
 import com.dune.planet.Tile;
 
 public class AStar {
-	static Map<String, Node> nodeMap=new HashMap<String, Node>();
-	static Map<String, Node> nodeMapOpen = new HashMap<String, Node>();
+	private static Map<String, Node> nodeMap=new HashMap<String, Node>();
+	private static Map<String, Node> nodeMapOpen = new HashMap<String, Node>();
 	
     //Comparator for queue
     public static Comparator<Node> fComparator = new Comparator<Node>(){
@@ -24,7 +24,7 @@ public class AStar {
     };
 	
 	
-	 static int stepSize = 15;
+	private static int stepSize = 15;
 	 
 	//input has to be in absolute coordinates!
 	public static Map<String, ArrayList<Integer>> AStarFunction(int xStart, int yStart, int xEnd, int yEnd) {
@@ -44,7 +44,7 @@ public class AStar {
 
 		
 		//Adding the starting to openlist
-		startPoint = new Node(xStart, yStart,PlanetMap.mapArray.get((xStart+yStart*PlanetMap.width)/Tile.getSizeX()),"x=" + 0 + "_y=" + 0,"x=" + 0 + "_y=" + 0,0,0,0);
+		startPoint = new Node(xStart, yStart,PlanetMap.mapArray.get((xStart+yStart*PlanetMap.getWidth())/Tile.getSizeX()),"x=" + 0 + "_y=" + 0,"x=" + 0 + "_y=" + 0,0,0,0);
 		fPriorityQueue.add(startPoint);
 		nodeMapOpen.put("x=" + 0 + "_y=" + 0,startPoint);
 		

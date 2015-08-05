@@ -33,13 +33,13 @@ public class PlanetMap {
 	
 	private ArrayList<Tile> scopeTileArray = new ArrayList<Tile>(); 
 	
-	public static int width=0; 
 	public static int WIDTHSLOPE=15;
 	private static final int DEFAULTTILESIZE = 45;
 	public static final int ELEVATIONHEIGHT=15;	
 	
 	private Rectangle rCatch;
-	private int height = 0, firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
+	private static int width = 0, height = 0;
+	private int firstIndex=0, lastIndex=0, scopeWidth = 0, scopeHeight = 0;
  
 	BufferedImage CombinedTileImage;
 	
@@ -722,6 +722,10 @@ public ArrayList<Tile> transitionAlgo(ArrayList<String> tilearray, ArrayList<Str
 
 	public void setViewframe(ViewFrame viewframe) {
 		this.viewframe = viewframe;
+	}
+
+	public static int getWidth() {
+		return width;
 	}
 	
 }

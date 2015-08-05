@@ -206,7 +206,7 @@ public class PlayScreen extends GameScreen{
 				//Logic to check what the underlying tile is
 				xTile=(xPos+ (int) viewframe.getFrameX())/Tile.getSizeX();
 				yTile=(yPos+ (int) viewframe.getFrameY())/Tile.getSizeY();
-				tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.width);				
+				tileInfo = PlanetMap.mapArray.get(xTile+yTile*PlanetMap.getWidth());				
 				
 				// exit if on forbidden terrain type
 				if(tileInfo.equals("W")) return;
